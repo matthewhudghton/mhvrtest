@@ -308,10 +308,45 @@ var Pinput = (function () {
 })();
 
 export class InputManager {
-  constructor(camera, scene, font) {
-    this.pinput = new Pinput();
+  constructor(camera, scene) {
+    this.input = new Pinput();
+    this.camera = camera;
+    this.scene = scene;
   }
   update() {
-    this.pinput.update();
+    this.input.update();
+
+    /// handle camera
+    const value = 0.1;
+    if (this.input.isDown("a")) {
+      this.camera.position.x -= value;
+    }
+    if (this.input.isDown("d")) {
+      this.camera.position.x += value;
+    }
+    if (this.input.isDown("q")) {
+      this.camera.position.y += value;
+    }
+    if (this.input.isDown("z")) {
+      this.camera.position.y -= value;
+    }
+    if (this.input.isDown("w")) {
+      this.camera.position.z -= value;
+    }
+    if (this.input.isDown("s")) {
+      this.camera.position.z += value;
+    }
+    if (this.input.isDown("h")) {
+      this.camera.rotation.y -= value;
+    }
+    if (this.input.isDown("f")) {
+      this.camera.rotation.y += value;
+    }
+    if (this.input.isDown("t")) {
+      this.camera.rotation.x += value;
+    }
+    if (this.input.isDown("g")) {
+      this.camera.rotation.x -= value;
+    }
   }
 }

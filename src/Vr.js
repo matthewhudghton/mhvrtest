@@ -27,7 +27,6 @@ let inputManager;
 function init() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x505050);
-  inputManager = new InputManager();
 
   camera = new THREE.PerspectiveCamera(
     50,
@@ -201,7 +200,7 @@ function init() {
   scene.add(controllerGrip2);
 
   //
-
+  inputManager = new InputManager(camera, scene);
   window.addEventListener("resize", onWindowResize);
 }
 
