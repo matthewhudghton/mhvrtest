@@ -18,10 +18,16 @@ export class Hud {
   }
   render() {
     for (const object of this.objects) {
-      object.position.x = this.camera.position.x + object.userData.offset.x;
-      object.position.y = this.camera.position.y + object.userData.offset.y;
-      object.position.z = this.camera.position.z + object.userData.offset.z;
+      let offset = new THREE.Vector3();
+      offset.x = object.userData.offset.x;
+      offset.y = object.userData.offset.y;
+      offset.z = object.userData.offset.z;
+      const worldOffset = this.camera.getWorldDirection(offset);
+      object.position.x = worldOffset.x;
+      object.position.y = worldOffset.y;
+      object.position.z = worldOffset.z;
     }
+    //object.position.applyAxisAngle( axis, angle );
   }
   set debugText(value) {
     var textGeometry = new THREE.TextGeometry(value, {
