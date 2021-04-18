@@ -36,30 +36,28 @@ export class Hud {
   set debugText(value) {
     var textGeometry = new THREE.TextGeometry(value, {
       font: this.font,
-      size: 0.1,
-      height: 0.1
+      size: 0.02,
+      height: 0.02
     });
 
-    var textMaterial = new THREE.MeshPhongMaterial({
+    var textMaterial = new THREE.MeshBasicMaterial({
       color: 0xff0000,
       specular: 0xffffff
     });
 
-    for (var i = 0; i < 100; i++) {
-      var mesh = new THREE.Mesh(textGeometry, textMaterial);
-      mesh.position.x = 0 + i;
-      mesh.position.y = 1.5 + i;
-      mesh.position.z = -10 + i;
+    var mesh = new THREE.Mesh(textGeometry, textMaterial);
+    mesh.position.x = 0;
+    mesh.position.y = 0;
+    mesh.position.z = 0;
 
-      mesh.userData.offset = new THREE.Vector3();
-      mesh.userData.offset.x = 50 - i;
-      mesh.userData.offset.y = 50 - i;
-      mesh.userData.offset.z = 50 - i;
+    mesh.userData.offset = new THREE.Vector3();
+    mesh.userData.offset.x = 0;
+    mesh.userData.offset.y = 0;
+    mesh.userData.offset.z = 0;
 
-      mesh.material.depthTest = false;
-      console.log("Adding text!!!");
-      this.scene.add(mesh);
-      this.objects.push(mesh);
-    }
+    mesh.material.depthTest = false;
+    console.log("Adding text!!!");
+    this.scene.add(mesh);
+    this.objects.push(mesh);
   }
 }
