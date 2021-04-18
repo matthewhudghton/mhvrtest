@@ -58,6 +58,9 @@ export class Hud {
     mesh.material.depthTest = false;
     console.log("Adding text!!!");
     this.scene.add(mesh);
+    for (const object of this.objects) {
+      this.scene.remove(object);
+    }
     this.objects.push(mesh);
   }
 }

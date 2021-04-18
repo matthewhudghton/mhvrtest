@@ -161,8 +161,10 @@ function init() {
   controller1 = renderer.xr.getController(0);
   controller1.addEventListener("selectstart", onSelectStart);
   controller1.addEventListener("selectend", onSelectEnd);
+
   controller1.addEventListener("connected", function (event) {
     this.add(buildController(event.data));
+    controller1.gamepad = event.data.gamepad;
   });
   controller1.addEventListener("disconnected", function () {
     this.remove(this.children[0]);
@@ -174,6 +176,7 @@ function init() {
   controller2.addEventListener("selectend", onSelectEnd);
   controller2.addEventListener("connected", function (event) {
     this.add(buildController(event.data));
+    controller2.gamepad = event.data.gamepad;
   });
   controller2.addEventListener("disconnected", function () {
     this.remove(this.children[0]);
@@ -233,6 +236,8 @@ function buildController(data) {
         transparent: true
       });
       return new THREE.Mesh(geometry, material);
+    default:
+      console.err("Running default case " + data);
   }
 }
 
@@ -252,7 +257,7 @@ function handleController(controller) {
     object.userData.velocity.y = (Math.random() - 0.5) * 3;
     object.userData.velocity.z = Math.random() - 9;
     object.userData.velocity.applyQuaternion(controller.quaternion);
-
+    hud.debugText = JSON.stringify(controller.gamepad);
     if (count === room.children.length) count = 0;
   }
 }
