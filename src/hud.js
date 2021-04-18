@@ -22,10 +22,12 @@ export class Hud {
       offset.x = object.userData.offset.x;
       offset.y = object.userData.offset.y;
       offset.z = object.userData.offset.z;
-      const worldOffset = this.camera.getWorldDirection(offset);
-      object.position.x = worldOffset.x;
-      object.position.y = worldOffset.y;
-      object.position.z = worldOffset.z;
+      let worldOffset = new THREE.Vector3();
+      this.camera.getWorldDirection(worldOffset);
+      object.position.x = this.camera.position.x + worldOffset.x;
+      object.position.y = this.camera.position.y + worldOffset.y;
+      object.position.z = this.camera.position.z + worldOffset.z;
+      object.
     }
     //object.position.applyAxisAngle( axis, angle );
   }
@@ -43,13 +45,15 @@ export class Hud {
 
     for (var i = 0; i < 100; i++) {
       var mesh = new THREE.Mesh(textGeometry, textMaterial);
-      mesh.position.x = 50 - i;
-      mesh.position.y = 50 - i;
-      mesh.position.z = 50 - i;
+      mesh.position.x = 0 + i;
+      mesh.position.y = 1.5 + i;
+      mesh.position.z = -10 + i;
+
       mesh.userData.offset = new THREE.Vector3();
       mesh.userData.offset.x = 50 - i;
       mesh.userData.offset.y = 50 - i;
       mesh.userData.offset.z = 50 - i;
+
       mesh.material.depthTest = false;
       console.log("Adding text!!!");
       this.scene.add(mesh);
