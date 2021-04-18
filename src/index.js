@@ -6,7 +6,9 @@ import Vr from "./Vr";
 const rootElement = document.getElementById("root");
 ReactDOM.render(
   <StrictMode>
-    <Vr />
+    <Vr>
+     
+    </Vr>
   </StrictMode>,
   rootElement
 );

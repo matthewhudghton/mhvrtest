@@ -5,11 +5,12 @@
   "keywords": ["react", "starter"],
   "main": "src/index.js",
   "dependencies": {
+    "@seregpie/three.text-sprite": "latest",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-scripts": "4.0.0",
+    "statsvr": "2.2.1",
     "three": "latest",
-    "@seregpie/three.text-sprite": "latest",
     "webxr": "latest"
   },
   "devDependencies": {

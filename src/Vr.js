@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { VRButton } from "./VRButton.js";
 import { XRControllerModelFactory } from "./jsm/webxr/XRControllerModelFactory.js";
+import { Hud } from "./hud.js";
+import { InputManager } from "./inputManager.js";
 
 import "./styles.css";
 import "./scene.js";
@@ -15,15 +17,17 @@ let count = 0;
 const radius = 0.08;
 let normal = new THREE.Vector3();
 const relativeVelocity = new THREE.Vector3();
-
+let texts = [];
 const clock = new THREE.Clock();
-
+let hud;
 init();
 animate();
+let inputManager;
 
 function init() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x505050);
+  inputManager = new InputManager();
 
   camera = new THREE.PerspectiveCamera(
     50,
@@ -81,7 +85,8 @@ function init() {
       size: 0.1,
       height: 0.1
     });
-
+    hud = new Hud(camera, scene, font);
+    hud.debugText = "Hello my debug text!";
     var textMaterial = new THREE.MeshPhongMaterial({
       color: 0xff0000,
       specular: 0xffffff
@@ -96,7 +101,7 @@ function init() {
       mesh.userData.velocity.x = Math.random() * 0.01 - 0.005;
       mesh.userData.velocity.y = Math.random() * 0.01 - 0.005;
       mesh.userData.velocity.z = Math.random() * 0.01 - 0.005;
-
+      texts.push(mesh);
       room.add(mesh);
     }
   });
@@ -127,7 +132,19 @@ function init() {
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.xr.enabled = true;
   document.body.appendChild(renderer.domElement);
+  let hudElement = document.createElement("div");
+  hudElement.className = "hud";
+  hudElement.textContent = "Example text";
+  hudElement.style.position = "absolute";
+  hudElement.style.zIndex = 100; // if you still don't see the label, try uncommenting this
+  hudElement.style.width = 100;
+  hudElement.style.height = 100;
+  hudElement.style.backgroundColor = "blue";
+  hudElement.innerHTML = "hi there!";
+  hudElement.style.top = 200 + "px";
+  hudElement.style.left = 200 + "px";
 
+  document.body.appendChild(hudElement);
   //
 
   document.body.appendChild(VRButton.createButton(renderer));
@@ -250,6 +267,10 @@ function animate() {
 function render() {
   handleController(controller1);
   handleController(controller2);
+
+  if (hud) {
+    hud.render();
+  }
 
   //
 
