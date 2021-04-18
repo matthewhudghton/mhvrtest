@@ -27,7 +27,9 @@ export class Hud {
       object.position.x = this.camera.position.x + worldOffset.x;
       object.position.y = this.camera.position.y + worldOffset.y;
       object.position.z = this.camera.position.z + worldOffset.z;
-      object.
+      object.rotation.x = this.camera.rotation.x;
+      object.rotation.y = this.camera.rotation.y;
+      object.rotation.z = this.camera.rotation.z;
     }
     //object.position.applyAxisAngle( axis, angle );
   }
