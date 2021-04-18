@@ -311,4 +311,7 @@ export class InputManager {
   constructor(camera, scene, font) {
     this.pinput = new Pinput();
   }
+  update() {
+    this.pinput.update();
+  }
 }

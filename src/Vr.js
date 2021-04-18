@@ -271,6 +271,9 @@ function render() {
   if (hud) {
     hud.render();
   }
+  if (inputManager) {
+    inputManager.update();
+  }
 
   //
 
