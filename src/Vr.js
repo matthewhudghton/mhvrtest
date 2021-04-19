@@ -233,25 +233,16 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function handleController(controller) {
-  if (controller.userData.isSelecting) {
-    const object = room.children[count++];
-
-    object.position.copy(controller.position);
-    object.userData.velocity.x = (Math.random() - 0.5) * 3;
-    object.userData.velocity.y = (Math.random() - 0.5) * 3;
-    object.userData.velocity.z = Math.random() - 9;
-    object.userData.velocity.applyQuaternion(controller.quaternion);
-    hud.debugText = JSON.stringify(controller.gamepad);
-    if (count === room.children.length) count = 0;
-  }
-}
+function handleController(controller) {}
 
 //
 
 function animate() {
   renderer.setAnimationLoop(render);
 }
+
+let controller1LastPosition = new THREE.Vector3(0, 0, 0);
+let controller2LastPosition = new THREE.Vector3(0, 0, 0);
 
 function render() {
   const delta = clock.getDelta() * 0.8;
@@ -275,6 +266,21 @@ function render() {
       actors.splice(i, 1);
     }
   }
+
+  /* Track controller position with actor */
+  const controller1 = inputManager.controller1;
+  let position = new THREE.Vector3();
+  controller1.getWorldPosition(position);
+  // if (controller1 && !controller1.position.equals(controller1LastPosition)) {
+  actors.push(new Actor(THREE, room, 100, position));
+  controller1LastPosition = controller1.position;
+  //}
+  const controller2 = inputManager.controller2;
+  controller2.getWorldPosition(position);
+  // if (controller2 && !controller2.position.equals(controller2LastPosition)) {
+  actors.push(new Actor(THREE, room, 100, position));
+  controller2LastPosition = controller2.position;
+  // }
 
   const range = 3 - radius;
 

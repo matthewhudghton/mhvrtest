@@ -374,7 +374,7 @@ export class InputManager {
         this.camera.getWorldDirection(direction);
         this.user.position.addScaledVector(
           direction,
-          0.1 * controllerState[1].axes[2]
+          -0.2 * controllerState[1].axes[2]
         );
       }
     }

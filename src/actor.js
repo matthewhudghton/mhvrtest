@@ -1,5 +1,5 @@
 export class Actor {
-  constructor(THREE, scene, lifeSpan = 1000) {
+  constructor(THREE, scene, lifeSpan = 1000, position = undefined) {
     this.THREE = THREE;
     this.scene = scene;
     this.lifeSpan = lifeSpan;
@@ -8,15 +8,22 @@ export class Actor {
       geometry,
       new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
     );
+    if (position) {
+      this.object.position.copy(position);
+      this.object.userData.velocity = new THREE.Vector3();
+      this.object.userData.velocity.x = 0;
+      this.object.userData.velocity.y = 0;
+      this.object.userData.velocity.z = 0;
+    } else {
+      this.object.position.x = Math.random() * 4 - 2;
+      this.object.position.y = Math.random() * 4;
+      this.object.position.z = Math.random() * 4 - 2;
 
-    this.object.position.x = Math.random() * 4 - 2;
-    this.object.position.y = Math.random() * 4;
-    this.object.position.z = Math.random() * 4 - 2;
-
-    this.object.userData.velocity = new THREE.Vector3();
-    this.object.userData.velocity.x = Math.random() * 0.01 - 0.005;
-    this.object.userData.velocity.y = Math.random() * 0.01 - 0.005;
-    this.object.userData.velocity.z = Math.random() * 0.01 - 0.005;
+      this.object.userData.velocity = new THREE.Vector3();
+      this.object.userData.velocity.x = Math.random() * 0.01 - 0.005;
+      this.object.userData.velocity.y = Math.random() * 0.01 - 0.005;
+      this.object.userData.velocity.z = Math.random() * 0.01 - 0.005;
+    }
 
     scene.add(this.object);
   }
