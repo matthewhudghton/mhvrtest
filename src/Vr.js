@@ -3,6 +3,7 @@ import { VRButton } from "./VRButton.js";
 import { XRControllerModelFactory } from "./jsm/webxr/XRControllerModelFactory.js";
 import { Hud } from "./hud.js";
 import { InputManager } from "./inputManager.js";
+import { Actor } from "./actor.js";
 
 import "./styles.css";
 import "./scene.js";
@@ -20,6 +21,7 @@ const relativeVelocity = new THREE.Vector3();
 let texts = [];
 const clock = new THREE.Clock();
 let hud;
+let actors = [];
 init();
 animate();
 let inputManager;
@@ -92,37 +94,10 @@ function init() {
       color: 0xff0000,
       specular: 0xffffff
     });
-
-    for (let i = 0; i < 10; i++) {
-      var mesh = new THREE.Mesh(textGeometry, textMaterial);
-      mesh.position.x = Math.random() * 4 - 2;
-      mesh.position.y = Math.random() * 4;
-      mesh.position.z = Math.random() * 4 - 2;
-      mesh.userData.velocity = new THREE.Vector3();
-      mesh.userData.velocity.x = Math.random() * 0.01 - 0.005;
-      mesh.userData.velocity.y = Math.random() * 0.01 - 0.005;
-      mesh.userData.velocity.z = Math.random() * 0.01 - 0.005;
-      texts.push(mesh);
-      room.add(mesh);
-    }
   });
 
-  for (let i = 0; i < 1; i++) {
-    const object = new THREE.Mesh(
-      geometry,
-      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
-    );
-
-    object.position.x = Math.random() * 4 - 2;
-    object.position.y = Math.random() * 4;
-    object.position.z = Math.random() * 4 - 2;
-
-    object.userData.velocity = new THREE.Vector3();
-    object.userData.velocity.x = Math.random() * 0.01 - 0.005;
-    object.userData.velocity.y = Math.random() * 0.01 - 0.005;
-    object.userData.velocity.z = Math.random() * 0.01 - 0.005;
-
-    room.add(object);
+  for (let i = 0; i < 10; i++) {
+    actors.push(new Actor(THREE, room, Math.random() * 1000));
   }
 
   //
@@ -205,7 +180,15 @@ function init() {
   user.add(controllerGrip2);
 
   //
-  inputManager = new InputManager(THREE, renderer.xr, camera, scene, user);
+  inputManager = new InputManager(
+    THREE,
+    renderer.xr,
+    camera,
+    scene,
+    user,
+    controller1,
+    controller2
+  );
   window.addEventListener("resize", onWindowResize);
 }
 
@@ -271,6 +254,7 @@ function animate() {
 }
 
 function render() {
+  const delta = clock.getDelta() * 0.8;
   handleController(controller1);
   handleController(controller2);
 
@@ -281,18 +265,21 @@ function render() {
     inputManager.update(hud);
   }
 
-  //
-
-  const delta = clock.getDelta() * 0.8; // slow down simulation
+  /* Delete any actor marked as should remove */
+  let i = actors.length;
+  while (i--) {
+    const actor = actors[i];
+    actor.update(delta);
+    if (actor.shouldBeDeleted) {
+      actor.delete();
+      actors.splice(i, 1);
+    }
+  }
 
   const range = 3 - radius;
 
   for (let i = 0; i < room.children.length; i++) {
     const object = room.children[i];
-
-    object.position.x += object.userData.velocity.x * delta;
-    object.position.y += object.userData.velocity.y * delta;
-    object.position.z += object.userData.velocity.z * delta;
 
     // keep objects inside room
 
@@ -309,7 +296,7 @@ function render() {
       object.position.y = Math.max(object.position.y, radius);
 
       object.userData.velocity.x *= 0.98;
-      object.userData.velocity.y = -object.userData.velocity.y * 0.8;
+      object.userData.velocity.y = -object.userData.velocity.y;
       object.userData.velocity.z *= 0.98;
     }
 

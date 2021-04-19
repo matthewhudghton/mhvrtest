@@ -308,13 +308,15 @@ var Pinput = (function () {
 })();
 
 export class InputManager {
-  constructor(THREE, xr, camera, scene, user) {
+  constructor(THREE, xr, camera, scene, user, controller1, controller2) {
     this.input = new Pinput();
     this.camera = camera;
     this.scene = scene;
     this.xr = xr;
     this.THREE = THREE;
     this.user = user;
+    this.controller1 = controller1;
+    this.controller2 = controller2;
   }
   update(hud) {
     this.hud = hud; // debug remove this later
