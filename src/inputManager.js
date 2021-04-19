@@ -1,4 +1,3 @@
-import * as THREE from "three";
 var Pinput = (function () {
   "use strict;";
 
@@ -309,11 +308,13 @@ var Pinput = (function () {
 })();
 
 export class InputManager {
-  constructor(xr, camera, scene) {
+  constructor(THREE, xr, camera, scene, user) {
     this.input = new Pinput();
     this.camera = camera;
     this.scene = scene;
     this.xr = xr;
+    this.THREE = THREE;
+    this.user = user;
   }
   update(hud) {
     this.hud = hud; // debug remove this later
@@ -353,17 +354,30 @@ export class InputManager {
     }
 
     /* Quest controller*/
-    /*
+
     let controllerState = this.getQuest2ControllerData();
-    
-    this.hud.debugText = JSON.stringify(controllerState, null, "  ");
-    if (controllerState) {
-      if (controllerState[0].axes[3] > 0) {
-        let direction = new THREE.Vector3();
-        this.camera.getWorldDirection(direction);
-        this.camera.position.add(direction);
+    if (hud && controllerState) {
+      if (!this.value) {
+        this.value = 0;
       }
-    }*/
+      if (this.value % 600 == 0) {
+        hud.debugText = JSON.stringify(controllerState, null, "  ");
+      }
+      this.value++;
+    }
+
+    if (controllerState) {
+      if (controllerState[1].axes[2] < 0) {
+        let direction = new this.THREE.Vector3();
+        this.camera.getWorldDirection(direction);
+        this.user.position.addScaledVector(direction, 0.05);
+      }
+      if (controllerState[1].axes[3] < 0) {
+        let direction = new this.THREE.Vector3();
+        this.camera.getWorldDirection(direction);
+        this.user.position.addScaledVector(direction, 0.05);
+      }
+    }
   }
 
   getQuest2ControllerData() {

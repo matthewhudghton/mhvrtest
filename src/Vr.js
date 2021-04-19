@@ -10,7 +10,7 @@ import "./scene.js";
 let camera, scene, renderer;
 let controller1, controller2;
 let controllerGrip1, controllerGrip2;
-
+let user = new THREE.Group();
 let room;
 
 let count = 0;
@@ -35,6 +35,8 @@ function init() {
     10
   );
   camera.position.set(0, 1.6, 3);
+  user.add(camera);
+  scene.add(user);
   const roomGeometry = new THREE.BufferGeometry();
   // create a simple square shape. We duplicate the top left and bottom right
   // vertices because each vertex needs to appear once per triangle.
@@ -164,15 +166,12 @@ function init() {
 
   controller1.addEventListener("connected", function (event) {
     this.add(buildController(event.data));
-
-    //   handedness: handedness,
-    //buttons: source.gamepad.buttons.map((b) => b.value),
+    controller1.gamepad = event.data.gamepad;
   });
-
   controller1.addEventListener("disconnected", function () {
     this.remove(this.children[0]);
   });
-  scene.add(controller1);
+  user.add(controller1);
 
   controller2 = renderer.xr.getController(1);
   controller2.addEventListener("selectstart", onSelectStart);
@@ -184,7 +183,7 @@ function init() {
   controller2.addEventListener("disconnected", function () {
     this.remove(this.children[0]);
   });
-  scene.add(controller2);
+  user.add(controller2);
 
   // The XRControllerModelFactory will automatically fetch controller models
   // that match what the user is holding as closely as possible. The models
@@ -197,16 +196,16 @@ function init() {
   controllerGrip1.add(
     controllerModelFactory.createControllerModel(controllerGrip1)
   );
-  scene.add(controllerGrip1);
+  user.add(controllerGrip1);
 
   controllerGrip2 = renderer.xr.getControllerGrip(1);
   controllerGrip2.add(
     controllerModelFactory.createControllerModel(controllerGrip2)
   );
-  scene.add(controllerGrip2);
+  user.add(controllerGrip2);
 
   //
-  inputManager = new InputManager(renderer.xr, camera, scene, hud);
+  inputManager = new InputManager(THREE, renderer.xr, camera, scene, user);
   window.addEventListener("resize", onWindowResize);
 }
 
@@ -260,7 +259,7 @@ function handleController(controller) {
     object.userData.velocity.y = (Math.random() - 0.5) * 3;
     object.userData.velocity.z = Math.random() - 9;
     object.userData.velocity.applyQuaternion(controller.quaternion);
-
+    hud.debugText = JSON.stringify(controller.gamepad);
     if (count === room.children.length) count = 0;
   }
 }
@@ -279,7 +278,7 @@ function render() {
     hud.render();
   }
   if (inputManager) {
-    inputManager.update();
+    inputManager.update(hud);
   }
 
   //
