@@ -1,3 +1,4 @@
+import * as THREE from "three";
 var Pinput = (function () {
   "use strict;";
 
@@ -308,12 +309,14 @@ var Pinput = (function () {
 })();
 
 export class InputManager {
-  constructor(camera, scene) {
+  constructor(xr, camera, scene) {
     this.input = new Pinput();
     this.camera = camera;
     this.scene = scene;
+    this.xr = xr;
   }
-  update() {
+  update(hud) {
+    this.hud = hud; // debug remove this later
     this.input.update();
 
     /// handle camera
@@ -348,5 +351,42 @@ export class InputManager {
     if (this.input.isDown("g")) {
       this.camera.rotation.x -= value;
     }
+
+    /* Quest controller*/
+    /*
+    let controllerState = this.getQuest2ControllerData();
+    
+    this.hud.debugText = JSON.stringify(controllerState, null, "  ");
+    if (controllerState) {
+      if (controllerState[0].axes[3] > 0) {
+        let direction = new THREE.Vector3();
+        this.camera.getWorldDirection(direction);
+        this.camera.position.add(direction);
+      }
+    }*/
+  }
+
+  getQuest2ControllerData() {
+    const session = this.xr.getSession();
+    let i = 0;
+    let handedness;
+    let data = [];
+    if (session) {
+      for (const source of session.inputSources) {
+        if (source && source.handedness) {
+          handedness = source.handedness; //left or right controllers
+        }
+        if (!source.gamepad) continue;
+        data.push({
+          handedness: handedness,
+          buttons: source.gamepad.buttons.map((b) => b.value),
+          axes: source.gamepad.axes.slice(0)
+        });
+      }
+    }
+    if (data.length != 2) {
+      return undefined;
+    }
+    return data;
   }
 }

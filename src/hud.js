@@ -17,12 +17,13 @@ export class Hud {
     return this.height * this.width;
   }
   render() {
+    /*
     for (const object of this.objects) {
-      let offset = new THREE.Vector3();
-      offset.x = object.userData.offset.x;
-      offset.y = object.userData.offset.y;
-      offset.z = object.userData.offset.z;
       let worldOffset = new THREE.Vector3();
+      worldOffset.x = object.userData.offset.x;
+      worldOffset.y = object.userData.offset.y;
+      worldOffset.z = object.userData.offset.z;
+      //let worldOffset = new THREE.Vector3();
       this.camera.getWorldDirection(worldOffset);
       object.position.x = this.camera.position.x + worldOffset.x;
       object.position.y = this.camera.position.y + worldOffset.y;
@@ -30,18 +31,18 @@ export class Hud {
       object.rotation.x = this.camera.rotation.x;
       object.rotation.y = this.camera.rotation.y;
       object.rotation.z = this.camera.rotation.z;
-    }
+    }*/
     //object.position.applyAxisAngle( axis, angle );
   }
   set debugText(value) {
     var textGeometry = new THREE.TextGeometry(value, {
       font: this.font,
-      size: 0.02,
+      size: 0.01,
       height: 0.02
     });
 
     var textMaterial = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
+      color: 0xffff00,
       specular: 0xffffff
     });
 
@@ -62,5 +63,18 @@ export class Hud {
       this.scene.remove(object);
     }
     this.objects.push(mesh);
+
+    let worldOffset = new THREE.Vector3();
+    worldOffset.x = mesh.userData.offset.x;
+    worldOffset.y = mesh.userData.offset.y;
+    worldOffset.z = mesh.userData.offset.z;
+    //let worldOffset = new THREE.Vector3();
+    this.camera.getWorldDirection(worldOffset);
+    mesh.position.x = this.camera.position.x + worldOffset.x;
+    mesh.position.y = this.camera.position.y + worldOffset.y;
+    mesh.position.z = this.camera.position.z + worldOffset.z;
+    mesh.rotation.x = this.camera.rotation.x;
+    mesh.rotation.y = this.camera.rotation.y;
+    mesh.rotation.z = this.camera.rotation.z;
   }
 }

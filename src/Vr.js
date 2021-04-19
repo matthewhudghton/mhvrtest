@@ -164,8 +164,11 @@ function init() {
 
   controller1.addEventListener("connected", function (event) {
     this.add(buildController(event.data));
-    controller1.gamepad = event.data.gamepad;
+
+    //   handedness: handedness,
+    //buttons: source.gamepad.buttons.map((b) => b.value),
   });
+
   controller1.addEventListener("disconnected", function () {
     this.remove(this.children[0]);
   });
@@ -203,7 +206,7 @@ function init() {
   scene.add(controllerGrip2);
 
   //
-  inputManager = new InputManager(camera, scene);
+  inputManager = new InputManager(renderer.xr, camera, scene, hud);
   window.addEventListener("resize", onWindowResize);
 }
 
@@ -257,7 +260,7 @@ function handleController(controller) {
     object.userData.velocity.y = (Math.random() - 0.5) * 3;
     object.userData.velocity.z = Math.random() - 9;
     object.userData.velocity.applyQuaternion(controller.quaternion);
-    hud.debugText = JSON.stringify(controller.gamepad);
+
     if (count === room.children.length) count = 0;
   }
 }
