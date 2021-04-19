@@ -367,15 +367,13 @@ export class InputManager {
     }
 
     if (controllerState) {
-      if (controllerState[1].axes[2] < 0) {
+      if (controllerState[1].axes[2] != 0) {
         let direction = new this.THREE.Vector3();
         this.camera.getWorldDirection(direction);
-        this.user.position.addScaledVector(direction, 0.05);
-      }
-      if (controllerState[1].axes[3] < 0) {
-        let direction = new this.THREE.Vector3();
-        this.camera.getWorldDirection(direction);
-        this.user.position.addScaledVector(direction, 0.05);
+        this.user.position.addScaledVector(
+          direction,
+          0.1 * controllerState[1].axes[2]
+        );
       }
     }
   }
