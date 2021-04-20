@@ -1,12 +1,5 @@
 export class Actor {
-  constructor(
-    THREE,
-    CANNON,
-    scene,
-    world,
-    lifeSpan = 10,
-    position = undefined
-  ) {
+  constructor(THREE, CANNON, scene, world, lifeSpan = 1, position = undefined) {
     this.THREE = THREE;
     this.CANNON = CANNON;
     this.scene = scene;
@@ -28,18 +21,11 @@ export class Actor {
     });
     this.body.addShape(this.shape);
     this.body.angularVelocity.set(0, 0, 0);
-    this.body.linearDamping = 0.1;
+    this.body.linearDamping = 0.05;
     this.body.angularDamping = 0.5;
 
     if (position) {
-      if (position.y == 0) {
-        position.y = 1.5;
-        position.x = 0.5;
-        position.z = 2;
-      }
       this.body.position = position;
-
-      console.log(position);
     } else {
       this.body.position.set(
         Math.random() * 4 - 2,
@@ -52,7 +38,7 @@ export class Actor {
   }
 
   update(dt) {
-    //this.lifeSpan -= dt;
+    this.lifeSpan -= dt;
     const object = this.object;
 
     // Copy coordinates from Cannon.js to Three.js

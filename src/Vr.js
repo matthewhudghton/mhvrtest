@@ -30,7 +30,7 @@ var world, mass, body, shape;
 
 function initCannon() {
   world = new CANNON.World();
-  world.gravity.set(0, -1, 0);
+  world.gravity.set(0, -3.8, 0);
   world.broadphase = new CANNON.NaiveBroadphase();
   world.solver.iterations = 10;
 
@@ -279,12 +279,17 @@ function handleController(controller) {}
 function animate() {
   renderer.setAnimationLoop(render);
 }
+let timePassedSinceLastBall = 0;
 
 let controller1LastPosition = new THREE.Vector3(0, 0, 0);
 let controller2LastPosition = new THREE.Vector3(0, 0, 0);
 
 function render() {
-  const dt = clock.getDelta() * 0.00001;
+  const dt = clock.getDelta();
+  // guard against bug in cannon where 0 time cause error
+  if (dt <= 0) {
+    return;
+  }
   handleController(controller1);
   handleController(controller2);
 
@@ -294,7 +299,7 @@ function render() {
   if (inputManager) {
     inputManager.update(hud);
   }
-  world.step(0.1);
+  world.step(dt);
 
   /* Delete any actor marked as should remove */
   let i = actors.length;
@@ -320,12 +325,13 @@ function render() {
     three_position.y,
     three_position.z
   );
-
-  if (actors.length < 50) {
-    // if (controller1 && !controller1.position.equals(controller1LastPosition)) {
-    actors.push(new Actor(THREE, CANNON, scene, world, 100, position));
-    controller1LastPosition = three_position;
-    //}
+  timePassedSinceLastBall += dt;
+  if (actors.length < 200 && timePassedSinceLastBall > 0.2) {
+    timePassedSinceLastBall = 0;
+    if (controller1 && !three_position.equals(controller1LastPosition)) {
+      actors.push(new Actor(THREE, CANNON, scene, world, 10, position));
+      controller1LastPosition = three_position;
+    }
     const controller2 = inputManager.controller2;
     controller2.getWorldPosition(three_position);
     position = new CANNON.Vec3(
@@ -333,10 +339,10 @@ function render() {
       three_position.y,
       three_position.z
     );
-    // if (controller2 && !controller2.position.equals(controller2LastPosition)) {
-    actors.push(new Actor(THREE, CANNON, scene, world, 100, position));
-    controller2LastPosition = three_position;
-    // }
+    if (controller2 && !three_position.equals(controller2LastPosition)) {
+      actors.push(new Actor(THREE, CANNON, scene, world, 10, position));
+      controller2LastPosition = three_position;
+    }
   }
 
   renderer.render(scene, camera);

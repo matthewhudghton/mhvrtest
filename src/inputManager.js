@@ -363,7 +363,7 @@ export class InputManager {
         this.value = 0;
       }
       if (this.value % 600 == 0) {
-        hud.debugText = JSON.stringify(controllerState, null, "  ");
+        //hud.debugText = JSON.stringify(controllerState, null, "  ");
       }
       this.value++;
     }
