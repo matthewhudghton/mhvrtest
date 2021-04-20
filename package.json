@@ -11,7 +11,8 @@
     "react-scripts": "4.0.0",
     "statsvr": "2.2.1",
     "three": "latest",
-    "webxr": "latest"
+    "webxr": "latest",
+    "cannon": "latest"
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",

@@ -4,6 +4,7 @@ import { XRControllerModelFactory } from "./jsm/webxr/XRControllerModelFactory.j
 import { Hud } from "./hud.js";
 import { InputManager } from "./inputManager.js";
 import { Actor } from "./actor.js";
+import * as CANNON from "cannon";
 
 import "./styles.css";
 import "./scene.js";
@@ -12,7 +13,6 @@ let camera, scene, renderer;
 let controller1, controller2;
 let controllerGrip1, controllerGrip2;
 let user = new THREE.Group();
-let room;
 
 let count = 0;
 const radius = 0.08;
@@ -26,16 +26,67 @@ init();
 animate();
 let inputManager;
 
-function init() {
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x505050);
+var world, mass, body, shape;
 
+function initCannon() {
+  world = new CANNON.World();
+  world.gravity.set(0, -1, 0);
+  world.broadphase = new CANNON.NaiveBroadphase();
+  world.solver.iterations = 10;
+
+  // add a floor
+  var groundShape = new CANNON.Plane();
+  var groundBody = new CANNON.Body({ mass: 0 });
+  groundBody.addShape(groundShape);
+  groundBody.quaternion.setFromAxisAngle(
+    new CANNON.Vec3(1, 0, 0),
+    -Math.PI / 2
+  );
+  world.addBody(groundBody);
+
+  //world.add(groundBody);
+}
+
+function init() {
+  initCannon();
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xeeeeee);
+  scene.fog = new THREE.Fog(0x000000, 0, 1000);
+  let light2 = new THREE.SpotLight(0xffffff);
+  light2.position.set(10, 30, 20);
+  light2.target.position.set(0, 0, 0);
+  if (true) {
+    light2.castShadow = true;
+
+    light2.shadowCameraNear = 20;
+    light2.shadowCameraFar = 50; //camera.far;
+    light2.shadowCameraFov = 40;
+
+    light2.shadowMapBias = 0.1;
+    light2.shadowMapDarkness = 0.7;
+    light2.shadowMapWidth = 2 * 512;
+    light2.shadowMapHeight = 2 * 512;
+
+    //light.shadowCameraVisible = true;
+  }
+  scene.add(light2);
   camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
     0.1,
-    10
+    10000
   );
+
+  let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
+  floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
+
+  material = new THREE.MeshLambertMaterial({ color: 0xaaaaaa });
+
+  mesh = new THREE.Mesh(floorGeometry, material);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  scene.add(mesh);
+
   camera.position.set(0, 1.6, 3);
   user.add(camera);
   scene.add(user);
@@ -64,20 +115,7 @@ function init() {
     10.0
   ]);
 
-  // itemSize = 3 because there are 3 values (components) per vertex
-  roomGeometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-  room = new THREE.LineSegments(
-    roomGeometry,
-    new THREE.LineBasicMaterial({ color: 0x808080 })
-  );
-  room.geometry.translate(0, 3, 0);
-  scene.add(room);
-
   scene.add(new THREE.HemisphereLight(0x606060, 0x404040));
-
-  const light = new THREE.DirectionalLight(0xffffff);
-  light.position.set(1, 1, 1).normalize();
-  scene.add(light);
 
   const geometry = new THREE.IcosahedronGeometry(radius, 3);
 
@@ -96,10 +134,6 @@ function init() {
     });
   });
 
-  for (let i = 0; i < 10; i++) {
-    actors.push(new Actor(THREE, room, Math.random() * 1000));
-  }
-
   //
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -107,6 +141,11 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.xr.enabled = true;
+  renderer.shadowMapEnabled = true;
+  renderer.shadowMapSoft = true;
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(scene.fog.color, 1);
+
   document.body.appendChild(renderer.domElement);
   let hudElement = document.createElement("div");
   hudElement.className = "hud";
@@ -245,7 +284,7 @@ let controller1LastPosition = new THREE.Vector3(0, 0, 0);
 let controller2LastPosition = new THREE.Vector3(0, 0, 0);
 
 function render() {
-  const delta = clock.getDelta() * 0.8;
+  const dt = clock.getDelta() * 0.00001;
   handleController(controller1);
   handleController(controller2);
 
@@ -255,12 +294,15 @@ function render() {
   if (inputManager) {
     inputManager.update(hud);
   }
+  world.step(0.1);
 
   /* Delete any actor marked as should remove */
   let i = actors.length;
   while (i--) {
     const actor = actors[i];
-    actor.update(delta);
+    // Step the physics world
+    actor.update(dt);
+
     if (actor.shouldBeDeleted) {
       actor.delete();
       actors.splice(i, 1);
@@ -269,79 +311,32 @@ function render() {
 
   /* Track controller position with actor */
   const controller1 = inputManager.controller1;
-  let position = new THREE.Vector3();
-  controller1.getWorldPosition(position);
-  // if (controller1 && !controller1.position.equals(controller1LastPosition)) {
-  actors.push(new Actor(THREE, room, 100, position));
-  controller1LastPosition = controller1.position;
-  //}
-  const controller2 = inputManager.controller2;
-  controller2.getWorldPosition(position);
-  // if (controller2 && !controller2.position.equals(controller2LastPosition)) {
-  actors.push(new Actor(THREE, room, 100, position));
-  controller2LastPosition = controller2.position;
-  // }
+  let three_position = new THREE.Vector3();
 
-  const range = 3 - radius;
+  controller1.getWorldPosition(three_position);
 
-  for (let i = 0; i < room.children.length; i++) {
-    const object = room.children[i];
+  let position = new CANNON.Vec3(
+    three_position.x,
+    three_position.y,
+    three_position.z
+  );
 
-    // keep objects inside room
-
-    if (object.position.x < -range || object.position.x > range) {
-      object.position.x = THREE.MathUtils.clamp(
-        object.position.x,
-        -range,
-        range
-      );
-      object.userData.velocity.x = -object.userData.velocity.x;
-    }
-
-    if (object.position.y < radius || object.position.y > 6) {
-      object.position.y = Math.max(object.position.y, radius);
-
-      object.userData.velocity.x *= 0.98;
-      object.userData.velocity.y = -object.userData.velocity.y;
-      object.userData.velocity.z *= 0.98;
-    }
-
-    if (object.position.z < -range || object.position.z > range) {
-      object.position.z = THREE.MathUtils.clamp(
-        object.position.z,
-        -range,
-        range
-      );
-      object.userData.velocity.z = -object.userData.velocity.z;
-    }
-
-    for (let j = i + 1; j < room.children.length; j++) {
-      const object2 = room.children[j];
-
-      normal.copy(object.position).sub(object2.position);
-
-      const distance = normal.length();
-
-      if (distance < 2 * radius) {
-        normal.multiplyScalar(0.5 * distance - radius);
-
-        object.position.sub(normal);
-        object2.position.add(normal);
-
-        normal.normalize();
-
-        relativeVelocity
-          .copy(object.userData.velocity)
-          .sub(object2.userData.velocity);
-
-        normal = normal.multiplyScalar(relativeVelocity.dot(normal));
-
-        object.userData.velocity.sub(normal);
-        object2.userData.velocity.add(normal);
-      }
-    }
-
-    object.userData.velocity.y -= 9.8 * delta;
+  if (actors.length < 50) {
+    // if (controller1 && !controller1.position.equals(controller1LastPosition)) {
+    actors.push(new Actor(THREE, CANNON, scene, world, 100, position));
+    controller1LastPosition = three_position;
+    //}
+    const controller2 = inputManager.controller2;
+    controller2.getWorldPosition(three_position);
+    position = new CANNON.Vec3(
+      three_position.x,
+      three_position.y,
+      three_position.z
+    );
+    // if (controller2 && !controller2.position.equals(controller2LastPosition)) {
+    actors.push(new Actor(THREE, CANNON, scene, world, 100, position));
+    controller2LastPosition = three_position;
+    // }
   }
 
   renderer.render(scene, camera);

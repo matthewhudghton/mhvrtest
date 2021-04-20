@@ -1,43 +1,71 @@
 export class Actor {
-  constructor(THREE, scene, lifeSpan = 1000, position = undefined) {
+  constructor(
+    THREE,
+    CANNON,
+    scene,
+    world,
+    lifeSpan = 10,
+    position = undefined
+  ) {
     this.THREE = THREE;
+    this.CANNON = CANNON;
     this.scene = scene;
     this.lifeSpan = lifeSpan;
-    const geometry = new THREE.IcosahedronGeometry(0.1, 3);
+    const geometry = new THREE.IcosahedronGeometry(0.2, 3);
     this.object = new THREE.Mesh(
       geometry,
       new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
     );
-    if (position) {
-      this.object.position.copy(position);
-      this.object.userData.velocity = new THREE.Vector3();
-      this.object.userData.velocity.x = 0;
-      this.object.userData.velocity.y = 0;
-      this.object.userData.velocity.z = 0;
-    } else {
-      this.object.position.x = Math.random() * 4 - 2;
-      this.object.position.y = Math.random() * 4;
-      this.object.position.z = Math.random() * 4 - 2;
 
-      this.object.userData.velocity = new THREE.Vector3();
-      this.object.userData.velocity.x = Math.random() * 0.01 - 0.005;
-      this.object.userData.velocity.y = Math.random() * 0.01 - 0.005;
-      this.object.userData.velocity.z = Math.random() * 0.01 - 0.005;
+    this.object.castShadow = true;
+    this.object.receiveShadow = true;
+    scene.add(this.object);
+    this.world = world;
+    this.shape = new CANNON.Sphere(0.2);
+    this.mass = 1;
+    this.body = new CANNON.Body({
+      mass: 1
+    });
+    this.body.addShape(this.shape);
+    this.body.angularVelocity.set(0, 0, 0);
+    this.body.linearDamping = 0.1;
+    this.body.angularDamping = 0.5;
+
+    if (position) {
+      if (position.y == 0) {
+        position.y = 1.5;
+        position.x = 0.5;
+        position.z = 2;
+      }
+      this.body.position = position;
+
+      console.log(position);
+    } else {
+      this.body.position.set(
+        Math.random() * 4 - 2,
+        Math.random() * 4,
+        Math.random() * 4 - 2
+      );
     }
 
-    scene.add(this.object);
+    this.world.addBody(this.body);
   }
 
   update(dt) {
-    this.lifeSpan -= 1;
+    //this.lifeSpan -= dt;
     const object = this.object;
-    this.object.position.x += object.userData.velocity.x * dt;
-    this.object.position.y += object.userData.velocity.y * dt;
-    this.object.position.z += object.userData.velocity.z * dt;
+
+    // Copy coordinates from Cannon.js to Three.js
+    this.object.position.copy(this.body.position);
+    //console.log(this.body.position);
+    this.object.quaternion.copy(this.body.quaternion);
+    //console.log(this.body.position);
   }
 
   delete() {
+    this.world.remove(this.body);
     this.scene.remove(this.object);
+    console.log("deleteing!");
   }
 
   get shouldBeDeleted() {
