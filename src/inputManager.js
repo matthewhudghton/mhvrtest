@@ -308,11 +308,21 @@ var Pinput = (function () {
 })();
 
 export class InputManager {
-  constructor(THREE, xr, camera, scene, user, controller1, controller2) {
+  constructor(
+    THREE,
+    xr,
+    camera,
+    scene,
+    user,
+    player,
+    controller1,
+    controller2
+  ) {
     this.input = new Pinput();
     this.camera = camera;
     this.scene = scene;
     this.xr = xr;
+    this.player = player;
     this.THREE = THREE;
     this.user = user;
     this.controller1 = controller1;
@@ -337,7 +347,8 @@ export class InputManager {
       this.camera.position.y -= value;
     }
     if (this.input.isDown("w")) {
-      this.camera.position.z -= value;
+      //this.camera.position.z -= value;
+      this.player.addMessage({ forward: 1 });
     }
     if (this.input.isDown("s")) {
       this.camera.position.z += value;

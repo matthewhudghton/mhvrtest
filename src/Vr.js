@@ -99,7 +99,7 @@ function init() {
 
   camera.position.set(0, 1.6, 3);
   user.add(camera);
-  player = new Player(THREE, CANNON, user, map);
+  player = new Player(THREE, CANNON, camera, user, map);
   scene.add(user);
   const roomGeometry = new THREE.BufferGeometry();
   // create a simple square shape. We duplicate the top left and bottom right
@@ -236,6 +236,7 @@ function init() {
     user,
     scene,
     user,
+    player,
     controller1,
     controller2
   );
