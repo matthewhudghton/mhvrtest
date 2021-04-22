@@ -385,7 +385,7 @@ export class InputManager {
     let i = 0;
     let handedness;
     let data = [];
-    if (session) {
+    if (session && session.inputSources) {
       for (const source of session.inputSources) {
         if (source && source.handedness) {
           handedness = source.handedness; //left or right controllers

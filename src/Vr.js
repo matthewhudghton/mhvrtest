@@ -4,6 +4,8 @@ import { XRControllerModelFactory } from "./jsm/webxr/XRControllerModelFactory.j
 import { Hud } from "./hud.js";
 import { InputManager } from "./inputManager.js";
 import { Actor } from "./actor.js";
+import { Player } from "./player.js";
+import { Map } from "./map.js";
 import * as CANNON from "cannon";
 
 import "./styles.css";
@@ -22,6 +24,13 @@ let texts = [];
 const clock = new THREE.Clock();
 let hud;
 let actors = [];
+let player;
+let map;
+function appendDebug(text) {
+  var node = document.createTextNode(text); // Create a text node
+  document.getElementById("debugText").appendChild(node);
+}
+
 init();
 animate();
 let inputManager;
@@ -67,6 +76,7 @@ function init() {
     light2.shadowMapWidth = 2 * 512;
     light2.shadowMapHeight = 2 * 512;
 
+    map = new Map(scene, world);
     //light.shadowCameraVisible = true;
   }
   scene.add(light2);
@@ -80,15 +90,16 @@ function init() {
   let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
   floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-  material = new THREE.MeshLambertMaterial({ color: 0xaaaaaa });
+  let material = new THREE.MeshLambertMaterial({ color: 0xaaaaaa });
 
-  mesh = new THREE.Mesh(floorGeometry, material);
+  let mesh = new THREE.Mesh(floorGeometry, material);
   mesh.castShadow = true;
   mesh.receiveShadow = true;
   scene.add(mesh);
 
   camera.position.set(0, 1.6, 3);
   user.add(camera);
+  player = new Player(THREE, CANNON, user, map);
   scene.add(user);
   const roomGeometry = new THREE.BufferGeometry();
   // create a simple square shape. We duplicate the top left and bottom right
@@ -286,10 +297,7 @@ let controller2LastPosition = new THREE.Vector3(0, 0, 0);
 
 function render() {
   const dt = clock.getDelta();
-  // guard against bug in cannon where 0 time cause error
-  if (dt <= 0) {
-    return;
-  }
+
   handleController(controller1);
   handleController(controller2);
 
@@ -299,20 +307,7 @@ function render() {
   if (inputManager) {
     inputManager.update(hud);
   }
-  world.step(dt);
-
-  /* Delete any actor marked as should remove */
-  let i = actors.length;
-  while (i--) {
-    const actor = actors[i];
-    // Step the physics world
-    actor.update(dt);
-
-    if (actor.shouldBeDeleted) {
-      actor.delete();
-      actors.splice(i, 1);
-    }
-  }
+  map.update(dt);
 
   /* Track controller position with actor */
   const controller1 = inputManager.controller1;
@@ -326,10 +321,23 @@ function render() {
     three_position.z
   );
   timePassedSinceLastBall += dt;
-  if (actors.length < 200 && timePassedSinceLastBall > 0.2) {
-    timePassedSinceLastBall = 0;
-    if (controller1 && !three_position.equals(controller1LastPosition)) {
-      actors.push(new Actor(THREE, CANNON, scene, world, 10, position));
+  const k = 0.1;
+  if (controller1 && controller1.getVelocity) {
+    appendDebug(JSON.stringify(controller1));
+  }
+  if (timePassedSinceLastBall > 0.2) {
+    if (
+      controller1 &&
+      controller1.getVelocity &&
+      (controller1.getVelocity.x > k ||
+        controller1.getVelocity.y > k ||
+        controller1.getVelocity.z > k) &&
+      !three_position.equals(controller1LastPosition)
+    ) {
+      timePassedSinceLastBall = 0;
+      actors.push(
+        new Actor(THREE, CANNON, map, 10, position, controller1.getVelocity)
+      );
       controller1LastPosition = three_position;
     }
     const controller2 = inputManager.controller2;
@@ -339,8 +347,18 @@ function render() {
       three_position.y,
       three_position.z
     );
-    if (controller2 && !three_position.equals(controller2LastPosition)) {
-      actors.push(new Actor(THREE, CANNON, scene, world, 10, position));
+    if (
+      controller2 &&
+      controller1.getVelocity &&
+      (controller2.getVelocity.x > k ||
+        controller2.getVelocity.y > k ||
+        controller2.getVelocity.z > k) &&
+      !three_position.equals(controller2LastPosition)
+    ) {
+      timePassedSinceLastBall = 0;
+      actors.push(
+        new Actor(THREE, CANNON, map, 10, position, controller2.getVelocity)
+      );
       controller2LastPosition = three_position;
     }
   }
@@ -352,6 +370,7 @@ export default function Vr() {
   return (
     <div className="Vr">
       <h1>Matts Test VR APP</h1>
+      <p id="debugText"></p>
     </div>
   );
 }
