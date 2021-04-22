@@ -10,7 +10,21 @@ export class Player {
     this.playerPos = undefined;
   }
 
-  update(dt) {}
+  update(dt) {
+    const k = 0.05;
+
+    this.cameraGroup.position.x =
+      this.cameraGroup.position.x * k +
+      this.bodyActor.body.position.x * (1 - k);
+
+    this.cameraGroup.position.y =
+      this.cameraGroup.position.y * k +
+      this.bodyActor.body.position.y * (1 - k);
+
+    this.cameraGroup.position.z =
+      this.cameraGroup.position.z * k +
+      this.bodyActor.body.position.z * (1 - k);
+  }
 
   delete() {}
 

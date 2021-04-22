@@ -233,7 +233,7 @@ function init() {
   inputManager = new InputManager(
     THREE,
     renderer.xr,
-    camera,
+    user,
     scene,
     user,
     controller1,
@@ -308,6 +308,7 @@ function render() {
     inputManager.update(hud);
   }
   map.update(dt);
+  player.update(dt);
 
   /* Track controller position with actor */
   const controller1 = inputManager.controller1;
