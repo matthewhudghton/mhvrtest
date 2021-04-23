@@ -1,4 +1,5 @@
-import { Actor } from "./actor";
+import { Actor } from "./actor.js";
+import { Debouncer } from "./debouncer.js";
 
 export class Player {
   constructor(THREE, CANNON, camera, cameraGroup, map) {
@@ -19,6 +20,9 @@ export class Player {
     this.bodyActor.body.fixedRotation = true;
     this.bodyActor.body.linearDamping = 0.4;
 
+    this.leftFireDebouncer = new Debouncer(1);
+    this.rightFireDebouncer = new Debouncer(1);
+    this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
     this.messages = [];
     this.map = map;
@@ -27,6 +31,10 @@ export class Player {
   update(dt) {
     const CANNON = this.CANNON;
     const k = 0.05;
+
+    this.debouncers.forEach((debouncer) => {
+      debouncer.update(dt);
+    });
 
     this.cameraGroup.position.x =
       this.cameraGroup.position.x * k +
@@ -82,7 +90,7 @@ export class Player {
       if (message.backward) {
         this.applyImpulseRelativeToCamera(-2);
       }
-      if (message.fire) {
+      if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */
 
         new Actor(
