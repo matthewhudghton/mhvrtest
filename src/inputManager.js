@@ -310,6 +310,7 @@ var Pinput = (function () {
 export class InputManager {
   constructor(
     THREE,
+    CANNON,
     xr,
     camera,
     scene,
@@ -319,6 +320,7 @@ export class InputManager {
     controller2
   ) {
     this.input = new Pinput();
+    this.CANNON = CANNON;
     this.camera = camera;
     this.scene = scene;
     this.xr = xr;
@@ -381,13 +383,40 @@ export class InputManager {
     }
 
     if (controllerState) {
-      if (controllerState[0].axes[2] > 0) {
-        this.player.addMessage({ forward: controllerState[1].axes[2] });
-      }
       if (controllerState[0].axes[2] < 0) {
-        this.player.addMessage({ backward: controllerState[1].axes[2] });
+        this.player.addMessage({ forward: controllerState[0].axes[2] });
+      }
+      if (controllerState[0].axes[2] > 0) {
+        this.player.addMessage({ backward: controllerState[0].axes[2] });
+      }
+
+      if (controllerState[1].axes[2] > 0) {
+        this.player.addMessage({
+          fire: { position: this.getController2Position() }
+        });
       }
     }
+  }
+  getControllerPosition(controller) {
+    const THREE = this.THREE;
+    const CANNON = this.CANNON;
+    let three_position = new THREE.Vector3();
+
+    controller.getWorldPosition(three_position);
+
+    let position = new CANNON.Vec3(
+      three_position.x,
+      three_position.y,
+      three_position.z
+    );
+    return position;
+  }
+
+  getController1Position() {
+    return this.getControllerPosition(this.controller1);
+  }
+  getController2Position() {
+    return this.getControllerPosition(this.controller2);
   }
 
   getQuest2ControllerData() {

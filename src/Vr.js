@@ -248,6 +248,7 @@ function init() {
   //
   inputManager = new InputManager(
     THREE,
+    CANNON,
     renderer.xr,
     user,
     scene,

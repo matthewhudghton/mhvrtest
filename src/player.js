@@ -21,6 +21,7 @@ export class Player {
 
     this.playerPos = undefined;
     this.messages = [];
+    this.map = map;
   }
 
   update(dt) {
@@ -74,11 +75,24 @@ export class Player {
 
   handleMessages(messages) {
     for (const message of messages) {
+      /* Movement */
       if (message.forward) {
         this.applyImpulseRelativeToCamera(2);
       }
       if (message.backward) {
         this.applyImpulseRelativeToCamera(-2);
+      }
+      if (message.fire) {
+        /* Fire */
+
+        new Actor(
+          this.THREE,
+          this.CANNON,
+          this.map,
+          undefined,
+          message.fire.position,
+          undefined
+        );
       }
     }
   }
