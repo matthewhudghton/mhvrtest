@@ -5,7 +5,8 @@ export class Actor {
     map,
     lifeSpan = undefined,
     position = undefined,
-    velocity = undefined
+    velocity = undefined,
+    bodySettings
   ) {
     this.THREE = THREE;
     this.CANNON = CANNON;
@@ -15,7 +16,8 @@ export class Actor {
     this.scene = map.scene;
     this.lifeSpan = lifeSpan;
 
-    const geometry = new THREE.IcosahedronGeometry(0.2, 3);
+    //const geometry = new THREE.IcosahedronGeometry(0.2, 3);
+    const geometry = new THREE.BoxGeometry(0.3, 0.2, 0.6);
     this.mesh = new THREE.Mesh(
       geometry,
       new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
@@ -24,11 +26,11 @@ export class Actor {
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
 
-    this.shape = new CANNON.Sphere(0.2);
+    //this.shape = new CANNON.Sphere(0.2);
+    this.shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.2, 0.6));
     this.mass = 1;
-    this.body = new CANNON.Body({
-      mass: 1
-    });
+
+    this.body = new CANNON.Body({ ...bodySettings, mass: 1 });
     this.body.addShape(this.shape);
     if (velocity) {
       this.body.angularVelocity.set(velocity.x, velocity.y, velocity.z);

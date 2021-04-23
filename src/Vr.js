@@ -53,6 +53,22 @@ function initCannon() {
   );
   world.addBody(groundBody);
 
+  // Materials
+  var playerMaterial = new CANNON.Material("playerMaterial");
+
+  // Adjust constraint equation parameters for ground/ground contact
+  var playerMaterial_cm = new CANNON.ContactMaterial(
+    playerMaterial,
+    playerMaterial,
+    {
+      friction: 0,
+      restitution: 0.3,
+      contactEquationStiffness: 1e8,
+      contactEquationRelaxation: 3
+    }
+  );
+  world.addContactMaterial(playerMaterial_cm);
+
   //world.add(groundBody);
 }
 

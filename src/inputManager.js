@@ -351,7 +351,8 @@ export class InputManager {
       this.player.addMessage({ forward: 1 });
     }
     if (this.input.isDown("s")) {
-      this.camera.position.z += value;
+      //this.camera.position.z += value;
+      this.player.addMessage({ backward: 1 });
     }
     if (this.input.isDown("h")) {
       this.camera.rotation.y -= value;
@@ -380,13 +381,11 @@ export class InputManager {
     }
 
     if (controllerState) {
-      if (controllerState[1].axes[2] != 0) {
-        let direction = new this.THREE.Vector3();
-        this.camera.getWorldDirection(direction);
-        this.user.position.addScaledVector(
-          direction,
-          -0.2 * controllerState[1].axes[2]
-        );
+      if (controllerState[0].axes[2] > 0) {
+        this.player.addMessage({ forward: controllerState[1].axes[2] });
+      }
+      if (controllerState[0].axes[2] < 0) {
+        this.player.addMessage({ backward: controllerState[1].axes[2] });
       }
     }
   }

@@ -7,14 +7,26 @@ export class Player {
     this.cameraGroup = cameraGroup;
     this.camera = camera;
     let position = new CANNON.Vec3(0, 1, 0);
-    this.bodyActor = new Actor(THREE, CANNON, map, undefined, position);
+    this.bodyActor = new Actor(
+      THREE,
+      CANNON,
+      map,
+      undefined,
+      position,
+      undefined,
+      { fixedRotation: true, material: "playerMaterial" }
+    );
+    this.bodyActor.body.fixedRotation = true;
+    this.bodyActor.body.linearDamping = 0.4;
+
     this.playerPos = undefined;
     this.messages = [];
   }
 
   update(dt) {
+    const CANNON = this.CANNON;
     const k = 0.05;
-    /*
+
     this.cameraGroup.position.x =
       this.cameraGroup.position.x * k +
       this.bodyActor.body.position.x * (1 - k);
@@ -25,7 +37,12 @@ export class Player {
 
     this.cameraGroup.position.z =
       this.cameraGroup.position.z * k +
-      this.bodyActor.body.position.z * (1 - k);*/
+      this.bodyActor.body.position.z * (1 - k);
+
+    /* this.bodyActor.body.quaternion.setFromAxisAngle(
+      new CANNON.Vec3(0, 0, 0),
+      -Math.PI / 2
+    );*/
 
     this.handleMessages(this.messages);
     while (this.messages.pop()) {}
@@ -52,13 +69,16 @@ export class Player {
       direction.z * speed
     );
     const pointOnBody = new CANNON.Vec3(0, 0, 0);
-    this.bodyActor.body.applyLocalImpulse(force, pointOnBody);
+    this.bodyActor.body.applyImpulse(force, pointOnBody);
   }
 
   handleMessages(messages) {
     for (const message of messages) {
       if (message.forward) {
-        this.applyImpulseRelativeToCamera(1);
+        this.applyImpulseRelativeToCamera(2);
+      }
+      if (message.backward) {
+        this.applyImpulseRelativeToCamera(-2);
       }
     }
   }
