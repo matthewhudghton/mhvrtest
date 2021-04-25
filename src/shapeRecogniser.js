@@ -8,6 +8,8 @@ export class ShapeRecogniser {
     this.minX = Number.MAX_VALUE;
     this.maxY = -Number.MAX_VALUE;
     this.minY = Number.MAX_VALUE;
+    this.xCount = 100;
+    this.yCount = 100;
   }
 
   addPoint(x, y) {
@@ -17,9 +19,22 @@ export class ShapeRecogniser {
     this.minY = Math.min(this.minY, y);
     this.maxY = Math.max(this.maxY, y);
   }
-  print() {
-    let logString = `x ${this.minX}`;
 
+  normalisePoints(points) {
+    //  ~~ is a fast bitwise way to convert to int
+    return points.map((p) => [
+      ~~(((p[0] - this.minX) / (this.maxX - this.minX)) * this.xCount),
+      ~~(((p[1] - this.minY) / (this.maxY - this.minY)) * this.yCount)
+    ]);
+  }
+
+  print() {
+    let logString = `
+    x: ${this.minX} ${this.maxX}
+    y: ${this.minY} ${this.maxY}
+    `;
     console.log(logString);
+    let normalisedPoints = this.normalisePoints(this.points);
+    console.log(normalisedPoints);
   }
 }
