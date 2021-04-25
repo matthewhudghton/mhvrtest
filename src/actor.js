@@ -27,7 +27,7 @@ export class Actor {
     this.mesh.receiveShadow = true;
 
     //this.shape = new CANNON.Sphere(0.2);
-    this.shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.2, 0.6));
+    this.shape = new CANNON.Box(new CANNON.Vec3(0.15, 0.1, 0.3)); // half of three
     this.mass = 1;
 
     this.body = new CANNON.Body({ ...bodySettings, mass: 1 });

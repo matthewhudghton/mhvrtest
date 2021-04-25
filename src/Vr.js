@@ -6,7 +6,9 @@ import { InputManager } from "./inputManager.js";
 import { Actor } from "./actor.js";
 import { Player } from "./player.js";
 import { Map } from "./map.js";
+//import { ShapeRecogniser } from "./shapeRecogniser.js";
 import * as CANNON from "cannon";
+import { Mouse } from "./mouse.js";
 
 import "./styles.css";
 import "./scene.js";
@@ -94,7 +96,9 @@ function init() {
 
     map = new Map(scene, world);
     //light.shadowCameraVisible = true;
+    var mouse = new Mouse(THREE);
   }
+
   scene.add(light2);
   camera = new THREE.PerspectiveCamera(
     50,
@@ -384,6 +388,11 @@ function render() {
 
   renderer.render(scene, camera);
 }
+/*
+let shapeRecogniser = new ShapeRecogniser();
+for (let i = 0; i < 1; i += 0.01) {
+
+}*/
 
 export default function Vr() {
   return (

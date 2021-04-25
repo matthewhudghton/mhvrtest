@@ -368,7 +368,7 @@ export class InputManager {
     if (this.input.isDown("g")) {
       this.camera.rotation.x -= value;
     }
-
+    var first = true;
     /* Quest controller*/
 
     let controllerState = this.getQuest2ControllerData();
@@ -390,13 +390,21 @@ export class InputManager {
         this.player.addMessage({ backward: controllerState[0].axes[2] });
       }
 
-      if (controllerState[1].axes[2] > 0) {
+      if (
+        controllerState[1].axes[2] > 0 ||
+        this?.controller1?.userData?.isSelecting
+      ) {
         this.player.addMessage({
           fire: { position: this.getController2Position() }
         });
+        if (first) {
+          hud.debugText = JSON.stringify(this.getController2Position());
+          first = false;
+        }
       }
     }
   }
+
   getControllerPosition(controller) {
     const THREE = this.THREE;
     const CANNON = this.CANNON;

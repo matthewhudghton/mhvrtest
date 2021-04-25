@@ -6,13 +6,13 @@
   "main": "src/index.js",
   "dependencies": {
     "@seregpie/three.text-sprite": "latest",
+    "cannon": "latest",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-scripts": "4.0.0",
     "statsvr": "2.2.1",
-    "three": "latest",
-    "webxr": "latest",
-    "cannon": "latest"
+    "three": "0.127.0",
+    "webxr": "latest"
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",
