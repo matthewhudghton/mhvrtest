@@ -1,3 +1,5 @@
+import { ShapeRecogniser } from "./shapeRecogniser.js";
+
 export class Mouse {
   constructor(THREE) {
     this.THREE = THREE;
@@ -31,16 +33,15 @@ export class Mouse {
       "mouseup",
       function onDocumentMouseUp(event) {
         this.mousePressed = false;
-        console.log(this.recordedPoints);
+        this.shapeRecogniser.print();
       }.bind(this),
       false
     );
   }
   newRecord() {
-    this.currentIndex++;
-    this.recordedPoints[this.currentIndex] = [];
+    this.shapeRecogniser = new ShapeRecogniser();
   }
   recordPos(x, y) {
-    this.recordedPoints[this.currentIndex].push([x, y]);
+    this.shapeRecogniser.addPoint(x, y);
   }
 }

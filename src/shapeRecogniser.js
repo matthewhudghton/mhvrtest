@@ -3,10 +3,23 @@ import { Debouncer } from "./debouncer.js";
 
 export class ShapeRecogniser {
   constructor() {
-    this.foo = 1;
+    this.points = [];
+    this.maxX = -Number.MAX_VALUE;
+    this.minX = Number.MAX_VALUE;
+    this.maxY = -Number.MAX_VALUE;
+    this.minY = Number.MAX_VALUE;
   }
 
-  getPoint(radius, angle) {
-    return [radius * Math.cos(angle), radius * Math.sin(angle)];
+  addPoint(x, y) {
+    this.points.push([x, y]);
+    this.minX = Math.min(this.minX, x);
+    this.maxX = Math.max(this.maxX, x);
+    this.minY = Math.min(this.minY, y);
+    this.maxY = Math.max(this.maxY, y);
+  }
+  print() {
+    let logString = `x ${this.minX}`;
+
+    console.log(logString);
   }
 }
