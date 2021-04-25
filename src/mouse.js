@@ -4,6 +4,8 @@ export class Mouse {
     this.mousePressed = false;
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
+    this.currentIndex = -1;
+    this.recordedPoints = [];
 
     document.addEventListener(
       "mousemove",
@@ -11,7 +13,8 @@ export class Mouse {
         if (this.mousePressed) {
           this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
           this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-          console.log(this.mouse.x, this.mouse.y);
+          //console.log(this.mouse.x, this.mouse.y);
+          this.recordPos(this.mouse.x, this.mouse.y);
         }
       }.bind(this),
       false
@@ -20,6 +23,7 @@ export class Mouse {
       "mousedown",
       function onDocumentMouseDown(event) {
         this.mousePressed = true;
+        this.newRecord();
       }.bind(this),
       false
     );
@@ -27,8 +31,16 @@ export class Mouse {
       "mouseup",
       function onDocumentMouseUp(event) {
         this.mousePressed = false;
+        console.log(this.recordedPoints);
       }.bind(this),
       false
     );
+  }
+  newRecord() {
+    this.currentIndex++;
+    this.recordedPoints[this.currentIndex] = [];
+  }
+  recordPos(x, y) {
+    this.recordedPoints[this.currentIndex].push([x, y]);
   }
 }
