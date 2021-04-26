@@ -42,6 +42,7 @@ export class Mouse {
     this.shapeRecogniser = new ShapeRecogniser();
   }
   recordPos(x, y) {
-    this.shapeRecogniser.addPoint(x, y);
+    const time = new Date().getTime();
+    this.shapeRecogniser.addPoint(x, y, time);
   }
 }
