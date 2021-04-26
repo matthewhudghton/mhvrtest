@@ -46,7 +46,8 @@ export class ShapeRecogniser {
     let message = "";
     for (let y = 0; y < this.yCount; y++) {
       for (let x = 0; x < this.xCount; x++) {
-        message += matrix[x][y] && matrix[x][y].length > 0 ? "#" : ".";
+        message +=
+          matrix[x][y] && matrix[x][y].length > 0 ? matrix[x][y].length : ".";
       }
       message += "\n";
     }
