@@ -163,8 +163,20 @@ export class ShapeRecogniser {
         [1, 1]
       ]
     });
+    const lineDown = new ShapeRecord({
+      name: "lineDown",
+      vectors: [
+        [0, -1],
+        [0, -1],
+        [0, -1],
+        [0, -1],
+        [0, -1],
+        [0, -1],
+        [0, -1]
+      ]
+    });
 
-    const shapes = [square, circle];
+    const shapes = [square, circle, lineDown];
     for (let point of normalisedPoints) {
       for (let shape of shapes) {
         if (shape.processPoint(point)) {
