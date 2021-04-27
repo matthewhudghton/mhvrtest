@@ -130,6 +130,24 @@ export class ShapeRecogniser {
     }
     console.log(message);
   }
+
+  printMatrixToDom(matrix) {
+    var br = document.createElement("br");
+    document.getElementById("debugText").appendChild(br);
+    for (let y = 0; y < this.yCount; y++) {
+      var text = "";
+      for (let x = 0; x < this.xCount; x++) {
+        text +=
+          matrix[x][y] && matrix[x][y].length > 0 && matrix[x][y][0][1]
+            ? this.getCharForVector(matrix[x][y][0][1])
+            : ".";
+      }
+      var node = document.createTextNode(text);
+      var br = document.createElement("br");
+      document.getElementById("debugText").appendChild(node);
+      document.getElementById("debugText").appendChild(br);
+    }
+  }
   print() {
     let logString = `
     x: ${this.minX} ${this.maxX}
@@ -141,6 +159,7 @@ export class ShapeRecogniser {
     this.initMatrix(normalisedPoints);
     console.log("this.matrix", this.matrix);
     this.printMatrix(this.matrix);
+    this.printMatrixToDom(this.matrix);
     //this.checkForShape(normalisedPoints);
     const square = new ShapeRecord({
       name: "square",

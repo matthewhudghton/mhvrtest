@@ -393,10 +393,12 @@ export class InputManager {
         this.player.addMessage({ backward: controllerState[0].axes[2] });
       }
 
-      if (this?.controller1?.userData?.isSelecting) {
+      if (this?.controller2?.userData?.isSelecting) {
         this.player.addMessage({
           fire: { position: this.getController2Position() }
         });
+        var node = document.createTextNode(" print ");
+        document.getElementById("debugText").appendChild(node);
         this.shapeRecogniser.print();
         this.shapeRecogniser = new ShapeRecogniser();
         if (first) {
@@ -409,6 +411,8 @@ export class InputManager {
         this.player.addMessage({
           fire: { position }
         });
+        //var node = document.createTextNode(" " + position.x + " " + position.y);
+        //document.getElementById("debugText").appendChild(node);
         this.shapeRecogniser.addPoint(
           position.x,
           position.y,
