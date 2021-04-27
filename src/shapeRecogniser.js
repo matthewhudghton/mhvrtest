@@ -26,6 +26,8 @@ class ShapeRecord {
       if (xDir != 0 || yDir != 0) {
         if (this.index >= shape.length) {
           console.log("Match " + this.name);
+          var node = document.createTextNode(this.name + " ");
+          document.getElementById("debugText").appendChild(node);
           return true;
         }
         if (shape[this.index][0] == xDir && shape[this.index][1] == yDir) {
@@ -183,47 +185,6 @@ export class ShapeRecogniser {
           shapes.forEach((s) => s.reset());
         }
       }
-    }
-  }
-
-  checkForShape(points) {
-    let previousPoint;
-    let shape = [
-      [1, 0],
-      [0, -1],
-      [-1, 0],
-      [0, 1]
-    ];
-    let index = 0;
-    let tries = 0;
-    let maxTries = 5;
-    for (let i = 0; i < points.length; i++) {
-      const p = points[i];
-      if (previousPoint !== undefined) {
-        const x = p[0] - previousPoint[0];
-        const y = p[1] - previousPoint[1];
-        let xDir = x > 0 ? 1 : x < 0 ? -1 : 0;
-        let yDir = y > 0 ? 1 : y < 0 ? -1 : 0;
-        if (xDir != 0 || yDir != 0) {
-          console.log(xDir, yDir, index, tries);
-          if (index >= shape.length) {
-            console.log("Match!!!");
-            return true;
-          }
-          if (shape[index][0] == xDir && shape[index][1] == yDir) {
-            index++;
-          } else if (index > 0) {
-            if (shape[index - 1][0] != xDir || shape[index - 1][1] != yDir) {
-              tries++;
-              if (tries > maxTries) {
-                tries = 0;
-                index = 0;
-              }
-            }
-          }
-        }
-      }
-      previousPoint = p;
     }
   }
 }

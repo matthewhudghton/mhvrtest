@@ -1,3 +1,5 @@
+import { ShapeRecogniser } from "./shapeRecogniser.js";
+
 var Pinput = (function () {
   "use strict;";
 
@@ -329,6 +331,7 @@ export class InputManager {
     this.user = user;
     this.controller1 = controller1;
     this.controller2 = controller2;
+    this.shapeRecogniser = new ShapeRecogniser();
   }
   update(hud) {
     this.hud = hud; // debug remove this later
@@ -390,15 +393,30 @@ export class InputManager {
         this.player.addMessage({ backward: controllerState[0].axes[2] });
       }
 
-      if (
-        controllerState[1].axes[2] > 0 ||
-        this?.controller1?.userData?.isSelecting
-      ) {
+      if (this?.controller1?.userData?.isSelecting) {
         this.player.addMessage({
           fire: { position: this.getController2Position() }
         });
+        this.shapeRecogniser.print();
+        this.shapeRecogniser = new ShapeRecogniser();
         if (first) {
-          hud.debugText = JSON.stringify(this.getController2Position());
+          //hud.debugText = JSON.stringify(this.getController2Position());
+          first = false;
+        }
+      }
+      if (this?.controller1?.userData?.isSelecting) {
+        let position = this.getController1Position();
+        this.player.addMessage({
+          fire: { position }
+        });
+        this.shapeRecogniser.addPoint(
+          position.x,
+          position.y,
+          new Date().getTime()
+        );
+        if (first) {
+          //hud.debugText = JSON.stringify(this.getController1Position());
+
           first = false;
         }
       }
