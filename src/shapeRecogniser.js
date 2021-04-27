@@ -8,8 +8,8 @@ export class ShapeRecogniser {
     this.minX = Number.MAX_VALUE;
     this.maxY = -Number.MAX_VALUE;
     this.minY = Number.MAX_VALUE;
-    this.xCount = 20;
-    this.yCount = 20;
+    this.xCount = 10;
+    this.yCount = 10;
     this.matrix = new Array(this.xCount)
       .fill(0)
       .map(() => new Array(this.yCount));
@@ -33,21 +33,46 @@ export class ShapeRecogniser {
   }
   initMatrix(points) {
     console.log("points = ", points);
+    let previousPoint;
     points.forEach((p) => {
       let x = p[0];
       let y = p[1];
       if (!this.matrix[x][y]) {
         this.matrix[x][y] = [];
       }
-      this.matrix[x][y].push(p[2]);
+      const diff =
+        previousPoint !== undefined
+          ? [x - previousPoint[0], y - previousPoint[1]]
+          : undefined;
+      this.matrix[x][y].push([p[2], diff]);
+      previousPoint = p;
     });
+  }
+  getCharForVector(vector) {
+    let x = vector[0];
+    let y = vector[1];
+    if (x > 0 && x > y) {
+      return "<";
+    }
+    if (x < 0 && x < y) {
+      return ">";
+    }
+    if (y > 0) {
+      return "^";
+    }
+    if (y < 0) {
+      return "v";
+    }
+    return "#";
   }
   printMatrix(matrix) {
     let message = "";
     for (let y = 0; y < this.yCount; y++) {
       for (let x = 0; x < this.xCount; x++) {
         message +=
-          matrix[x][y] && matrix[x][y].length > 0 ? matrix[x][y].length : ".";
+          matrix[x][y] && matrix[x][y].length > 0 && matrix[x][y][0][1]
+            ? this.getCharForVector(matrix[x][y][0][1])
+            : ".";
       }
       message += "\n";
     }
