@@ -1,6 +1,55 @@
 import { Actor } from "./actor.js";
 import { Debouncer } from "./debouncer.js";
 
+class ShapeRecord {
+  constructor(options) {
+    this.shape = options.vectors;
+    this.name = options.name;
+    this.reset();
+  }
+
+  reset() {
+    this.previousPoint = undefined;
+    this.index = 0;
+    this.tries = 0;
+    this.maxTries = 5;
+  }
+
+  processPoint(p) {
+    const previousPoint = this.previousPoint;
+    const shape = this.shape;
+    if (previousPoint !== undefined) {
+      const x = p[0] - previousPoint[0];
+      const y = p[1] - previousPoint[1];
+      let xDir = x > 0 ? 1 : x < 0 ? -1 : 0;
+      let yDir = y > 0 ? 1 : y < 0 ? -1 : 0;
+      if (xDir != 0 || yDir != 0) {
+        console.log(xDir, yDir, this.index, this.tries);
+        if (this.index >= shape.length) {
+          console.log("Match " + this.name);
+          return true;
+        }
+        if (shape[this.index][0] == xDir && shape[this.index][1] == yDir) {
+          this.index++;
+        } else if (this.index > 0) {
+          if (
+            shape[this.index - 1][0] != xDir ||
+            shape[this.index - 1][1] != yDir
+          ) {
+            this.tries++;
+            if (this.tries > this.maxTries) {
+              this.tries = 0;
+              this.index = 0;
+            }
+          }
+        }
+      }
+    }
+    this.previousPoint = p;
+    return false;
+  }
+}
+
 export class ShapeRecogniser {
   constructor() {
     this.points = [];
@@ -91,7 +140,24 @@ export class ShapeRecogniser {
     this.initMatrix(normalisedPoints);
     console.log("this.matrix", this.matrix);
     this.printMatrix(this.matrix);
-    this.checkForShape(normalisedPoints);
+    //this.checkForShape(normalisedPoints);
+    const circle = new ShapeRecord({
+      name: "square",
+      vectors: [
+        [1, 0],
+        [0, -1],
+        [-1, 0],
+        [0, 1]
+      ]
+    });
+    const shapes = [circle];
+    for (let point of normalisedPoints) {
+      for (let shape of shapes) {
+        if (shape.processPoint(point)) {
+          shapes.forEach((s) => s.reset());
+        }
+      }
+    }
   }
 
   checkForShape(points) {
