@@ -34,7 +34,8 @@ export class ShapeRecogniser {
   initMatrix(points) {
     console.log("points = ", points);
     let previousPoint;
-    points.forEach((p) => {
+    for (let i = 0; i < points.length; i++) {
+      const p = points[i];
       let x = p[0];
       let y = p[1];
       if (!this.matrix[x][y]) {
@@ -46,8 +47,9 @@ export class ShapeRecogniser {
           : undefined;
       this.matrix[x][y].push([p[2], diff]);
       previousPoint = p;
-    });
+    }
   }
+
   getCharForVector(vector) {
     let x = vector[0];
     let y = vector[1];
@@ -103,7 +105,8 @@ export class ShapeRecogniser {
     let index = 0;
     let tries = 0;
     let maxTries = 5;
-    points.forEach((p) => {
+    for (let i = 0; i < points.length; i++) {
+      const p = points[i];
       if (previousPoint !== undefined) {
         const x = p[0] - previousPoint[0];
         const y = p[1] - previousPoint[1];
@@ -129,6 +132,6 @@ export class ShapeRecogniser {
         }
       }
       previousPoint = p;
-    });
+    }
   }
 }
