@@ -5,6 +5,7 @@ class ShapeRecord {
   constructor(options) {
     this.shape = options.vectors;
     this.name = options.name;
+    this.maxTries = 5;
     this.reset();
   }
 
@@ -12,7 +13,6 @@ class ShapeRecord {
     this.previousPoint = undefined;
     this.index = 0;
     this.tries = 0;
-    this.maxTries = 5;
   }
 
   processPoint(p) {
@@ -24,7 +24,6 @@ class ShapeRecord {
       let xDir = x > 0 ? 1 : x < 0 ? -1 : 0;
       let yDir = y > 0 ? 1 : y < 0 ? -1 : 0;
       if (xDir != 0 || yDir != 0) {
-        console.log(xDir, yDir, this.index, this.tries);
         if (this.index >= shape.length) {
           console.log("Match " + this.name);
           return true;
@@ -141,7 +140,7 @@ export class ShapeRecogniser {
     console.log("this.matrix", this.matrix);
     this.printMatrix(this.matrix);
     //this.checkForShape(normalisedPoints);
-    const circle = new ShapeRecord({
+    const square = new ShapeRecord({
       name: "square",
       vectors: [
         [1, 0],
@@ -150,7 +149,22 @@ export class ShapeRecogniser {
         [0, 1]
       ]
     });
-    const shapes = [circle];
+    const circle = new ShapeRecord({
+      name: "circle",
+      vectors: [
+        [1, 0],
+        [1, -1],
+        [0, -1],
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [-1, 1],
+        [0, 1],
+        [1, 1]
+      ]
+    });
+
+    const shapes = [square, circle];
     for (let point of normalisedPoints) {
       for (let shape of shapes) {
         if (shape.processPoint(point)) {
