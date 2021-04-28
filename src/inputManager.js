@@ -419,33 +419,40 @@ export class InputManager {
         this?.controller1?.userData?.isSelecting
       ) {
         let position = this.controller1.position; //this.getController1Position();
+        let positionRelativeToCamera = new this.THREE.Vector3(0, 0, 0);
+        positionRelativeToCamera.copy(position);
+        this.camera.matrixWorldInverse.getInverse(this.camera.matrixWorld);
+        positionRelativeToCamera.applyMatrix4(this.camera.matrixWorldInverse);
+
         this.player.addMessage({
           fire: { position }
         });
         if (lastPosition !== undefined) {
+          /*
           var node = document.createTextNode(
             "(" +
-              (position.x - lastPosition.x).toFixed(3) +
+              (positionRelativeToCamera.x - lastPosition.x).toFixed(3) +
               ", " +
-              (position.y - lastPosition.y).toFixed(3) +
+              (positionRelativeToCamera.y - lastPosition.y).toFixed(3) +
               ", " +
-              (position.z - lastPosition.z).toFixed(3) +
+              (positionRelativeToCamera.z - lastPosition.z).toFixed(3) +
               ") "
           );
           var br = document.createElement("br");
           document.getElementById("debugText").appendChild(br);
 
           document.getElementById("debugText").appendChild(node);
+          */
           this.shapeRecogniser.addPoint(
-            position.x,
-            position.y,
+            positionRelativeToCamera.x,
+            positionRelativeToCamera.y,
             new Date().getTime()
           );
         }
         lastPosition = new this.THREE.Vector3(
-          position.x,
-          position.y,
-          position.z
+          positionRelativeToCamera.x,
+          positionRelativeToCamera.y,
+          positionRelativeToCamera.z
         );
 
         if (first) {

@@ -254,7 +254,7 @@ function init() {
     THREE,
     CANNON,
     renderer.xr,
-    user,
+    camera,
     scene,
     user,
     player,

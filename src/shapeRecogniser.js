@@ -5,7 +5,7 @@ class ShapeRecord {
   constructor(options) {
     this.shape = options.vectors;
     this.name = options.name;
-    this.maxTries = 7;
+    this.maxTries = options.maxTries ?? 7;
     this.reset();
   }
 
@@ -139,7 +139,7 @@ export class ShapeRecogniser {
   printMatrixToDom(matrix) {
     var br = document.createElement("br");
     document.getElementById("debugText").appendChild(br);
-    for (let y = 0; y < this.yCount; y++) {
+    for (let y = this.yCount - 1; y >= 0; y -= 1) {
       var text = "";
       for (let x = 0; x < this.xCount; x++) {
         text +=
@@ -187,7 +187,8 @@ export class ShapeRecogniser {
         [-1, 1],
         [0, 1],
         [1, 1]
-      ]
+      ],
+      maxTries: 10
     });
     const lineDown = new ShapeRecord({
       name: "lineDown",
@@ -202,7 +203,7 @@ export class ShapeRecogniser {
       ]
     });
 
-    const shapes = [square, circle, lineDown];
+    const shapes = [square, circle];
     for (let point of normalisedPoints) {
       for (let shape of shapes) {
         if (shape.processPoint(point)) {
