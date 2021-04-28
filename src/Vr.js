@@ -327,7 +327,7 @@ function render() {
     hud.render();
   }
   if (inputManager) {
-    inputManager.update(hud);
+    inputManager.update(dt, hud);
   }
   map.update(dt);
   player.update(dt);

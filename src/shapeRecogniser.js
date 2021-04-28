@@ -5,7 +5,7 @@ class ShapeRecord {
   constructor(options) {
     this.shape = options.vectors;
     this.name = options.name;
-    this.maxTries = 5;
+    this.maxTries = 7;
     this.reset();
   }
 
@@ -32,6 +32,9 @@ class ShapeRecord {
         }
         if (shape[this.index][0] == xDir && shape[this.index][1] == yDir) {
           this.index++;
+          if (this.tries > 0) {
+            this.tries--;
+          }
         } else if (this.index > 0) {
           if (
             shape[this.index - 1][0] != xDir ||
@@ -58,8 +61,8 @@ export class ShapeRecogniser {
     this.minX = Number.MAX_VALUE;
     this.maxY = -Number.MAX_VALUE;
     this.minY = Number.MAX_VALUE;
-    this.xCount = 10;
-    this.yCount = 10;
+    this.xCount = 20;
+    this.yCount = 20;
     this.matrix = new Array(this.xCount)
       .fill(0)
       .map(() => new Array(this.yCount));
@@ -74,10 +77,12 @@ export class ShapeRecogniser {
   }
 
   normalisePoints(points) {
+    let max = Math.max(this.maxX, this.maxY);
+    let min = Math.min(this.minX, this.minY);
     //  ~~ is a fast bitwise way to convert to int
     return points.map((p) => [
-      ~~(((p[0] - this.minX) / (this.maxX - this.minX)) * (this.xCount - 1)),
-      ~~(((p[1] - this.minY) / (this.maxY - this.minY)) * (this.yCount - 1)),
+      ~~(((p[0] - min) / (max - min)) * (this.xCount - 1)),
+      ~~(((p[1] - min) / (max - min)) * (this.yCount - 1)),
       p[2]
     ]);
   }
@@ -104,10 +109,10 @@ export class ShapeRecogniser {
     let x = vector[0];
     let y = vector[1];
     if (x > 0 && x > y) {
-      return "<";
+      return ">";
     }
     if (x < 0 && x < y) {
-      return ">";
+      return "<";
     }
     if (y > 0) {
       return "^";

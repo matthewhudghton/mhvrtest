@@ -1,4 +1,5 @@
 import { ShapeRecogniser } from "./shapeRecogniser.js";
+import { Debouncer } from "./debouncer.js";
 
 var Pinput = (function () {
   "use strict;";
@@ -308,7 +309,7 @@ var Pinput = (function () {
 
   return Pinput;
 })();
-
+let lastPosition;
 export class InputManager {
   constructor(
     THREE,
@@ -332,10 +333,14 @@ export class InputManager {
     this.controller1 = controller1;
     this.controller2 = controller2;
     this.shapeRecogniser = new ShapeRecogniser();
+    this.shapeDebouncer = new Debouncer(1);
+    this.pointsDebouncer = new Debouncer(0.01);
   }
-  update(hud) {
+  update(dt, hud) {
     this.hud = hud; // debug remove this later
     this.input.update();
+    this.shapeDebouncer.update(dt);
+    this.pointsDebouncer.update(dt);
 
     /// handle camera
     const value = 0.1;
@@ -397,27 +402,52 @@ export class InputManager {
         this.player.addMessage({
           fire: { position: this.getController2Position() }
         });
-        var node = document.createTextNode(" print ");
-        document.getElementById("debugText").appendChild(node);
-        this.shapeRecogniser.print();
-        this.shapeRecogniser = new ShapeRecogniser();
+
+        if (this.shapeDebouncer.tryFireAndReset()) {
+          var node = document.createTextNode(" print ");
+          document.getElementById("debugText").appendChild(node);
+          this.shapeRecogniser.print();
+          this.shapeRecogniser = new ShapeRecogniser();
+        }
         if (first) {
           //hud.debugText = JSON.stringify(this.getController2Position());
           first = false;
         }
       }
-      if (this?.controller1?.userData?.isSelecting) {
-        let position = this.getController1Position();
+      if (
+        this.pointsDebouncer.tryFireAndReset() &&
+        this?.controller1?.userData?.isSelecting
+      ) {
+        let position = this.controller1.position; //this.getController1Position();
         this.player.addMessage({
           fire: { position }
         });
-        //var node = document.createTextNode(" " + position.x + " " + position.y);
-        //document.getElementById("debugText").appendChild(node);
-        this.shapeRecogniser.addPoint(
+        if (lastPosition !== undefined) {
+          var node = document.createTextNode(
+            "(" +
+              (position.x - lastPosition.x).toFixed(3) +
+              ", " +
+              (position.y - lastPosition.y).toFixed(3) +
+              ", " +
+              (position.z - lastPosition.z).toFixed(3) +
+              ") "
+          );
+          var br = document.createElement("br");
+          document.getElementById("debugText").appendChild(br);
+
+          document.getElementById("debugText").appendChild(node);
+          this.shapeRecogniser.addPoint(
+            position.x,
+            position.y,
+            new Date().getTime()
+          );
+        }
+        lastPosition = new this.THREE.Vector3(
           position.x,
           position.y,
-          new Date().getTime()
+          position.z
         );
+
         if (first) {
           //hud.debugText = JSON.stringify(this.getController1Position());
 
