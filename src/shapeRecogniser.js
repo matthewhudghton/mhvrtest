@@ -67,13 +67,58 @@ class ShapeRecord {
 
 export class ShapeRecogniser {
   constructor() {
-    this.points = [];
+    this.xCount = 30;
+    this.yCount = 30;
+    this.clear();
+
+    const square = new ShapeRecord({
+      name: "square",
+      vectors: [
+        [1, 0],
+        [1, 0],
+        [0, -1],
+        [0, -1],
+        [-1, 0],
+        [-1, 0],
+        [0, 1],
+        [0, 1]
+      ],
+      maxTries: 1
+    });
+    const circle = new ShapeRecord({
+      name: "circle",
+      vectors: [
+        [1, 0],
+        [1, -1],
+        [0, -1],
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, 1],
+        [1, 1]
+      ],
+      maxTries: 20
+    });
+    const downLeft = new ShapeRecord({
+      name: "downLeft",
+      vectors: [
+        [0, -1],
+        [0, -1],
+        [0, -1],
+        [-1, 0],
+        [-1, 0],
+        [-1, 0]
+      ]
+    });
+
+    this.shapes = [square, circle];
+  }
+  clear() {
     this.maxX = -Number.MAX_VALUE;
     this.minX = Number.MAX_VALUE;
     this.maxY = -Number.MAX_VALUE;
     this.minY = Number.MAX_VALUE;
-    this.xCount = 30;
-    this.yCount = 30;
+    this.points = [];
     this.matrix = new Array(this.xCount)
       .fill(0)
       .map(() => new Array(this.yCount));
@@ -173,6 +218,22 @@ export class ShapeRecogniser {
       document.getElementById("debugText").appendChild(br);
     }
   }
+
+  getShapeInfo() {
+    let normalisedPoints = this.normalisePoints(this.points);
+    this.initMatrix(normalisedPoints);
+    let results = [];
+    for (let point of normalisedPoints) {
+      for (let shape of this.shapes) {
+        if (shape.processPoint(point)) {
+          results.push(shape.name);
+          this.shapes.forEach((s) => s.reset());
+        }
+      }
+    }
+    return results;
+  }
+
   print() {
     let logString = `
     x: ${this.minX} ${this.maxX}
@@ -186,55 +247,5 @@ export class ShapeRecogniser {
     this.printMatrix(this.matrix);
     this.printMatrixToDom(this.matrix);
     //this.checkForShape(normalisedPoints);
-    const square = new ShapeRecord({
-      name: "square",
-      vectors: [
-        [1, 0],
-        [1, 0],
-        [0, -1],
-        [0, -1],
-        [-1, 0],
-        [-1, 0],
-        [0, 1],
-        [0, 1]
-      ],
-      maxTries: 1
-    });
-    const circle = new ShapeRecord({
-      name: "circle",
-      vectors: [
-        [1, 0],
-        [1, -1],
-        [0, -1],
-        [-1, -1],
-        [-1, 0],
-        [-1, 1],
-        [0, 1],
-        [1, 1]
-      ],
-      maxTries: 20
-    });
-    const lineDown = new ShapeRecord({
-      name: "lineDown",
-      vectors: [
-        [0, -1],
-        [0, -1],
-        [0, -1],
-        [0, -1],
-        [0, -1],
-        [0, -1],
-        [0, -1]
-      ]
-    });
-
-    const shapes = [square, circle];
-    for (let point of normalisedPoints) {
-      for (let shape of shapes) {
-        if (shape.processPoint(point)) {
-          shapes.forEach((s) => s.printFractionMatch());
-          shapes.forEach((s) => s.reset());
-        }
-      }
-    }
   }
 }

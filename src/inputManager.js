@@ -335,6 +335,8 @@ export class InputManager {
     this.shapeRecogniser = new ShapeRecogniser();
     this.shapeDebouncer = new Debouncer(1);
     this.pointsDebouncer = new Debouncer(0.01);
+    this.leftWasSelecting = false;
+    this.rightWasSelecting = false;
   }
   update(dt, hud) {
     this.hud = hud; // debug remove this later
@@ -414,19 +416,29 @@ export class InputManager {
           first = false;
         }
       }
+
+      if (this.leftWasSelecting && !this?.controller1?.userData?.isSelecting) {
+        this.leftWasSelecting = false;
+        const shapeMatches = this.shapeRecogniser.getShapeInfo();
+        if (shapeMatches.length > 0) {
+          this.player.addMessage({
+            fire: { position: this.getController1Position() }
+          });
+        }
+        this.shapeRecogniser.clear();
+      }
+
       if (
         this.pointsDebouncer.tryFireAndReset() &&
         this?.controller1?.userData?.isSelecting
       ) {
+        this.leftWasSelecting = true;
         let position = this.controller1.position; //this.getController1Position();
         let positionRelativeToCamera = new this.THREE.Vector3(0, 0, 0);
         positionRelativeToCamera.copy(position);
         this.camera.matrixWorldInverse.getInverse(this.camera.matrixWorld);
         positionRelativeToCamera.applyMatrix4(this.camera.matrixWorldInverse);
 
-        this.player.addMessage({
-          fire: { position }
-        });
         if (lastPosition !== undefined) {
           /*
           var node = document.createTextNode(
