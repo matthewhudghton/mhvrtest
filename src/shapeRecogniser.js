@@ -9,6 +9,17 @@ class ShapeRecord {
     this.reset();
   }
 
+  getFractionMatch() {
+    return this.index / this.shape.length;
+  }
+  printFractionMatch() {
+    const fraction = this.getFractionMatch();
+    var node = document.createTextNode(
+      "(" + this.name + "," + Math.floor(fraction * 100) + ") "
+    );
+    document.getElementById("debugText").appendChild(node);
+  }
+
   reset() {
     this.previousPoint = undefined;
     this.index = 0;
@@ -61,8 +72,8 @@ export class ShapeRecogniser {
     this.minX = Number.MAX_VALUE;
     this.maxY = -Number.MAX_VALUE;
     this.minY = Number.MAX_VALUE;
-    this.xCount = 20;
-    this.yCount = 20;
+    this.xCount = 30;
+    this.yCount = 30;
     this.matrix = new Array(this.xCount)
       .fill(0)
       .map(() => new Array(this.yCount));
@@ -108,6 +119,15 @@ export class ShapeRecogniser {
   getCharForVector(vector) {
     let x = vector[0];
     let y = vector[1];
+
+    if (x == y && (x == 1 || x == -1)) {
+      return "/";
+    }
+
+    if (x == -y && x != 0) {
+      return "\\";
+    }
+
     if (x > 0 && x > y) {
       return ">";
     }
@@ -170,10 +190,15 @@ export class ShapeRecogniser {
       name: "square",
       vectors: [
         [1, 0],
+        [1, 0],
+        [0, -1],
         [0, -1],
         [-1, 0],
+        [-1, 0],
+        [0, 1],
         [0, 1]
-      ]
+      ],
+      maxTries: 1
     });
     const circle = new ShapeRecord({
       name: "circle",
@@ -184,11 +209,10 @@ export class ShapeRecogniser {
         [-1, -1],
         [-1, 0],
         [-1, 1],
-        [-1, 1],
         [0, 1],
         [1, 1]
       ],
-      maxTries: 10
+      maxTries: 20
     });
     const lineDown = new ShapeRecord({
       name: "lineDown",
@@ -207,6 +231,7 @@ export class ShapeRecogniser {
     for (let point of normalisedPoints) {
       for (let shape of shapes) {
         if (shape.processPoint(point)) {
+          shapes.forEach((s) => s.printFractionMatch());
           shapes.forEach((s) => s.reset());
         }
       }
