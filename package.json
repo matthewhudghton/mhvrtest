@@ -12,6 +12,7 @@
     "react-scripts": "4.0.0",
     "statsvr": "2.2.1",
     "three": "0.127.0",
+    "three-nebula": "10.0.1",
     "webxr": "latest"
   },
   "devDependencies": {

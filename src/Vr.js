@@ -9,6 +9,9 @@ import { Map } from "./map.js";
 //import { ShapeRecogniser } from "./shapeRecogniser.js";
 import * as CANNON from "cannon";
 import { Mouse } from "./mouse.js";
+import Nebula, { SpriteRenderer } from "three-nebula";
+
+import json from "./my-particle-system.json";
 
 import "./styles.css";
 import "./scene.js";
@@ -17,6 +20,7 @@ let camera, scene, renderer;
 let controller1, controller2;
 let controllerGrip1, controllerGrip2;
 let user = new THREE.Group();
+let nebula;
 
 let count = 0;
 const radius = 0.08;
@@ -106,6 +110,15 @@ function init() {
     0.1,
     10000
   );
+
+  //particle test
+  Nebula.fromJSONAsync(json, THREE).then((loaded) => {
+    const nebulaRenderer = new SpriteRenderer(scene, THREE);
+    nebula = loaded.addRenderer(nebulaRenderer);
+    nebula.emitters[0].position.z = -10;
+    nebula.emitters[0].position.x = 10;
+    nebula.emitters[0].position.y = 5;
+  });
 
   let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
   floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
@@ -322,6 +335,10 @@ function render() {
 
   handleController(controller1);
   handleController(controller2);
+
+  if (nebula) {
+    nebula.update();
+  }
 
   if (hud) {
     hud.render();

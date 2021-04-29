@@ -53,11 +53,11 @@ export class InputManager {
     }
     if (this.input.isDown("w")) {
       //this.camera.position.z -= value;
-      this.player.addMessage({ forward: 1 });
+      this.player.addMessage({ forward: 10 });
     }
     if (this.input.isDown("s")) {
       //this.camera.position.z += value;
-      this.player.addMessage({ backward: 1 });
+      this.player.addMessage({ backward: 10 });
     }
     if (this.input.isDown("h")) {
       this.camera.rotation.y -= value;
