@@ -359,7 +359,14 @@ function render() {
     ) {
       timePassedSinceLastBall = 0;
       actors.push(
-        new Actor(THREE, CANNON, map, 10, position, controller1.getVelocity)
+        new Actor({
+          THREE: THREE,
+          CANNON: CANNON,
+          map: map,
+          lifeSpan: 10,
+          position: position,
+          velocity: controller1.getVelocity
+        })
       );
       controller1LastPosition = three_position;
     }
@@ -380,7 +387,14 @@ function render() {
     ) {
       timePassedSinceLastBall = 0;
       actors.push(
-        new Actor(THREE, CANNON, map, 10, position, controller2.getVelocity)
+        new Actor({
+          THREE: THREE,
+          CANNON: CANNON,
+          map: map,
+          lifespan: 10,
+          position: position,
+          velocity: controller2.getVelocity
+        })
       );
       controller2LastPosition = three_position;
     }

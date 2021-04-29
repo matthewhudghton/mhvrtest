@@ -8,15 +8,15 @@ export class Player {
     this.cameraGroup = cameraGroup;
     this.camera = camera;
     let position = new CANNON.Vec3(0, 1, 0);
-    this.bodyActor = new Actor(
+    this.bodyActor = new Actor({
       THREE,
       CANNON,
       map,
-      undefined,
+      lifespan: undefined,
       position,
-      undefined,
-      { fixedRotation: true, material: "playerMaterial" }
-    );
+      velocity: undefined,
+      bodySettings: { fixedRotation: true, material: "playerMaterial" }
+    });
     this.bodyActor.body.fixedRotation = true;
     this.bodyActor.body.linearDamping = 0.4;
 
