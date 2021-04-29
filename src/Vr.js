@@ -394,6 +394,10 @@ function render() {
       three_position.y,
       three_position.z
     );
+    nebula.emitters[0].position.x = three_position.x;
+    nebula.emitters[0].position.y = three_position.y;
+    nebula.emitters[0].position.z = three_position.z;
+
     if (
       controller2 &&
       controller1.getVelocity &&

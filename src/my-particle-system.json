@@ -9,7 +9,7 @@
       "cache": { "totalEmitTimes": null, "life": null },
       "rate": {
         "particlesMin": 1,
-        "particlesMax": 4,
+        "particlesMax": 2,
         "perSecondMin": 0.01,
         "perSecondMax": 0.02
       },
@@ -24,7 +24,7 @@
         {
           "id": "51ca9452-3d8b-11e9-a1e8-4785d9606b75",
           "type": "Life",
-          "properties": { "min": 2, "max": 4, "isEnabled": true }
+          "properties": { "min": 1, "max": 2, "isEnabled": true }
         },
         {
           "id": "51ca9453-3d8b-11e9-a1e8-4785d9606b75",
@@ -37,15 +37,15 @@
         {
           "id": "51ca9454-3d8b-11e9-a1e8-4785d9606b75",
           "type": "Radius",
-          "properties": { "width": 12, "height": 4, "isEnabled": true }
+          "properties": { "width": 1, "height": 1, "isEnabled": true }
         },
         {
           "id": "51ca9455-3d8b-11e9-a1e8-4785d9606b75",
           "type": "RadialVelocity",
           "properties": {
-            "radius": 10,
+            "radius": 2,
             "x": 0,
-            "y": 5,
+            "y": 0.5,
             "z": 0,
             "theta": 900,
             "isEnabled": true
@@ -77,8 +77,8 @@
           "id": "51ca9458-3d8b-11e9-a1e8-4785d9606b75",
           "type": "Scale",
           "properties": {
-            "scaleA": 1,
-            "scaleB": 0.5,
+            "scaleA": 0.3,
+            "scaleB": 0.1,
             "life": null,
             "easing": "easeLinear"
           }
@@ -88,7 +88,7 @@
           "type": "Force",
           "properties": {
             "fx": 0,
-            "fy": 5,
+            "fy": 0.2,
             "fz": 0,
             "life": null,
             "easing": "easeLinear"
@@ -109,9 +109,9 @@
           "id": "51ca945b-3d8b-11e9-a1e8-4785d9606b75",
           "type": "RandomDrift",
           "properties": {
-            "driftX": 1,
-            "driftY": 23,
-            "driftZ": 4,
+            "driftX": 0.001,
+            "driftY": 0.003,
+            "driftZ": 0.001,
             "delay": 1,
             "life": null,
             "easing": "easeLinear"
@@ -121,8 +121,8 @@
           "id": "51ca945c-3d8b-11e9-a1e8-4785d9606b75",
           "type": "Spring",
           "properties": {
-            "x": 1,
-            "y": 5,
+            "x": 0.1,
+            "y": 0.5,
             "z": 0,
             "spring": 0.01,
             "friction": 1,

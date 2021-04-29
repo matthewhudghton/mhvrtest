@@ -93,14 +93,13 @@ export class Player {
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */
 
-        new Actor(
-          this.THREE,
-          this.CANNON,
-          this.map,
-          undefined,
-          message.fire.position,
-          undefined
-        );
+        new Actor({
+          THREE: this.THREE,
+          CANNON: this.CANNON,
+          map: this.map,
+          lifeSpan: undefined,
+          position: message.fire.position,
+        });
       }
     }
   }
