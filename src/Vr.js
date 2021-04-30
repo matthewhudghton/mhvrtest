@@ -6,7 +6,6 @@ import { InputManager } from "./inputManager.js";
 import { Actor } from "./actor.js";
 import { Player } from "./player.js";
 import { Map } from "./map.js";
-//import { ShapeRecogniser } from "./shapeRecogniser.js";
 import * as CANNON from "cannon";
 import { ParticleSystem } from "./particleSystem.js";
 import { Mouse } from "./mouse.js";
@@ -27,8 +26,6 @@ import System, {
   Scale,
   Color
 } from "three-nebula";
-
-import json from "./my-particle-system.json";
 
 import "./styles.css";
 import "./scene.js";
@@ -118,10 +115,15 @@ function init() {
     map = new Map(scene, world);
     //light.shadowCameraVisible = true;
     var mouse = new Mouse(THREE);
-    leftHandParticleSystem = new ParticleSystem({ THREE: THREE, scene: scene });
+    leftHandParticleSystem = new ParticleSystem({
+      THREE: THREE,
+      scene: scene,
+      type: "left_hand"
+    });
     rightHandParticleSystem = new ParticleSystem({
       THREE: THREE,
-      scene: scene
+      scene: scene,
+      type: "right_hand"
     });
   }
 
