@@ -9,7 +9,23 @@ import { Map } from "./map.js";
 //import { ShapeRecogniser } from "./shapeRecogniser.js";
 import * as CANNON from "cannon";
 import { Mouse } from "./mouse.js";
-import Nebula, { SpriteRenderer } from "three-nebula";
+import System, {
+  Emitter,
+  Rate,
+  Span,
+  Position,
+  Mass,
+  Radius,
+  Life,
+  Velocity,
+  PointZone,
+  SpriteRenderer,
+  RadialVelocity,
+  Vector3D,
+  Alpha,
+  Scale,
+  Color
+} from "three-nebula";
 
 import json from "./my-particle-system.json";
 
@@ -26,6 +42,10 @@ let count = 0;
 const radius = 0.08;
 let normal = new THREE.Vector3();
 const relativeVelocity = new THREE.Vector3();
+let particleRenderer;
+let leftEmitter = new Emitter();
+let rightEmitter = new Emitter();
+const particleSystem = new System();
 let texts = [];
 const clock = new THREE.Clock();
 let hud;
@@ -111,15 +131,37 @@ function init() {
     10000
   );
 
-  //particle test
-  Nebula.fromJSONAsync(json, THREE).then((loaded) => {
-    const nebulaRenderer = new SpriteRenderer(scene, THREE);
-    nebula = loaded.addRenderer(nebulaRenderer);
-    nebula.emitters[0].position.z = -10;
-    nebula.emitters[0].position.x = 10;
-    nebula.emitters[0].position.y = 5;
-  });
+  const leftEmitter = new Emitter();
 
+  let particleRenderer = new SpriteRenderer(scene, THREE);
+
+  // Set emitter rate (particles per second) as well as the particle initializers and behaviours
+  leftEmitter
+    .setRate(new Rate(new Span(4, 16), new Span(0.01)))
+    .setInitializers([
+      new Position(new PointZone(0, 0)),
+      new Mass(1),
+      new Radius(6, 12),
+      new Life(3999999),
+      new RadialVelocity(45, new Vector3D(0, 1, 0), 180)
+    ])
+    .setBehaviours([
+      new Alpha(1, 0),
+      new Scale(0.1, 1.3),
+      new Color(new THREE.Color(), new THREE.Color())
+    ]);
+
+  function onStart() {}
+  function onUpdate() {}
+  function onEnd() {}
+
+  // add the emitter and a renderer to your particle system
+
+  particleSystem
+    .addEmitter(leftEmitter)
+    .addRenderer(particleRenderer)
+    .emit({ onStart, onUpdate, onEnd });
+  console.log(particleSystem);
   let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
   floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
@@ -336,8 +378,8 @@ function render() {
   handleController(controller1);
   handleController(controller2);
 
-  if (nebula) {
-    nebula.update();
+  if (particleSystem) {
+    particleSystem.update();
   }
 
   if (hud) {
@@ -394,9 +436,9 @@ function render() {
       three_position.y,
       three_position.z
     );
-    nebula.emitters[0].position.x = three_position.x;
-    nebula.emitters[0].position.y = three_position.y;
-    nebula.emitters[0].position.z = three_position.z;
+    leftEmitter.position.x = three_position.x;
+    leftEmitter.position.y = three_position.y;
+    leftEmitter.position.z = three_position.z;
 
     if (
       controller2 &&

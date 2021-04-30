@@ -1,5 +1,5 @@
 {
-  "preParticles": 500,
+  "preParticles": 0,
   "integrationType": "EULER",
   "emitters": [
     {
@@ -43,9 +43,9 @@
           "id": "51ca9455-3d8b-11e9-a1e8-4785d9606b75",
           "type": "RadialVelocity",
           "properties": {
-            "radius": 2,
+            "radius": 0.01,
             "x": 0,
-            "y": 0.5,
+            "y": 0.3,
             "z": 0,
             "theta": 900,
             "isEnabled": true
@@ -88,7 +88,7 @@
           "type": "Force",
           "properties": {
             "fx": 0,
-            "fy": 0.2,
+            "fy": 0.1,
             "fz": 0,
             "life": null,
             "easing": "easeLinear"
@@ -122,7 +122,7 @@
           "type": "Spring",
           "properties": {
             "x": 0.1,
-            "y": 0.5,
+            "y": 0.3,
             "z": 0,
             "spring": 0.01,
             "friction": 1,
