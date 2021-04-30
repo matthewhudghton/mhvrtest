@@ -37,23 +37,18 @@ let camera, scene, renderer;
 let controller1, controller2;
 let controllerGrip1, controllerGrip2;
 let user = new THREE.Group();
-let nebula;
 
-let count = 0;
 const radius = 0.08;
-let normal = new THREE.Vector3();
+
 const relativeVelocity = new THREE.Vector3();
-let particleRenderer;
-let leftEmitter = new Emitter();
-let rightEmitter = new Emitter();
-const particleSystem = new System();
-let texts = [];
+
 const clock = new THREE.Clock();
 let hud;
 let actors = [];
 let player;
 let map;
-let myParticleSystem;
+let leftHandParticleSystem;
+let rightHandParticleSystem;
 function appendDebug(text) {
   var node = document.createTextNode(text); // Create a text node
   document.getElementById("debugText").appendChild(node);
@@ -123,6 +118,11 @@ function init() {
     map = new Map(scene, world);
     //light.shadowCameraVisible = true;
     var mouse = new Mouse(THREE);
+    leftHandParticleSystem = new ParticleSystem({ THREE: THREE, scene: scene });
+    rightHandParticleSystem = new ParticleSystem({
+      THREE: THREE,
+      scene: scene
+    });
   }
 
   scene.add(light2);
@@ -133,42 +133,6 @@ function init() {
     10000
   );
 
-  const leftEmitter = new Emitter();
-
-  // Set emitter rate (particles per second) as well as the particle initializers and behaviours
-  leftEmitter
-    .setRate(new Rate(new Span(4, 16), new Span(0.01)))
-    .setInitializers([
-      new Position(new PointZone(0, 0)),
-      new Mass(1),
-      new Radius(6, 12),
-      new Life(3999999),
-      new RadialVelocity(45, new Vector3D(0, 1, 0), 180)
-    ])
-    .setBehaviours([
-      new Alpha(1, 0),
-      new Scale(0.1, 1.3),
-      new Color(new THREE.Color(), new THREE.Color())
-    ]);
-
-  myParticleSystem = new ParticleSystem({ THREE: THREE, scene: scene });
-
-  function onStart() {}
-  function onUpdate() {}
-  function onEnd() {}
-
-  // add the emitter and a renderer to your particle system
-  let particleRenderer = new SpriteRenderer(scene, THREE);
-  particleSystem
-    .addEmitter(leftEmitter)
-    .addRenderer(particleRenderer)
-    .emit({ onStart, onUpdate, onEnd });
-
-  particleSystem.emitters[0].position.z = -10;
-  particleSystem.emitters[0].position.x = 10;
-  particleSystem.emitters[0].position.y = 5;
-
-  console.log(particleSystem);
   let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
   floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
@@ -385,11 +349,8 @@ function render() {
   handleController(controller1);
   handleController(controller2);
 
-  if (particleSystem) {
-    particleSystem.update();
-  }
-
-  myParticleSystem.update();
+  leftHandParticleSystem.update();
+  rightHandParticleSystem.update();
 
   if (hud) {
     hud.render();
@@ -411,6 +372,13 @@ function render() {
     three_position.y,
     three_position.z
   );
+
+  leftHandParticleSystem.setPosition(
+    three_position.x,
+    three_position.y,
+    three_position.z
+  );
+
   timePassedSinceLastBall += dt;
   const k = 0.1;
   if (controller1 && controller1.getVelocity) {
@@ -446,7 +414,7 @@ function render() {
       three_position.z
     );
 
-    myParticleSystem.setPosition(
+    rightHandParticleSystem.setPosition(
       three_position.x,
       three_position.y,
       three_position.z
