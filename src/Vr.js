@@ -8,6 +8,7 @@ import { Player } from "./player.js";
 import { Map } from "./map.js";
 //import { ShapeRecogniser } from "./shapeRecogniser.js";
 import * as CANNON from "cannon";
+import { ParticleSystem } from "./particleSystem.js";
 import { Mouse } from "./mouse.js";
 import System, {
   Emitter,
@@ -52,6 +53,7 @@ let hud;
 let actors = [];
 let player;
 let map;
+let myParticleSystem;
 function appendDebug(text) {
   var node = document.createTextNode(text); // Create a text node
   document.getElementById("debugText").appendChild(node);
@@ -133,8 +135,6 @@ function init() {
 
   const leftEmitter = new Emitter();
 
-  let particleRenderer = new SpriteRenderer(scene, THREE);
-
   // Set emitter rate (particles per second) as well as the particle initializers and behaviours
   leftEmitter
     .setRate(new Rate(new Span(4, 16), new Span(0.01)))
@@ -151,16 +151,23 @@ function init() {
       new Color(new THREE.Color(), new THREE.Color())
     ]);
 
+  myParticleSystem = new ParticleSystem({ THREE: THREE, scene: scene });
+
   function onStart() {}
   function onUpdate() {}
   function onEnd() {}
 
   // add the emitter and a renderer to your particle system
-
+  let particleRenderer = new SpriteRenderer(scene, THREE);
   particleSystem
     .addEmitter(leftEmitter)
     .addRenderer(particleRenderer)
     .emit({ onStart, onUpdate, onEnd });
+
+  particleSystem.emitters[0].position.z = -10;
+  particleSystem.emitters[0].position.x = 10;
+  particleSystem.emitters[0].position.y = 5;
+
   console.log(particleSystem);
   let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
   floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
@@ -382,6 +389,8 @@ function render() {
     particleSystem.update();
   }
 
+  myParticleSystem.update();
+
   if (hud) {
     hud.render();
   }
@@ -436,9 +445,12 @@ function render() {
       three_position.y,
       three_position.z
     );
-    leftEmitter.position.x = three_position.x;
-    leftEmitter.position.y = three_position.y;
-    leftEmitter.position.z = three_position.z;
+
+    myParticleSystem.setPosition(
+      three_position.x,
+      three_position.y,
+      three_position.z
+    );
 
     if (
       controller2 &&
