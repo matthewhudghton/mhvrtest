@@ -11,17 +11,18 @@ export class Player {
   cameraGroup;
   map;
   messages;
-
-  constructor(THREE, CANNON, camera, cameraGroup, map) {
-    this.THREE = THREE;
-    this.CANNON = CANNON;
-    this.cameraGroup = cameraGroup;
-    this.camera = camera;
-    let position = new CANNON.Vec3(0, 1, 0);
+  //THREE, CANNON, camera, cameraGroup, map
+  constructor(options) {
+    this.THREE = options.THREE;
+    this.CANNON = options.CANNON;
+    this.cameraGroup = options.cameraGroup;
+    this.camera = options.camera;
+    this.map = options.map;
+    let position = new this.CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
-      THREE,
-      CANNON,
-      map,
+      THREE: this.THREE,
+      CANNON: this.CANNON,
+      map: this.map,
       lifespan: undefined,
       position,
       velocity: undefined,
@@ -35,7 +36,6 @@ export class Player {
     this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
     this.messages = [];
-    this.map = map;
 
     this.leftHandParticleSystem = new ParticleSystem({
       THREE: this.THREE,
@@ -56,17 +56,18 @@ export class Player {
 
     this.leftHandParticleSystem.update(dt);
     this.rightHandParticleSystem.update(dt);
-
+    /*
     this.leftHandParticleSystem.setPosition(
       this.leftHandPosition.x,
       this.leftHandPosition.y,
       this.leftHandPosition.z
     );
+
     this.rightHandParticleSystem.setPosition(
       this.rightHandPosition.x,
       this.rightHandPosition.y,
       this.rightHandPosition.z
-    );
+    );*/
 
     this.debouncers.forEach((debouncer) => {
       debouncer.update(dt);

@@ -134,7 +134,7 @@ function init() {
 
   camera.position.set(0, 1.6, 3);
   user.add(camera);
-  player = new Player(THREE, CANNON, camera, user, map);
+
   scene.add(user);
 
   scene.add(new THREE.HemisphereLight(0x606060, 0x404040));
@@ -193,12 +193,20 @@ function init() {
     controllerModelFactory.createControllerModel(controllerGrip1)
   );
   user.add(controllerGrip1);
-
+  player = new Player({
+    THREE: THREE,
+    CANNON: CANNON,
+    camera: camera,
+    cameraGroup: user,
+    map: map
+  });
+  player.leftControllerGrip = controllerGrip1;
   controllerGrip2 = renderer.xr.getControllerGrip(1);
   controllerGrip2.add(
     controllerModelFactory.createControllerModel(controllerGrip2)
   );
   user.add(controllerGrip2);
+  player.rightControllerGrip = controllerGrip2;
 
   //
   inputManager = new InputManager(

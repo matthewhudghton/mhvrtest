@@ -18,9 +18,6 @@ export class ParticleSystem {
       (system) => {
         const nebulaRenderer = new SpriteRenderer(this.scene, this.THREE);
         this.nebula = system.addRenderer(nebulaRenderer);
-        this.nebula.emitters[0].position.z = -10;
-        this.nebula.emitters[0].position.x = 10;
-        this.nebula.emitters[0].position.y = 5;
       }
     );
   }
