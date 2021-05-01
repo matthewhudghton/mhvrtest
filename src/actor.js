@@ -10,23 +10,9 @@ export class Actor extends Entity {
     this.world = options.map.world;
     this.scene = options.map.scene;
     this.lifeSpan = options.lifeSpan;
-
-    //const geometry = new THREE.IcosahedronGeometry(0.2, 3);
-    const geometry = new THREE.BoxGeometry(0.3, 0.2, 0.6);
-    this.mesh = new THREE.Mesh(
-      geometry,
-      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
-    );
-
-    this.mesh.castShadow = true;
-    this.mesh.receiveShadow = true;
-
-    //this.shape = new CANNON.Sphere(0.2);
-    this.shape = new CANNON.Box(new CANNON.Vec3(0.15, 0.1, 0.3)); // half of three
     this.mass = 1;
+    this.initShape(options);
 
-    this.body = new CANNON.Body({ ...options.bodySettings, mass: 1 });
-    this.body.addShape(this.shape);
     if (options.velocity) {
       const velocity = options.velocity;
       this.body.angularVelocity.set(velocity.x, velocity.y, velocity.z);
@@ -48,6 +34,32 @@ export class Actor extends Entity {
     }
 
     this.map.addActor(this);
+  }
+
+  initShape(options) {
+    const THREE = this.THREE;
+    const CANNON = this.CANNON;
+    let geometry;
+    switch (options.shapeType) {
+      case "box":
+        geometry = new THREE.BoxGeometry(0.3, 0.2, 0.6);
+        this.shape = new CANNON.Box(new CANNON.Vec3(0.15, 0.1, 0.3));
+        break;
+      case "sphere":
+      default:
+        geometry = new THREE.IcosahedronGeometry(0.2, 3);
+        this.shape = new CANNON.Sphere(0.2);
+        break;
+    }
+
+    this.mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
+    );
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
+    this.body = new CANNON.Body({ ...options.bodySettings, mass: 1 });
+    this.body.addShape(this.shape);
   }
 
   update(dt) {
