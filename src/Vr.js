@@ -7,7 +7,7 @@ import { Actor } from "./actor.js";
 import { Player } from "./player.js";
 import { Map } from "./map.js";
 import * as CANNON from "cannon";
-import { ParticleSystem } from "./particleSystem.js";
+
 import { Mouse } from "./mouse.js";
 import System, {
   Emitter,
@@ -44,8 +44,7 @@ let hud;
 let actors = [];
 let player;
 let map;
-let leftHandParticleSystem;
-let rightHandParticleSystem;
+
 function appendDebug(text) {
   var node = document.createTextNode(text); // Create a text node
   document.getElementById("debugText").appendChild(node);
@@ -115,16 +114,6 @@ function init() {
     map = new Map(scene, world);
     //light.shadowCameraVisible = true;
     var mouse = new Mouse(THREE);
-    leftHandParticleSystem = new ParticleSystem({
-      THREE: THREE,
-      scene: scene,
-      type: "left_hand"
-    });
-    rightHandParticleSystem = new ParticleSystem({
-      THREE: THREE,
-      scene: scene,
-      type: "right_hand"
-    });
   }
 
   scene.add(light2);
@@ -351,9 +340,6 @@ function render() {
   handleController(controller1);
   handleController(controller2);
 
-  leftHandParticleSystem.update();
-  rightHandParticleSystem.update();
-
   if (hud) {
     hud.render();
   }
@@ -375,11 +361,7 @@ function render() {
     three_position.z
   );
 
-  leftHandParticleSystem.setPosition(
-    three_position.x,
-    three_position.y,
-    three_position.z
-  );
+  player.leftHandPosition.copy(three_position);
 
   timePassedSinceLastBall += dt;
   const k = 0.1;
@@ -416,11 +398,7 @@ function render() {
       three_position.z
     );
 
-    rightHandParticleSystem.setPosition(
-      three_position.x,
-      three_position.y,
-      three_position.z
-    );
+    player.rightHandPosition.copy(three_position);
 
     if (
       controller2 &&

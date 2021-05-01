@@ -1,7 +1,17 @@
+import { Vector3 } from "three";
 import { Actor } from "./actor.js";
 import { Debouncer } from "./debouncer.js";
+import { ParticleSystem } from "./particleSystem.js";
 
 export class Player {
+  leftHandPosition = new Vector3(0, 0, 0);
+  rightHandPosition = new Vector3(0, 0, 0);
+  THREE;
+  CANNON;
+  cameraGroup;
+  map;
+  messages;
+
   constructor(THREE, CANNON, camera, cameraGroup, map) {
     this.THREE = THREE;
     this.CANNON = CANNON;
@@ -26,11 +36,37 @@ export class Player {
     this.playerPos = undefined;
     this.messages = [];
     this.map = map;
+
+    this.leftHandParticleSystem = new ParticleSystem({
+      THREE: this.THREE,
+      scene: this.map.scene,
+      type: "left_hand"
+    });
+
+    this.rightHandParticleSystem = new ParticleSystem({
+      THREE: this.THREE,
+      scene: this.map.scene,
+      type: "right_hand"
+    });
   }
 
   update(dt) {
     const CANNON = this.CANNON;
     const k = 0.05;
+
+    this.leftHandParticleSystem.update(dt);
+    this.rightHandParticleSystem.update(dt);
+
+    this.leftHandParticleSystem.setPosition(
+      this.leftHandPosition.x,
+      this.leftHandPosition.y,
+      this.leftHandPosition.z
+    );
+    this.rightHandParticleSystem.setPosition(
+      this.rightHandPosition.x,
+      this.rightHandPosition.y,
+      this.rightHandPosition.z
+    );
 
     this.debouncers.forEach((debouncer) => {
       debouncer.update(dt);
@@ -98,7 +134,7 @@ export class Player {
           CANNON: this.CANNON,
           map: this.map,
           lifeSpan: undefined,
-          position: message.fire.position,
+          position: message.fire.position
         });
       }
     }

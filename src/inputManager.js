@@ -93,6 +93,9 @@ export class InputManager {
         this.player.addMessage({ backward: controllerState[0].axes[2] });
       }
 
+      this.player.leftSelecting = this?.controller1?.userData?.isSelecting;
+      this.player.rightSelecting = this?.controller2?.userData?.isSelecting;
+
       if (this?.controller2?.userData?.isSelecting) {
         this.player.addMessage({
           fire: { position: this.getController2Position() }

@@ -1,4 +1,5 @@
 import Nebula, { SpriteRenderer, Alpha, Scale, Color } from "three-nebula";
+
 import left_hand_ps from "./particles/left_hand.json";
 import right_hand_ps from "./particles/right_hand.json";
 
@@ -26,6 +27,7 @@ export class ParticleSystem {
 
   update(dt) {
     if (this.nebula) {
+      console.log("test ebula", this.nebula);
       this.nebula.update();
     }
   }
