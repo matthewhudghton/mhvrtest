@@ -4,11 +4,6 @@ export class Actor extends Entity {
   constructor(options) {
     super(options);
 
-    const THREE = this.THREE;
-    const CANNON = this.CANNON;
-
-    this.world = options.map.world;
-    this.scene = options.map.scene;
     this.lifeSpan = options.lifeSpan;
     this.mass = 1;
     this.initShape(options);

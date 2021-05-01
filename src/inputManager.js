@@ -118,7 +118,10 @@ export class InputManager {
         const shapeMatches = this.shapeRecogniser.getShapeInfo();
         if (shapeMatches.length > 0) {
           this.player.addMessage({
-            fire: { position: this.getController1Position() }
+            fire: {
+              position: this.getController1Position(),
+              shapeMatches: shapeMatches
+            }
           });
         }
         this.shapeRecogniser.clear();
