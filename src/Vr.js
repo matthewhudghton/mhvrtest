@@ -54,7 +54,7 @@ init();
 animate();
 let inputManager;
 
-var world, mass, body, shape;
+var world;
 
 function initCannon() {
   world = new CANNON.World();
@@ -87,8 +87,6 @@ function initCannon() {
     }
   );
   world.addContactMaterial(playerMaterial_cm);
-
-  //world.add(groundBody);
 }
 
 function init() {
@@ -152,20 +150,6 @@ function init() {
   renderer.setClearColor(scene.fog.color, 1);
 
   document.body.appendChild(renderer.domElement);
-  let hudElement = document.createElement("div");
-  hudElement.className = "hud";
-  hudElement.textContent = "Example text";
-  hudElement.style.position = "absolute";
-  hudElement.style.zIndex = 100; // if you still don't see the label, try uncommenting this
-  hudElement.style.width = 100;
-  hudElement.style.height = 100;
-  hudElement.style.backgroundColor = "blue";
-  hudElement.innerHTML = "hi there!";
-  hudElement.style.top = 200 + "px";
-  hudElement.style.left = 200 + "px";
-
-  document.body.appendChild(hudElement);
-  //
 
   document.body.appendChild(VRButton.createButton(renderer));
 
@@ -183,10 +167,7 @@ function init() {
   controller1.addEventListener("selectstart", onSelectStart);
   controller1.addEventListener("selectend", onSelectEnd);
 
-  controller1.addEventListener("connected", function (event) {
-    this.add(buildController(event.data));
-    controller1.gamepad = event.data.gamepad;
-  });
+  controller1.addEventListener("connected", function (event) {});
   controller1.addEventListener("disconnected", function () {
     this.remove(this.children[0]);
   });
@@ -195,10 +176,7 @@ function init() {
   controller2 = renderer.xr.getController(1);
   controller2.addEventListener("selectstart", onSelectStart);
   controller2.addEventListener("selectend", onSelectEnd);
-  controller2.addEventListener("connected", function (event) {
-    this.add(buildController(event.data));
-    controller2.gamepad = event.data.gamepad;
-  });
+  controller2.addEventListener("connected", function (event) {});
   controller2.addEventListener("disconnected", function () {
     this.remove(this.children[0]);
   });
@@ -208,7 +186,6 @@ function init() {
   // that match what the user is holding as closely as possible. The models
   // should be attached to the object returned from getControllerGrip in
   // order to match the orientation of the held device.
-
   const controllerModelFactory = new XRControllerModelFactory();
 
   controllerGrip1 = renderer.xr.getControllerGrip(0);
@@ -236,40 +213,6 @@ function init() {
     controller2
   );
   window.addEventListener("resize", onWindowResize);
-}
-
-function buildController(data) {
-  let geometry, material;
-
-  switch (data.targetRayMode) {
-    case "tracked-pointer":
-      geometry = new THREE.BufferGeometry();
-      geometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, -1], 3)
-      );
-      geometry.setAttribute(
-        "color",
-        new THREE.Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3)
-      );
-
-      material = new THREE.LineBasicMaterial({
-        vertexColors: true,
-        blending: THREE.AdditiveBlending
-      });
-
-      return new THREE.Line(geometry, material);
-
-    case "gaze":
-      geometry = new THREE.RingGeometry(0.02, 0.04, 32).translate(0, 0, -1);
-      material = new THREE.MeshBasicMaterial({
-        opacity: 0.5,
-        transparent: true
-      });
-      return new THREE.Mesh(geometry, material);
-    default:
-      console.err("Running default case " + data);
-  }
 }
 
 function onWindowResize() {
