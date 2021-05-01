@@ -1,4 +1,10 @@
 export class Entity {
+  THREE;
+  CANNON;
+  map;
+  world;
+  scene;
+  children;
   constructor(options) {
     this.THREE = options.THREE;
     this.CANNON = options.CANNON;

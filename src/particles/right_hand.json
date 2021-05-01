@@ -13,7 +13,7 @@
         "perSecondMin": 0.01,
         "perSecondMax": 0.02
       },
-      "position": { "x": 0, "y": 10, "z": 0 },
+      "position": { "x": 0, "y": 0, "z": 0 },
       "rotation": { "x": 0, "y": 0, "z": 0 },
       "initializers": [
         {
@@ -113,19 +113,6 @@
             "driftY": 0.003,
             "driftZ": 0.001,
             "delay": 1,
-            "life": null,
-            "easing": "easeLinear"
-          }
-        },
-        {
-          "id": "51ca945c-3d8b-11e9-a1e8-4785d9606b75",
-          "type": "Spring",
-          "properties": {
-            "x": 0.1,
-            "y": 0.3,
-            "z": 0,
-            "spring": 0.01,
-            "friction": 1,
             "life": null,
             "easing": "easeLinear"
           }

@@ -28,11 +28,9 @@ export class ParticleSystem {
     }
   }
 
-  setPosition(x, y, z) {
+  setPosition(position) {
     if (this.nebula) {
-      this.nebula.emitters[0].position.x = x;
-      this.nebula.emitters[0].position.y = y;
-      this.nebula.emitters[0].position.z = z;
+      this.nebula.emitters[0].setPosition(position);
     }
   }
 }

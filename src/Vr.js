@@ -193,20 +193,21 @@ function init() {
     controllerModelFactory.createControllerModel(controllerGrip1)
   );
   user.add(controllerGrip1);
-  player = new Player({
-    THREE: THREE,
-    CANNON: CANNON,
-    camera: camera,
-    cameraGroup: user,
-    map: map
-  });
-  player.leftControllerGrip = controllerGrip1;
+
   controllerGrip2 = renderer.xr.getControllerGrip(1);
   controllerGrip2.add(
     controllerModelFactory.createControllerModel(controllerGrip2)
   );
   user.add(controllerGrip2);
-  player.rightControllerGrip = controllerGrip2;
+  player = new Player({
+    THREE: THREE,
+    CANNON: CANNON,
+    camera: camera,
+    cameraGroup: user,
+    map: map,
+    leftControllerGrip: controllerGrip1,
+    rightControllerGrip: controllerGrip2
+  });
 
   //
   inputManager = new InputManager(

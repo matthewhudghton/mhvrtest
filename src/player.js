@@ -7,10 +7,8 @@ import { ParticleSystem } from "./particleSystem.js";
 export class Player extends Entity {
   leftHandPosition = new Vector3(0, 0, 0);
   rightHandPosition = new Vector3(0, 0, 0);
-  THREE;
-  CANNON;
   cameraGroup;
-  map;
+
   messages;
   //THREE, CANNON, camera, cameraGroup, map
   constructor(options) {
@@ -33,19 +31,22 @@ export class Player extends Entity {
 
     this.leftFireDebouncer = new Debouncer(1);
     this.rightFireDebouncer = new Debouncer(1);
+    this.leftControllerGrip = options.leftControllerGrip;
+    this.rightControllerGrip = options.rightControllerGrip;
+
     this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
     this.messages = [];
 
     this.leftHandParticleSystem = new ParticleSystem({
       THREE: this.THREE,
-      scene: this.map.scene,
+      scene: this.scene,
       type: "left_hand"
     });
 
     this.rightHandParticleSystem = new ParticleSystem({
       THREE: this.THREE,
-      scene: this.map.scene,
+      scene: this.scene,
       type: "right_hand"
     });
   }
@@ -54,20 +55,11 @@ export class Player extends Entity {
     const CANNON = this.CANNON;
     const k = 0.05;
 
+    this.leftHandParticleSystem.setPosition(this.leftHandPosition);
+
+    this.rightHandParticleSystem.setPosition(this.rightHandPosition);
     this.leftHandParticleSystem.update(dt);
     this.rightHandParticleSystem.update(dt);
-    /*
-    this.leftHandParticleSystem.setPosition(
-      this.leftHandPosition.x,
-      this.leftHandPosition.y,
-      this.leftHandPosition.z
-    );
-
-    this.rightHandParticleSystem.setPosition(
-      this.rightHandPosition.x,
-      this.rightHandPosition.y,
-      this.rightHandPosition.z
-    );*/
 
     this.debouncers.forEach((debouncer) => {
       debouncer.update(dt);
