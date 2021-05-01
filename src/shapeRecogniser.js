@@ -244,8 +244,8 @@ export class ShapeRecogniser {
     console.log(normalisedPoints);
     this.initMatrix(normalisedPoints);
     console.log("this.matrix", this.matrix);
-    this.printMatrix(this.matrix);
-    this.printMatrixToDom(this.matrix);
+    //this.printMatrix(this.matrix);
+    //this.printMatrixToDom(this.matrix);
     //this.checkForShape(normalisedPoints);
   }
 }

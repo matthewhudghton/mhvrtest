@@ -1,9 +1,10 @@
 import { Vector3 } from "three";
 import { Actor } from "./actor.js";
 import { Debouncer } from "./debouncer.js";
+import { Entity } from "./entity.js";
 import { ParticleSystem } from "./particleSystem.js";
 
-export class Player {
+export class Player extends Entity {
   leftHandPosition = new Vector3(0, 0, 0);
   rightHandPosition = new Vector3(0, 0, 0);
   THREE;
@@ -13,11 +14,10 @@ export class Player {
   messages;
   //THREE, CANNON, camera, cameraGroup, map
   constructor(options) {
-    this.THREE = options.THREE;
-    this.CANNON = options.CANNON;
+    super(options);
     this.cameraGroup = options.cameraGroup;
     this.camera = options.camera;
-    this.map = options.map;
+
     let position = new this.CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
       THREE: this.THREE,

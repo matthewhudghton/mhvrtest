@@ -1,11 +1,12 @@
-export class Actor {
+import { Entity } from "./entity.js";
+
+export class Actor extends Entity {
   constructor(options) {
-    this.THREE = options.THREE;
-    this.CANNON = options.CANNON;
+    super(options);
+
     const THREE = this.THREE;
     const CANNON = this.CANNON;
 
-    this.map = options.map;
     this.world = options.map.world;
     this.scene = options.map.scene;
     this.lifeSpan = options.lifeSpan;

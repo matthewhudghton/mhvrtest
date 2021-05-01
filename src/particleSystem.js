@@ -24,7 +24,6 @@ export class ParticleSystem {
 
   update(dt) {
     if (this.nebula) {
-      console.log("test ebula", this.nebula);
       this.nebula.update();
     }
   }
