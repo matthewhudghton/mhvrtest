@@ -138,51 +138,8 @@ function init() {
   user.add(camera);
   player = new Player(THREE, CANNON, camera, user, map);
   scene.add(user);
-  const roomGeometry = new THREE.BufferGeometry();
-  // create a simple square shape. We duplicate the top left and bottom right
-  // vertices because each vertex needs to appear once per triangle.
-  const vertices = new Float32Array([
-    -10.0,
-    -10.0,
-    10.0,
-    10.0,
-    -10.0,
-    10.0,
-    10.0,
-    10.0,
-    10.0,
-
-    10.0,
-    10.0,
-    10.0,
-    -10.0,
-    10.0,
-    10.0,
-    -10.0,
-    -10.0,
-    10.0
-  ]);
 
   scene.add(new THREE.HemisphereLight(0x606060, 0x404040));
-
-  const geometry = new THREE.IcosahedronGeometry(radius, 3);
-
-  var loader = new THREE.FontLoader();
-  loader.load("./fonts/helvetiker.typeface.json", function (font) {
-    var textGeometry = new THREE.TextGeometry("text", {
-      font: font,
-      size: 0.1,
-      height: 0.1
-    });
-    hud = new Hud(camera, scene, font);
-    hud.debugText = "Hello my debug text!";
-    var textMaterial = new THREE.MeshPhongMaterial({
-      color: 0xff0000,
-      specular: 0xffffff
-    });
-  });
-
-  //
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -322,10 +279,6 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function handleController(controller) {}
-
-//
-
 function animate() {
   renderer.setAnimationLoop(render);
 }
@@ -336,9 +289,6 @@ let controller2LastPosition = new THREE.Vector3(0, 0, 0);
 
 function render() {
   const dt = clock.getDelta();
-
-  handleController(controller1);
-  handleController(controller2);
 
   if (hud) {
     hud.render();
@@ -425,11 +375,6 @@ function render() {
 
   renderer.render(scene, camera);
 }
-/*
-let shapeRecogniser = new ShapeRecogniser();
-for (let i = 0; i < 1; i += 0.01) {
-
-}*/
 
 export default function Vr() {
   return (
