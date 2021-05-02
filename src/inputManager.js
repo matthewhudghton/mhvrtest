@@ -113,12 +113,12 @@ export class InputManager {
         }
       }
 
-      if (this.leftWasSelecting && !this?.controller1?.userData?.isSelecting) {
-        this.leftWasSelecting = false;
+      if (this.rightWasSelecting && !this?.controller1?.userData?.isSelecting) {
+        this.rightWasSelecting = false;
         const shapeMatches = this.shapeRecogniser.getShapeInfo();
         if (shapeMatches.length > 0) {
           this.player.addMessage({
-            fire: {
+            magic: {
               position: this.getController1Position(),
               shapeMatches: shapeMatches
             }
@@ -131,7 +131,7 @@ export class InputManager {
         this.pointsDebouncer.tryFireAndReset() &&
         this?.controller1?.userData?.isSelecting
       ) {
-        this.leftWasSelecting = true;
+        this.rightWasSelecting = true;
         let position = this.controller1.position; //this.getController1Position();
         let positionRelativeToCamera = new this.THREE.Vector3(0, 0, 0);
         positionRelativeToCamera.copy(position);

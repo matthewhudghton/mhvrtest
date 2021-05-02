@@ -1,5 +1,6 @@
 import { Vector3 } from "three";
 import { Actor } from "./actor.js";
+import { Projectile } from "./projectile.js";
 import { Debouncer } from "./debouncer.js";
 import { Entity } from "./entity.js";
 import { ParticleSystem } from "./particleSystem.js";
@@ -121,14 +122,31 @@ export class Player extends Entity {
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */
-
-        new Actor({
-          THREE: this.THREE,
-          CANNON: this.CANNON,
-          map: this.map,
-          lifeSpan: undefined,
-          position: message.fire.position
-        });
+      }
+      if (message.magic) {
+        switch (message.magic.shapeMatches[0]) {
+          case "square":
+            new Actor({
+              THREE: this.THREE,
+              CANNON: this.CANNON,
+              map: this.map,
+              lifeSpan: undefined,
+              shapeType: "box",
+              position: message.magic.position
+            });
+            break;
+          case "circle":
+            new Projectile({
+              THREE: this.THREE,
+              CANNON: this.CANNON,
+              map: this.map,
+              lifeSpan: undefined,
+              position: message.magic.position
+            });
+            break;
+          default:
+            console.error("No match found");
+        }
       }
     }
   }
