@@ -124,7 +124,7 @@ export class InputManager {
 
       if (this.rightWasSelecting && !this?.controller1?.userData?.isSelecting) {
         this.rightWasSelecting = false;
-        const shapeMatches = ["circle"]; //this.shapeRecogniser.getShapeInfo();
+        const shapeMatches = this.shapeRecogniser.getShapeInfo();
         if (shapeMatches.length > 0) {
           this.player.addMessage({
             magic: {
