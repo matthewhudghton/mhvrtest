@@ -2,10 +2,12 @@ import Nebula, { SpriteRenderer, Alpha, Scale, Color } from "three-nebula";
 
 import left_hand_ps from "./particles/left_hand.json";
 import right_hand_ps from "./particles/right_hand.json";
+import fireball_ps from "./particles/fireball.json";
 
 let particles_json_map = {
   left_hand: left_hand_ps,
-  right_hand: right_hand_ps
+  right_hand: right_hand_ps,
+  fireball: fireball_ps
 };
 
 export class ParticleSystem {
