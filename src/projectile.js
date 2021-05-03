@@ -17,6 +17,10 @@ export class Projectile extends Actor {
         type: "fireball"
       })
     );
+
+    const light = new this.THREE.PointLight(0xffaa00, 1, 100, 1);
+    light.position.set(50, 50, 50);
+    this.mesh.add(light);
   }
 
   update(dt) {

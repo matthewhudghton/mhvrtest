@@ -92,9 +92,9 @@ function initCannon() {
 function init() {
   initCannon();
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xeeeeee);
+  scene.background = new THREE.Color(0x000000);
   scene.fog = new THREE.Fog(0x000000, 0, 1000);
-  let light2 = new THREE.SpotLight(0xffffff);
+  let light2 = new THREE.SpotLight(0xffffff, 0.2);
   light2.position.set(10, 30, 20);
   light2.target.position.set(0, 0, 0);
   if (true) {
@@ -137,7 +137,7 @@ function init() {
 
   scene.add(user);
 
-  scene.add(new THREE.HemisphereLight(0x606060, 0x404040));
+  //scene.add(new THREE.HemisphereLight(0x606060, 0x404040));
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
