@@ -245,9 +245,7 @@ function render() {
   if (hud) {
     hud.render();
   }
-  if (inputManager) {
-    inputManager.update(dt, hud);
-  }
+
   map.update(dt);
   player.update(dt);
 
@@ -326,6 +324,9 @@ function render() {
   }
 
   renderer.render(scene, camera);
+  if (inputManager) {
+    inputManager.update(dt, hud);
+  }
 }
 
 export default function Vr() {
