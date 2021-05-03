@@ -102,10 +102,10 @@ export class InputManager {
 
     if (controllerState) {
       if (controllerState[0].axes[2] < 0) {
-        this.player.addMessage({ backward: controllerState[0].axes[2] });
+        this.player.addMessage({ forward: controllerState[0].axes[2] });
       }
       if (controllerState[0].axes[2] > 0) {
-        this.player.addMessage({ forward: controllerState[0].axes[2] });
+        this.player.addMessage({ backward: controllerState[0].axes[2] });
       }
 
       this.player.leftSelecting = this?.controller1?.userData?.isSelecting;
