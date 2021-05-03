@@ -5,6 +5,8 @@ export class Actor extends Entity {
     super(options);
 
     this.lifeSpan = options.lifeSpan;
+    this.particleSystems = [];
+
     this.initShape(options);
 
     if (options.velocity) {
@@ -70,6 +72,11 @@ export class Actor extends Entity {
     //console.log(this.body.position);
     this.mesh.quaternion.copy(this.body.quaternion);
     //console.log(this.body.position);
+
+    this.particleSystems.forEach((particleSystem) => {
+      particleSystem.setPosition(this.mesh.position);
+      particleSystem.update();
+    });
   }
 
   delete() {

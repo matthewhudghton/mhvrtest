@@ -1,6 +1,7 @@
 import { Pinput } from "./pinput.js";
 import { ShapeRecogniser } from "./shapeRecogniser.js";
 import { Debouncer } from "./debouncer.js";
+import { ControllerHandler, controllerHandler } from "./controllerHandler.js";
 
 let lastPosition;
 export class InputManager {
@@ -25,17 +26,31 @@ export class InputManager {
     this.user = user;
     this.controller1 = controller1;
     this.controller2 = controller2;
-    this.shapeRecogniser = new ShapeRecogniser();
+    this.rightShapeRecogniser = new ShapeRecogniser();
+    this.leftShapeRecogniser = new ShapeRecogniser();
     this.shapeDebouncer = new Debouncer(1);
-    this.pointsDebouncer = new Debouncer(0.01);
+    this.leftPointsDebouncer = new Debouncer(0.01);
+    this.rightPointsDebouncer = new Debouncer(0.01);
     this.leftWasSelecting = false;
     this.rightWasSelecting = false;
+    this.controllerHandler1 = new ControllerHandler({
+      controller: this.controller1,
+      player: this.player,
+      camera: this.camera,
+      THREE: this.THREE
+    });
+    this.controllerHandler2 = new ControllerHandler({
+      controller: this.controller2,
+      player: this.player,
+      camera: this.camera,
+      THREE: this.THREE
+    });
   }
   update(dt, hud) {
     this.hud = hud; // debug remove this later
     this.input.update();
     this.shapeDebouncer.update(dt);
-    this.pointsDebouncer.update(dt);
+    this.rightPointsDebouncer.update(dt);
 
     /// handle camera
     const value = 0.1;
@@ -84,120 +99,21 @@ export class InputManager {
     /* Quest controller*/
 
     let controllerState = this.getQuest2ControllerData();
-    if (hud && controllerState) {
-      if (!this.value) {
-        this.value = 0;
-      }
-      if (this.value % 600 == 0) {
-        //hud.debugText = JSON.stringify(controllerState, null, "  ");
-      }
-      this.value++;
-    }
 
     if (controllerState) {
       if (controllerState[0].axes[2] < 0) {
-        this.player.addMessage({ forward: controllerState[0].axes[2] });
+        this.player.addMessage({ backward: controllerState[0].axes[2] });
       }
       if (controllerState[0].axes[2] > 0) {
-        this.player.addMessage({ backward: controllerState[0].axes[2] });
+        this.player.addMessage({ forward: controllerState[0].axes[2] });
       }
 
       this.player.leftSelecting = this?.controller1?.userData?.isSelecting;
       this.player.rightSelecting = this?.controller2?.userData?.isSelecting;
 
-      if (this?.controller2?.userData?.isSelecting) {
-        this.player.addMessage({
-          fire: { position: this.getController2Position() }
-        });
-
-        if (this.shapeDebouncer.tryFireAndReset()) {
-          var node = document.createTextNode(" print ");
-          document.getElementById("debugText").appendChild(node);
-          this.shapeRecogniser.print();
-          this.shapeRecogniser = new ShapeRecogniser();
-        }
-        if (first) {
-          //hud.debugText = JSON.stringify(this.getController2Position());
-          first = false;
-        }
-      }
-
-      if (this.rightWasSelecting && !this?.controller1?.userData?.isSelecting) {
-        this.rightWasSelecting = false;
-        const shapeMatches = this.shapeRecogniser.getShapeInfo();
-        if (shapeMatches.length > 0) {
-          this.player.addMessage({
-            magic: {
-              position: this.getController1Position(),
-              quaternion: this.controller1.quaternion,
-              shapeMatches: shapeMatches
-            }
-          });
-        }
-        this.shapeRecogniser.clear();
-      }
-
-      if (
-        this.pointsDebouncer.tryFireAndReset() &&
-        this?.controller1?.userData?.isSelecting
-      ) {
-        this.rightWasSelecting = true;
-        let position = this.controller1.position; //this.getController1Position();
-        let positionRelativeToCamera = new this.THREE.Vector3(0, 0, 0);
-        positionRelativeToCamera.copy(position);
-        this.camera.matrixWorldInverse.getInverse(this.camera.matrixWorld);
-        positionRelativeToCamera.applyMatrix4(this.camera.matrixWorldInverse);
-
-        if (lastPosition !== undefined) {
-          /*
-          var node = document.createTextNode(
-            "(" +
-              (positionRelativeToCamera.x - lastPosition.x).toFixed(3) +
-              ", " +
-              (positionRelativeToCamera.y - lastPosition.y).toFixed(3) +
-              ", " +
-              (positionRelativeToCamera.z - lastPosition.z).toFixed(3) +
-              ") "
-          );
-          var br = document.createElement("br");
-          document.getElementById("debugText").appendChild(br);
-
-          document.getElementById("debugText").appendChild(node);
-          */
-          this.shapeRecogniser.addPoint(
-            positionRelativeToCamera.x,
-            positionRelativeToCamera.y,
-            new Date().getTime()
-          );
-        }
-        lastPosition = new this.THREE.Vector3(
-          positionRelativeToCamera.x,
-          positionRelativeToCamera.y,
-          positionRelativeToCamera.z
-        );
-
-        if (first) {
-          //hud.debugText = JSON.stringify(this.getController1Position());
-
-          first = false;
-        }
-      }
-    }
-  }
-
-  getControllerPosition(controller) {
-    const THREE = this.THREE;
-    const CANNON = this.CANNON;
-    let three_position = new THREE.Vector3();
-
-    controller.getWorldPosition(three_position);
-
-    let position = new CANNON.Vec3(
-      three_position.x,
-      three_position.y,
-      three_position.z
-    );
-    return position;
+      this.controllerHandler1.update(dt);
+      this.controllerHandler2.update(dt);
+    } // end of controller state
   }
 
   getController1Position() {

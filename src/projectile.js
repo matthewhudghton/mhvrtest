@@ -10,11 +10,13 @@ export class Projectile extends Actor {
     this.speed = options.speed ?? 15;
     this.body.linearDamping = 0;
 
-    this.particleSystem = new ParticleSystem({
-      THREE: this.THREE,
-      scene: this.scene,
-      type: "fireball"
-    });
+    this.particleSystems.push(
+      new ParticleSystem({
+        THREE: this.THREE,
+        scene: this.scene,
+        type: "fireball"
+      })
+    );
   }
 
   update(dt) {
@@ -24,7 +26,5 @@ export class Projectile extends Actor {
       new this.CANNON.Vec3(0, 3.75 * dt, -this.speed * dt),
       new this.CANNON.Vec3(0, 0, 0)
     );
-    this.particleSystem.setPosition(this.mesh.position);
-    this.particleSystem.update();
   }
 }
