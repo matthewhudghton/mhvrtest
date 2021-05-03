@@ -141,7 +141,10 @@ export class Player extends Entity {
               CANNON: this.CANNON,
               map: this.map,
               lifeSpan: undefined,
-              position: message.magic.position
+              position: message.magic.position,
+              bodySettings: {
+                quaternion: this.bodyActor.body.quaternion
+              }
             });
             break;
           default:

@@ -263,7 +263,7 @@ function render() {
     three_position.z
   );
 
-  player.leftHandPosition.copy(three_position);
+  player.rightHandPosition.copy(three_position);
 
   timePassedSinceLastBall += dt;
   const k = 0.1;
@@ -300,7 +300,7 @@ function render() {
       three_position.z
     );
 
-    player.rightHandPosition.copy(three_position);
+    player.leftHandPosition.copy(three_position);
 
     if (
       controller2 &&

@@ -71,6 +71,15 @@ export class InputManager {
     if (this.input.isDown("g")) {
       this.camera.rotation.x -= value;
     }
+    if (this.input.isDown("p")) {
+      this.player.addMessage({
+        magic: {
+          position: new this.THREE.Vector3(1, 1, 1),
+          shapeMatches: ["circle"]
+        }
+      });
+    }
+
     var first = true;
     /* Quest controller*/
 

@@ -5,7 +5,6 @@ export class Actor extends Entity {
     super(options);
 
     this.lifeSpan = options.lifeSpan;
-    this.mass = 1;
     this.initShape(options);
 
     if (options.velocity) {
@@ -53,7 +52,10 @@ export class Actor extends Entity {
     );
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
-    this.body = new CANNON.Body({ ...options.bodySettings, mass: 1 });
+    this.body = new CANNON.Body({
+      ...options.bodySettings,
+      mass: options.mass ?? 1
+    });
     this.body.addShape(this.shape);
   }
 

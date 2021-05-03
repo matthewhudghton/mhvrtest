@@ -67,8 +67,8 @@
           "id": "51ca9457-3d8b-11e9-a1e8-4785d9606b75",
           "type": "Color",
           "properties": {
-            "colorA": "#002a4f",
-            "colorB": "#0029FF",
+            "colorA": "#4f2a00",
+            "colorB": "#FF2900",
             "life": null,
             "easing": "easeOutCubic"
           }
@@ -88,7 +88,7 @@
           "type": "Force",
           "properties": {
             "fx": 0,
-            "fy": 0.1,
+            "fy": 0.03,
             "fz": 0,
             "life": null,
             "easing": "easeLinear"
@@ -110,7 +110,7 @@
           "type": "RandomDrift",
           "properties": {
             "driftX": 0.001,
-            "driftY": 0.003,
+            "driftY": 0.002,
             "driftZ": 0.001,
             "delay": 1,
             "life": null,
