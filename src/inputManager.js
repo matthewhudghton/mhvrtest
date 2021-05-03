@@ -124,11 +124,12 @@ export class InputManager {
 
       if (this.rightWasSelecting && !this?.controller1?.userData?.isSelecting) {
         this.rightWasSelecting = false;
-        const shapeMatches = this.shapeRecogniser.getShapeInfo();
+        const shapeMatches = ["circle"]; //this.shapeRecogniser.getShapeInfo();
         if (shapeMatches.length > 0) {
           this.player.addMessage({
             magic: {
               position: this.getController1Position(),
+              quaternion: this.controller1.quaternion,
               shapeMatches: shapeMatches
             }
           });

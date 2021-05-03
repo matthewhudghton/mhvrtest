@@ -4,8 +4,9 @@ export class Projectile extends Actor {
     options.shapeType ??= "sphere";
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
-    super(options);
 
+    super(options);
+    this.speed = options.speed ?? 15;
     this.body.linearDamping = 0;
   }
 
@@ -13,7 +14,7 @@ export class Projectile extends Actor {
     Actor.prototype.update.call(this, dt);
 
     this.body.applyLocalImpulse(
-      new this.CANNON.Vec3(0, 3.75 * dt, 10 * dt),
+      new this.CANNON.Vec3(0, 3.75 * dt, -this.speed * dt),
       new this.CANNON.Vec3(0, 0, 0)
     );
   }
