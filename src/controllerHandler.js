@@ -27,7 +27,8 @@ export class ControllerHandler {
           }
         });
       }
-      this.shapeRecogniser.clear();
+      //this.shapeRecogniser.clear();
+      this.shapeRecogniser = new ShapeRecogniser();
     }
     if (
       this.addPointsDebouncer.tryFireAndReset() &&

@@ -88,14 +88,14 @@ export class ShapeRecogniser {
     const circle = new ShapeRecord({
       name: "circle",
       vectors: [
-        [1, 0],
-        [1, -1],
-        [0, -1],
         [-1, -1],
         [-1, 0],
         [-1, 1],
         [0, 1],
-        [1, 1]
+        [1, 1],
+        [1, 0],
+        [1, -1],
+        [0, -1]
       ],
       maxTries: 20
     });
