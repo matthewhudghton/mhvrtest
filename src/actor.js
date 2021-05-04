@@ -65,6 +65,11 @@ export class Actor extends Entity {
     if (this.lifeSpan !== undefined) {
       this.lifeSpan -= dt;
     }
+
+    if (this.shouldBeKilled) {
+      this.kill();
+    }
+
     const mesh = this.mesh;
 
     // Copy coordinates from Cannon.js to Three.js
@@ -79,25 +84,48 @@ export class Actor extends Entity {
     });
   }
 
-  delete() {
+  kill() {
+    console.log("kill!");
     // remove physics
     this.world.remove(this.body);
     this.scene.remove(this.mesh);
-
-    // remove particles
-    this.particleSystems.forEach((particleSystem) => {
-      particleSystem.delete();
-    });
-    this.particleSystems = [];
 
     // remove lights
     this.lights.forEach((light) => {
       this.scene.remove(light);
     });
     this.lights = [];
+
+    // stop any new particles
+    // we'll wait for them to fade before we delete
+    this.particleSystems.forEach((particleSystem) => {
+      particleSystem.stop();
+    });
+  }
+
+  delete() {
+    console.log("Delete!");
+    // remove particles
+    this.particleSystems.forEach((particleSystem) => {
+      particleSystem.delete();
+    });
+    this.particleSystems = [];
+  }
+
+  get shouldBeKilled() {
+    return this.lifeSpan < 0;
   }
 
   get shouldBeDeleted() {
-    return this.lifeSpan < 0;
+    if (!this.shouldBeKilled) {
+      return false;
+    }
+    for (const particleSystem of this.particleSystems) {
+      if (particleSystem.hasParticles) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

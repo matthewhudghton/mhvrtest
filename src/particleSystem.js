@@ -30,6 +30,22 @@ export class ParticleSystem {
     }
   }
 
+  stop() {
+    this.nebula.emitters.forEach((emitter) => {
+      emitter.rate.numPan.a = 0;
+      emitter.rate.numPan.b = 0;
+    });
+  }
+
+  get hasParticles() {
+    for (const emitter of this.nebula.emitters) {
+      if (emitter.particles.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   delete() {
     this.nebula.emitters.forEach((emitter) => {
       emitter.removeAllParticles();

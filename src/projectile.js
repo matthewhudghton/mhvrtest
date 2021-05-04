@@ -5,7 +5,7 @@ export class Projectile extends Actor {
     options.shapeType ??= "sphere";
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
-    options.lifeSpan ??= 1;
+    options.lifeSpan ??= 3;
 
     super(options);
     this.speed = options.speed ?? 15;
