@@ -109,7 +109,6 @@ function init() {
     light2.shadowMapWidth = 2 * 512;
     light2.shadowMapHeight = 2 * 512;
 
-    map = new Map(scene, world);
     //light.shadowCameraVisible = true;
     var mouse = new Mouse(THREE);
   }
@@ -148,7 +147,7 @@ function init() {
   renderer.shadowMapSoft = true;
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(scene.fog.color, 1);
-
+  map = new Map(scene, world);
   document.body.appendChild(renderer.domElement);
 
   document.body.appendChild(VRButton.createButton(renderer));

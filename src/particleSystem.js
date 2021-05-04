@@ -18,8 +18,8 @@ export class ParticleSystem {
 
     Nebula.fromJSONAsync(particles_json_map[options.type], this.THREE).then(
       (system) => {
-        const nebulaRenderer = new SpriteRenderer(this.scene, this.THREE);
-        this.nebula = system.addRenderer(nebulaRenderer);
+        this.renderer = new SpriteRenderer(this.scene, this.THREE);
+        this.nebula = system.addRenderer(this.renderer);
       }
     );
   }
@@ -28,6 +28,17 @@ export class ParticleSystem {
     if (this.nebula) {
       this.nebula.update();
     }
+  }
+
+  delete() {
+    //this.nebula.removeRenderer(this.renderer);
+    //this.nebula.destroy();
+    this.nebula.emitters.forEach((emitter) => {
+      emitter.removeAllParticles();
+    });
+    this.nebula.update();
+    this.nebula.destroy();
+    delete this.nebula;
   }
 
   setPosition(position) {

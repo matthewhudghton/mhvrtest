@@ -6,7 +6,7 @@ export class Actor extends Entity {
 
     this.lifeSpan = options.lifeSpan;
     this.particleSystems = [];
-
+    this.lights = [];
     this.initShape(options);
 
     if (options.velocity) {
@@ -80,9 +80,21 @@ export class Actor extends Entity {
   }
 
   delete() {
+    // remove physics
     this.world.remove(this.body);
     this.scene.remove(this.mesh);
-    console.log("deleteing!");
+
+    // remove particles
+    this.particleSystems.forEach((particleSystem) => {
+      particleSystem.delete();
+    });
+    this.particleSystems = [];
+
+    // remove lights
+    this.lights.forEach((light) => {
+      this.scene.remove(light);
+    });
+    this.lights = [];
   }
 
   get shouldBeDeleted() {
