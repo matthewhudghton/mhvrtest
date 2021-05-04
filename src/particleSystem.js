@@ -31,8 +31,6 @@ export class ParticleSystem {
   }
 
   delete() {
-    //this.nebula.removeRenderer(this.renderer);
-    //this.nebula.destroy();
     this.nebula.emitters.forEach((emitter) => {
       emitter.removeAllParticles();
       emitter.dead = true;
