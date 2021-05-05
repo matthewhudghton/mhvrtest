@@ -4,12 +4,14 @@ import { ShapeRecogniser } from "./shapeRecogniser.js";
 export class ControllerHandler {
   constructor(options) {
     this.controller = options.controller;
+    this.controllerGrip = options.controllerGrip;
     this.player = options.player;
     this.camera = options.camera;
     this.THREE = options.THREE;
     this.shapeRecogniser = new ShapeRecogniser();
     this.wasSelecting = false;
     this.addPointsDebouncer = new Debouncer(0.01);
+    this.debugMesh = [];
   }
 
   update(dt) {
@@ -29,22 +31,38 @@ export class ControllerHandler {
       }
       //this.shapeRecogniser.clear();
       this.shapeRecogniser = new ShapeRecogniser();
+      this.debugMesh.forEach((mesh) => {
+        this.camera.remove(mesh);
+        this.player.scene.remove(mesh);
+        this.player.cameraGroup.remove(mesh);
+      });
+      this.debugMesh = [];
     }
     if (
       this.addPointsDebouncer.tryFireAndReset() &&
       this?.controller?.userData?.isSelecting
     ) {
       this.wasSelecting = true;
-      let position = this.controller.position;
+
       let positionRelativeToCamera = new this.THREE.Vector3(0, 0, 0);
-      positionRelativeToCamera.copy(position);
-      this.camera.matrixWorldInverse.getInverse(this.camera.matrixWorld);
+      positionRelativeToCamera.copy(this.controllerGrip.position);
+
       positionRelativeToCamera.applyMatrix4(this.camera.matrixWorldInverse);
       this.shapeRecogniser.addPoint(
         positionRelativeToCamera.x,
         positionRelativeToCamera.y,
         new Date().getTime()
       );
+
+      const mesh = new this.THREE.Mesh(
+        new this.THREE.IcosahedronGeometry(0.03, 3),
+        new this.THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
+      );
+      //mesh.position.copy(positionRelativeToCamera);
+      mesh.position.copy(this.controllerGrip.position);
+      this.debugMesh.push(mesh);
+      //this.camera.add(mesh);
+      this.player.cameraGroup.add(mesh);
     }
   }
 

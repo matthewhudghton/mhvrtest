@@ -77,6 +77,7 @@ export class Player extends Entity {
     this.cameraGroup.position.z =
       this.cameraGroup.position.z * k +
       this.bodyActor.body.position.z * (1 - k);
+
     //this.bodyActor.body.quaternion.copy(this.camera.quaternion);
     /* this.bodyActor.body.quaternion.setFromAxisAngle(
       new CANNON.Vec3(0, 0, 0),

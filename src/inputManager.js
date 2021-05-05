@@ -35,12 +35,14 @@ export class InputManager {
     this.rightWasSelecting = false;
     this.controllerHandler1 = new ControllerHandler({
       controller: this.controller1,
+      controllerGrip: this.player.leftControllerGrip,
       player: this.player,
       camera: this.camera,
       THREE: this.THREE
     });
     this.controllerHandler2 = new ControllerHandler({
       controller: this.controller2,
+      controllerGrip: this.player.rightControllerGrip,
       player: this.player,
       camera: this.camera,
       THREE: this.THREE
