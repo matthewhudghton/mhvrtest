@@ -44,13 +44,13 @@ export class ControllerHandler {
     ) {
       this.wasSelecting = true;
 
-      let positionRelativeToCamera = new this.THREE.Vector3(0, 0, 0);
-      positionRelativeToCamera.copy(this.controllerGrip.position);
+      let position = new this.THREE.Vector3(0, 0, 0);
+      position.copy(this.getControllerPosition());
 
-      positionRelativeToCamera.applyMatrix4(this.camera.matrixWorldInverse);
+      position.applyMatrix4(this.camera.matrixWorldInverse);
       this.shapeRecogniser.addPoint(
-        positionRelativeToCamera.x,
-        positionRelativeToCamera.y,
+        position.x,
+        position.y,
         new Date().getTime()
       );
 
@@ -59,10 +59,11 @@ export class ControllerHandler {
         new this.THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
       );
       //mesh.position.copy(positionRelativeToCamera);
-      mesh.position.copy(this.controllerGrip.position);
+
+      mesh.position.copy(position);
       this.debugMesh.push(mesh);
-      //this.camera.add(mesh);
-      this.player.cameraGroup.add(mesh);
+      this.camera.add(mesh);
+      //this.player.cameraGroup.add(mesh);
     }
   }
 
