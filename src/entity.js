@@ -18,4 +18,5 @@ export class Entity {
       child.update(dt);
     });
   }
+
 }

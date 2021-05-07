@@ -7,6 +7,7 @@ export class Actor extends Entity {
     this.lifeSpan = options.lifeSpan;
     this.particleSystems = [];
     this.lights = [];
+    this.sounds = [];
     this.initShape(options);
 
     if (options.velocity) {

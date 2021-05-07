@@ -1,5 +1,6 @@
 import { Actor } from "./actor.js";
 import { ParticleSystem } from "./particleSystem.js";
+import { Sound } from "./sound.js";
 export class Projectile extends Actor {
   constructor(options) {
     options.shapeType ??= "sphere";
@@ -10,7 +11,6 @@ export class Projectile extends Actor {
     super(options);
     this.speed = options.speed ?? 15;
     this.body.linearDamping = 0;
-    console.log("this.map.renderer", this.map.renderer);
     this.particleSystems.push(
       new ParticleSystem({
         THREE: this.THREE,
@@ -23,6 +23,10 @@ export class Projectile extends Actor {
     light.position.set(50, 50, 50);
     this.lights.push(light);
     this.mesh.add(light);
+
+    this.sounds.push(
+      new Sound({ THREE: this.THREE, actor: this, player: this.map.player })
+    );
   }
 
   update(dt) {

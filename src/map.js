@@ -1,10 +1,9 @@
 import { Actor } from "./actor";
 
 export class Map {
-  constructor(scene, world, renderer) {
+  constructor(scene, world, player) {
     this.scene = scene;
     this.world = world;
-    this.renderer = renderer;
     this.actors = [];
   }
 

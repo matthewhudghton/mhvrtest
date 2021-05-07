@@ -16,6 +16,9 @@ export class Player extends Entity {
     super(options);
     this.cameraGroup = options.cameraGroup;
     this.camera = options.camera;
+    this.THREE = options.THREE;
+    //this.listener = new this.THREE.AudioListener();
+    //this.camera.add(this.listener);
 
     let position = new this.CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
