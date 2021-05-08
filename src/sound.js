@@ -1,6 +1,7 @@
 const soundsBasePath = "sounds/";
 const soundFileMapping = {
-  woosh01: "woosh01.ogg"
+  woosh01: "woosh01.ogg",
+  music01: "Acruta Lao Dnor.mp3"
 };
 
 function getSoundFile(name) {

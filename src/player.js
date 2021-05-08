@@ -4,6 +4,7 @@ import { Projectile } from "./projectile.js";
 import { Debouncer } from "./debouncer.js";
 import { Entity } from "./entity.js";
 import { ParticleSystem } from "./particleSystem.js";
+import { Sound } from "./sound.js";
 
 export class Player extends Entity {
   leftHandPosition = new Vector3(0, 0, 0);
@@ -52,6 +53,14 @@ export class Player extends Entity {
       THREE: this.THREE,
       scene: this.scene,
       type: "right_hand"
+    });
+
+    // add music
+    this.music = new Sound({
+      THREE: this.THREE,
+      actor: this.bodyActor,
+      player: this,
+      name: "music01"
     });
   }
 
