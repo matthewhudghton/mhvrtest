@@ -8,6 +8,16 @@ export class Actor extends Entity {
     this.particleSystems = [];
     this.lights = [];
     this.sounds = [];
+    this.rawShapeData = options.rawShapeData ?? {
+      width: 0.15,
+      height: 0.15,
+      size: 0.1
+    };
+    this.size = this.rawShapeData.size / 2;
+    this.width = this.rawShapeData.width;
+    this.height = this.rawShapeData.height;
+    this.color = options.color;
+
     this.initShape(options);
 
     if (options.velocity) {
@@ -37,27 +47,28 @@ export class Actor extends Entity {
     const THREE = this.THREE;
     const CANNON = this.CANNON;
     let geometry;
+
     switch (options.shapeType) {
       case "box":
-        geometry = new THREE.BoxGeometry(0.3, 0.2, 0.6);
+        geometry = new THREE.BoxGeometry(this.width, this.height, 0.6);
         this.shape = new CANNON.Box(new CANNON.Vec3(0.15, 0.1, 0.3));
         break;
       case "sphere":
       default:
-        geometry = new THREE.IcosahedronGeometry(0.2, 3);
-        this.shape = new CANNON.Sphere(0.2);
+        geometry = new THREE.IcosahedronGeometry(this.size, 3);
+        this.shape = new CANNON.Sphere(this.size);
         break;
     }
 
     this.mesh = new THREE.Mesh(
       geometry,
-      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
+      new THREE.MeshLambertMaterial({ color: this.color })
     );
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
     this.body = new CANNON.Body({
       ...options.bodySettings,
-      mass: options.mass ?? 1
+      mass: options.mass ?? this.size
     });
     this.body.addShape(this.shape);
   }

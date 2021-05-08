@@ -137,13 +137,14 @@ export class Player extends Entity {
         /* Fire */
       }
       if (message.magic) {
-        switch (message.magic.shapeMatches[0]) {
+        switch (message.magic.shapeMatches[0].name) {
           case "square":
             new Actor({
               THREE: this.THREE,
               CANNON: this.CANNON,
               map: this.map,
               lifeSpan: undefined,
+              rawShapeData: message.magic.shapeMatches[0],
               shapeType: "box",
               position: message.magic.position
             });
@@ -154,6 +155,7 @@ export class Player extends Entity {
               CANNON: this.CANNON,
               map: this.map,
               lifeSpan: undefined,
+              rawShapeData: message.magic.shapeMatches[0],
               position: message.magic.position,
               bodySettings: {
                 quaternion: message.magic.quaternion

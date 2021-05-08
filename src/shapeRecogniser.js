@@ -219,6 +219,20 @@ export class ShapeRecogniser {
     }
   }
 
+  get width() {
+    return this.maxX - this.minX;
+  }
+
+  get height() {
+    return this.maxY - this.minY;
+  }
+
+  get size() {
+    return (
+      Math.sqrt(this.width * this.width) + Math.sqrt(this.height * this.height)
+    );
+  }
+
   getShapeInfo() {
     let normalisedPoints = this.normalisePoints(this.points);
     this.initMatrix(normalisedPoints);
@@ -226,7 +240,12 @@ export class ShapeRecogniser {
     for (let point of normalisedPoints) {
       for (let shape of this.shapes) {
         if (shape.processPoint(point)) {
-          results.push(shape.name);
+          results.push({
+            name: shape.name,
+            width: this.width,
+            height: this.height,
+            size: this.size
+          });
           this.shapes.forEach((s) => s.reset());
         }
       }

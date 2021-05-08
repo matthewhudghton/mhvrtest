@@ -92,7 +92,16 @@ export class InputManager {
       this.player.addMessage({
         magic: {
           position: new this.THREE.Vector3(1, 1, 1),
-          shapeMatches: ["circle"]
+          shapeMatches: [{ name: "circle", size: 0.5 }]
+        }
+      });
+    }
+
+    if (this.input.isDown("o")) {
+      this.player.addMessage({
+        magic: {
+          position: new this.THREE.Vector3(1, 1, 1),
+          shapeMatches: [{ name: "circle", size: 2 }]
         }
       });
     }
