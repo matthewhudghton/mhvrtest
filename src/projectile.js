@@ -27,8 +27,13 @@ export class Projectile extends Actor {
       })
     );
 
-    const light = new this.THREE.PointLight(this.color, 1, this.size * 100, 1);
-    light.position.set(50, 50, 50);
+    const light = new this.THREE.PointLight(
+      this.color,
+      this.size * this.size * 0.01,
+      0,
+      2
+    );
+    light.position.set(0, 0, 0);
     this.lights.push(light);
     this.mesh.add(light);
 
