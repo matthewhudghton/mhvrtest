@@ -86,7 +86,6 @@ export class Actor extends Entity {
   }
 
   kill() {
-    console.log("kill!");
     // remove physics
     this.world.remove(this.body);
     this.scene.remove(this.mesh);
@@ -101,6 +100,11 @@ export class Actor extends Entity {
     // we'll wait for them to fade before we delete
     this.particleSystems.forEach((particleSystem) => {
       particleSystem.stop();
+    });
+
+    // stop any sounds being played
+    this.sounds.forEach((sound) => {
+      sound.kill();
     });
   }
 

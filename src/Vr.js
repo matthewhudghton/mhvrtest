@@ -225,25 +225,6 @@ function init() {
   window.addEventListener("resize", onWindowResize);
 }
 
-function testAudio() {
-  // create an AudioListener and add it to the camera
-  const listener = new THREE.AudioListener();
-  camera.add(listener);
-
-  // create the PositionalAudio object (passing in the listener)
-  const sound = new THREE.PositionalAudio(listener);
-
-  // load a sound and set it as the PositionalAudio object's buffer
-  const audioLoader = new THREE.AudioLoader();
-  audioLoader.load("sounds/woosh01.ogg", function (buffer) {
-    sound.setBuffer(buffer);
-    sound.setRefDistance(20);
-    sound.play();
-    console.log("playing sound");
-  });
-  player.bodyActor.mesh.add(sound);
-}
-
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -259,15 +240,8 @@ let timePassedSinceLastBall = 0;
 let controller1LastPosition = new THREE.Vector3(0, 0, 0);
 let controller2LastPosition = new THREE.Vector3(0, 0, 0);
 
-var once = 1;
-
 function render() {
   const dt = clock.getDelta();
-
-  if (once == 1) {
-    testAudio();
-    once = 0;
-  }
   if (hud) {
     hud.render();
   }
