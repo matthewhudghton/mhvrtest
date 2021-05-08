@@ -23,7 +23,8 @@ export class Projectile extends Actor {
       new ParticleSystem({
         THREE: this.THREE,
         scene: this.scene,
-        type: "fireball"
+        type: "fireball",
+        colorA: this.color
       })
     );
 

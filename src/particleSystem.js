@@ -20,6 +20,14 @@ export class ParticleSystem {
       (system) => {
         this.renderer = new SpriteRenderer(this.scene, this.THREE);
         this.nebula = system.addRenderer(this.renderer);
+        /*this.nebula.emitters.forEach((emitter) => {
+          console.log(emitter);
+          emitter?.behaviours?.forEach((behaviour) => {
+            if (behaviour?.colorA?.colors[0]) {
+              behaviour.colorA.colors[0] = "#002a4f";
+            }
+          });
+        });*/
       }
     );
   }
