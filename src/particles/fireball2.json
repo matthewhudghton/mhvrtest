@@ -73,6 +73,7 @@
             "easing": "easeLinear"
           }
         },
+
         {
           "id": "51ca9457-3d8b-11e9-a1e8-4785d9606b75",
           "type": "Color",

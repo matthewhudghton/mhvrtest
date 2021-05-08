@@ -13,7 +13,8 @@
     "statsvr": "2.2.1",
     "three": "0.127.0",
     "three-nebula": "10.0.1",
-    "webxr": "latest"
+    "webxr": "latest",
+    "immutability-helper": "latest"
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",

@@ -1,4 +1,11 @@
-import Nebula, { SpriteRenderer, Alpha, Scale, Color } from "three-nebula";
+import Nebula, {
+  SpriteRenderer,
+  Alpha,
+  Scale,
+  Color,
+  Emitter
+} from "three-nebula";
+import update from "immutability-helper";
 
 import left_hand_ps from "./particles/left_hand.json";
 import right_hand_ps from "./particles/right_hand.json";
@@ -16,20 +23,29 @@ export class ParticleSystem {
     this.scene = options.scene;
     this.type = options.type;
 
-    Nebula.fromJSONAsync(particles_json_map[options.type], this.THREE).then(
+    Nebula.fromJSONAsync(this.getParticleJSON(options), this.THREE).then(
       (system) => {
         this.renderer = new SpriteRenderer(this.scene, this.THREE);
         this.nebula = system.addRenderer(this.renderer);
-        /*this.nebula.emitters.forEach((emitter) => {
-          console.log(emitter);
-          emitter?.behaviours?.forEach((behaviour) => {
-            if (behaviour?.colorA?.colors[0]) {
-              behaviour.colorA.colors[0] = "#002a4f";
-            }
-          });
-        });*/
       }
     );
+  }
+
+  getParticleJSON(options) {
+    const base = particles_json_map[options.type];
+    const data = update(base, {
+      emitters: [
+        {
+          behaviours: [
+            {},
+            {},
+            { properties: { $set: { colorA: "#ffffff", colorB: "#ffffff" } } }
+          ]
+        }
+      ]
+    });
+    console.log(data);
+    return data;
   }
 
   update(dt) {
