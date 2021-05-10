@@ -32,7 +32,6 @@ export class Actor extends Entity {
 
     if (options.position) {
       this.body.position.copy(options.position);
-      console.log(this.body.position);
     } else {
       this.body.position.set(
         Math.random() * 4 - 2,
@@ -125,7 +124,6 @@ export class Actor extends Entity {
   }
 
   delete() {
-    console.log("Delete!");
     // remove particles
     this.particleSystems.forEach((particleSystem) => {
       particleSystem.delete();

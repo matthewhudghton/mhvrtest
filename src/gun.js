@@ -34,12 +34,13 @@ export class Gun extends Actor {
     this.speed = options.speed ?? 15;
 
     this.body.linearDamping = 0;
-    console.log("hex strinng = " + ("#" + this.color.getHexString()));
+
     this.particleSystems.push(
       new ParticleSystem({
         THREE: this.THREE,
         scene: this.scene,
-        type: "fireball",
+        type: "gun1",
+        useLoaded: true,
         colorA: "#" + this.color.getHexString()
       })
     );

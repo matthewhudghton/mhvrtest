@@ -10,7 +10,7 @@ export class Projectile extends Actor {
     super(options);
     this.speed = options.speed ?? 15;
     this.body.linearDamping = 0;
-    console.log("this.map.renderer", this.map.renderer);
+
     /*this.particleSystems.push(
       new ParticleSystem({
         THREE: this.THREE,

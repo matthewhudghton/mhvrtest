@@ -10,11 +10,13 @@ import update from "immutability-helper";
 import left_hand_ps from "./particles/left_hand.json";
 import right_hand_ps from "./particles/right_hand.json";
 import fireball_ps from "./particles/fireball.json";
+import gun1_ps from "./particles/gun1.json";
 
 let particles_json_map = {
   left_hand: left_hand_ps,
   right_hand: right_hand_ps,
-  fireball: fireball_ps
+  fireball: fireball_ps,
+  gun1: gun1_ps
 };
 
 export class ParticleSystem {
@@ -80,9 +82,12 @@ export class ParticleSystem {
     this.nebula.destroy();
     delete this.nebula;
   }
-
   setPosition(position) {
-    if (this.nebula) {
+    if (
+      this.nebula &&
+      this.nebula.emitters &&
+      this.nebula.emitters.length > 0
+    ) {
       this.nebula.emitters[0].setPosition(position);
     }
   }
@@ -104,7 +109,7 @@ export class ParticleSystem {
     let driftY = options.driftY ?? 0.2;
     let driftZ = options.driftZ ?? 0.1;
     let driftDelay = options.driftDelay ?? 1;
-    
+
     const behaviorJson = [
       {
         type: "Alpha",
