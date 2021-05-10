@@ -24,7 +24,7 @@
         {
           "id": "b27df8b2-b18c-11eb-a046-9d24321db48f",
           "type": "Life",
-          "properties": { "min": 4, "max": 7, "isEnabled": true }
+          "properties": { "min": 2, "max": 4, "isEnabled": true }
         },
         {
           "id": "b27df8b3-b18c-11eb-a046-9d24321db48f",
@@ -124,8 +124,8 @@
             "x": 1,
             "y": 1,
             "z": 0,
-            "spring": 0.01,
-            "friction": 1,
+            "spring": 0.2,
+            "friction": 0.5,
             "life": null,
             "easing": "easeLinear"
           }

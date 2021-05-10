@@ -28,7 +28,9 @@ export class Projectile extends Actor {
         THREE: this.THREE,
         scene: this.scene,
         type: "fireball",
-        colorA: "#" + this.color.getHexString()
+        colorA: "#" + this.color.getHexString(),
+        scaleA: size * 0.5,
+        scaleB: size
       })
     );
 
