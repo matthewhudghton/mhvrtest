@@ -22,6 +22,7 @@ export class ParticleSystem {
     this.THREE = options.THREE;
     this.scene = options.scene;
     this.type = options.type;
+    this.useLoaded = options.useLoaded ?? false;
 
     Nebula.fromJSONAsync(this.getParticleJSON(options), this.THREE).then(
       (system) => {
@@ -33,18 +34,18 @@ export class ParticleSystem {
 
   getParticleJSON(options) {
     const base = particles_json_map[options.type];
+    /* If options.useDefault is setto true, then don't override settings */
+    if (options.useLoaded) {
+      return base;
+    }
     const data = update(base, {
       emitters: [
         {
-          behaviours: [
-            {},
-            {},
-            { properties: { $set: { colorA: "#ffffff", colorB: "#ffffff" } } }
-          ]
+          behaviours: { $set: this.getBehaviours(options) }
         }
       ]
     });
-    console.log(data);
+
     return data;
   }
 
@@ -84,5 +85,87 @@ export class ParticleSystem {
     if (this.nebula) {
       this.nebula.emitters[0].setPosition(position);
     }
+  }
+
+  getBehaviours(options) {
+    let alphaA = options.alphaA ?? 1;
+    let alphaB = options.alphaB ?? 0;
+    let scaleA = options.scaleA ?? 1;
+    let scaleB = options.scaleB ?? 1;
+    let colorA = options.colorA ?? "#ff2a00";
+    let colorB = options.colorB ?? "#111111";
+    let fx = options.fx ?? 0.0;
+    let fy = options.fy ?? 0.0;
+    let fz = options.fz ?? 0.0;
+    let rotateX = options.rotateX ?? 1;
+    let rotateY = options.rotateY ?? 0;
+    let rotateZ = options.rotateZ ?? 0;
+    let driftX = options.driftX ?? 0.1;
+    let driftY = options.driftY ?? 0.2;
+    let driftZ = options.driftZ ?? 0.1;
+    let driftDelay = options.driftDelay ?? 1;
+    
+    const behaviorJson = [
+      {
+        type: "Alpha",
+        properties: {
+          alphaA: alphaA,
+          alphaB: alphaB,
+          life: null,
+          easing: "easeLinear"
+        }
+      },
+      {
+        type: "Scale",
+        properties: {
+          scaleA: scaleA,
+          scaleB: scaleB,
+          life: null,
+          easing: "easeLinear"
+        }
+      },
+
+      {
+        type: "Color",
+        properties: {
+          colorA: colorA,
+          colorB: colorB,
+          life: null,
+          easing: "easeOutCubic"
+        }
+      },
+      {
+        type: "Force",
+        properties: {
+          fx: fx,
+          fy: fy,
+          fz: fz,
+          life: null,
+          easing: "easeLinear"
+        }
+      },
+      {
+        type: "Rotate",
+        properties: {
+          x: rotateX,
+          y: rotateY,
+          z: rotateZ,
+          life: null,
+          easing: "easeLinear"
+        }
+      },
+      {
+        type: "RandomDrift",
+        properties: {
+          driftX: driftX,
+          driftY: driftY,
+          driftZ: driftZ,
+          delay: driftDelay,
+          life: null,
+          easing: "easeLinear"
+        }
+      }
+    ];
+    return behaviorJson;
   }
 }

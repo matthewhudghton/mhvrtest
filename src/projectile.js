@@ -10,21 +10,26 @@ export class Projectile extends Actor {
     options.lifeSpan ??= 8;
     const size = options.rawShapeData.size;
 
-    const green = size * 5;
     const blue = Math.min(-100 + size * 80, 255);
     const red = Math.max(Math.min(100 + size * 5, 255) - blue, 0);
+    const green = 80 + size * 5 - blue;
 
-    options.color ??= new options.THREE.Color(red, green, blue);
+    options.color ??= new options.THREE.Color(
+      red / 255,
+      green / 255,
+      blue / 255
+    );
 
     super(options);
     this.speed = options.speed ?? 15;
     this.body.linearDamping = 0;
+    console.log("hex strinng = " + ("#" + this.color.getHexString()));
     this.particleSystems.push(
       new ParticleSystem({
         THREE: this.THREE,
         scene: this.scene,
         type: "fireball",
-        colorA: this.color
+        colorA: "#" + this.color.getHexString()
       })
     );
 

@@ -46,13 +46,15 @@ export class Player extends Entity {
     this.leftHandParticleSystem = new ParticleSystem({
       THREE: this.THREE,
       scene: this.scene,
-      type: "left_hand"
+      type: "left_hand",
+      useLoaded: true
     });
 
     this.rightHandParticleSystem = new ParticleSystem({
       THREE: this.THREE,
       scene: this.scene,
-      type: "right_hand"
+      type: "right_hand",
+      useLoaded: true
     });
 
     // add music
