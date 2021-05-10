@@ -7,9 +7,11 @@ export class Map {
     this.actors = [];
   }
 
-  addActor(actor) {
-    this.scene.add(actor.mesh);
-    this.world.addBody(actor.body);
+  addActor(actor, ghost) {
+    if (!ghost) {
+      this.scene.add(actor.mesh);
+      this.world.addBody(actor.body);
+    }
     this.actors.push(actor);
   }
 

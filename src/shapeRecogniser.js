@@ -83,7 +83,7 @@ export class ShapeRecogniser {
         [0, 1],
         [0, 1]
       ],
-      maxTries: 5
+      maxTries: 8
     });
     const circle = new ShapeRecord({
       name: "circle",

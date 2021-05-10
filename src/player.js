@@ -1,8 +1,8 @@
 import { Vector3 } from "three";
 import { Actor } from "./actor.js";
-import { Projectile } from "./projectile.js";
 import { Debouncer } from "./debouncer.js";
 import { Entity } from "./entity.js";
+import { Gun } from "./gun.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
 
@@ -152,7 +152,18 @@ export class Player extends Entity {
             });
             break;
           case "circle":
-            new Projectile({
+            /*new Projectile({
+              THREE: this.THREE,
+              CANNON: this.CANNON,
+              map: this.map,
+              lifeSpan: undefined,
+              rawShapeData: message.magic.shapeMatches[0],
+              position: message.magic.position,
+              bodySettings: {
+                quaternion: message.magic.quaternion
+              }
+            });*/
+            new Gun({
               THREE: this.THREE,
               CANNON: this.CANNON,
               map: this.map,
@@ -163,6 +174,7 @@ export class Player extends Entity {
                 quaternion: message.magic.quaternion
               }
             });
+
             break;
           default:
             console.error("No match found");

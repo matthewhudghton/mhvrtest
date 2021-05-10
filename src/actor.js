@@ -6,6 +6,7 @@ export class Actor extends Entity {
 
     this.lifeSpan = options.lifeSpan;
     this.particleSystems = [];
+    this.debouncers = [];
     this.lights = [];
     this.sounds = [];
     this.rawShapeData = options.rawShapeData ?? {
@@ -40,7 +41,7 @@ export class Actor extends Entity {
       );
     }
 
-    this.map.addActor(this);
+    this.map.addActor(this, options.ghost);
   }
 
   initShape(options) {
@@ -92,7 +93,11 @@ export class Actor extends Entity {
 
     this.particleSystems.forEach((particleSystem) => {
       particleSystem.setPosition(this.mesh.position);
-      particleSystem.update();
+      particleSystem.update(dt);
+    });
+
+    this.debouncers.forEach((debouncer) => {
+      debouncer.update(dt);
     });
   }
 
