@@ -29,6 +29,7 @@ export class Player extends Entity {
       lifespan: undefined,
       position,
       velocity: undefined,
+      mass: 1,
       bodySettings: { fixedRotation: true, material: "playerMaterial" }
     });
     this.bodyActor.body.fixedRotation = true;
@@ -130,10 +131,10 @@ export class Player extends Entity {
     for (const message of messages) {
       /* Movement */
       if (message.forward) {
-        this.applyImpulseRelativeToCamera(2);
+        this.applyImpulseRelativeToCamera(0.5);
       }
       if (message.backward) {
-        this.applyImpulseRelativeToCamera(-2);
+        this.applyImpulseRelativeToCamera(-0.5);
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */

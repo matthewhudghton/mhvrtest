@@ -59,10 +59,14 @@ export class Actor extends Entity {
         this.shape = new CANNON.Sphere(this.size);
         break;
     }
-
+    //let normalMap = new THREE.TextureLoader().load("bumpmaps/noise.jpg");
     this.mesh = new THREE.Mesh(
       geometry,
-      new THREE.MeshLambertMaterial({ color: this.color })
+      new THREE.MeshPhongMaterial({
+        color: this.color
+        //bumpScale: 0.1,
+        //normalMap: normalMap
+      })
     );
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;

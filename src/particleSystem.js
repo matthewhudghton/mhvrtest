@@ -43,7 +43,8 @@ export class ParticleSystem {
     const data = update(base, {
       emitters: [
         {
-          behaviours: { $set: this.getBehaviours(options) }
+          behaviours: { $set: this.getBehaviours(options) },
+          emitterBehaviours: { $set: this.getEmitterBehaviours(options) }
         }
       ]
     });
@@ -109,7 +110,13 @@ export class ParticleSystem {
     let driftY = options.driftY ?? 0.2;
     let driftZ = options.driftZ ?? 0.1;
     let driftDelay = options.driftDelay ?? 1;
-
+    let useSpring = options.useSpring ?? false;
+    let springX = options.springX ?? options?.position.x ?? 0;
+    let springY = options.springY ?? options?.position.y ?? 0;
+    let springZ = options.springZ ?? options?.position.z ?? 0;
+    let spring = options.spring ?? 0.2;
+    let springFriction = options.springFriction ?? 0.5;
+    let springLife = options.springLife ?? null;
     const behaviorJson = [
       {
         type: "Alpha",
@@ -171,6 +178,46 @@ export class ParticleSystem {
         }
       }
     ];
+
+    if (useSpring) {
+      behaviorJson.push({
+        type: "Spring",
+        properties: {
+          x: springX,
+          y: springY,
+          z: springZ,
+          spring: spring,
+          friction: springFriction,
+          life: springLife,
+          easing: "easeLinear"
+        }
+      });
+    }
     return behaviorJson;
+  }
+
+  getEmitterBehaviours(options) {
+    const emitterBehaviour = [];
+    let useEmitterRotate = options.useEmitterRotate ?? false;
+    let emitterRotateX = options.emitterRotateX ?? 0;
+    let emitterRotateY = options.emitterRotateY ?? 0;
+    let emitterRotateZ = options.emitterRotateZ ?? 0;
+    let emitterRotateLife = options.emitterRotateLife ?? null;
+    let emitterRotateEasing = options.emitterRotateEasing ?? "easeLinear";
+
+    if (useEmitterRotate) {
+      emitterBehaviour.push({
+        type: "Rotate",
+        properties: {
+          x: emitterRotateX,
+          y: emitterRotateY,
+          z: emitterRotateZ,
+          life: emitterRotateLife,
+          easing: emitterRotateEasing
+        }
+      });
+    }
+
+    return emitterBehaviour;
   }
 }

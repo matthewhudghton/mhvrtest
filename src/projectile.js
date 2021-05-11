@@ -30,7 +30,8 @@ export class Projectile extends Actor {
         type: "fireball",
         colorA: "#" + this.color.getHexString(),
         scaleA: size * 0.5,
-        scaleB: size
+        scaleB: size,
+        position: this.body.position
       })
     );
 

@@ -9,8 +9,8 @@ export class Gun extends Actor {
     options.shapeType ??= "sphere";
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
-    options.lifeSpan ??= 8;
-    options.delay ??= 5;
+    options.lifeSpan ??= 3;
+    options.delay ??= 0.3;
     options.ghost = true;
 
     const size = options.rawShapeData.size;

@@ -60,9 +60,9 @@ export class ControllerHandler {
       );
       //mesh.position.copy(positionRelativeToCamera);
 
-      mesh.position.copy(position);
-      this.debugMesh.push(mesh);
-      this.camera.add(mesh);
+      //mesh.position.copy(position);
+      //this.debugMesh.push(mesh);
+      //this.camera.add(mesh);
       //this.player.cameraGroup.add(mesh);
     }
   }
