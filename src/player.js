@@ -33,7 +33,7 @@ export class Player extends Entity {
       bodySettings: { fixedRotation: true, material: "playerMaterial" }
     });
     this.bodyActor.body.fixedRotation = true;
-    this.bodyActor.body.linearDamping = 0.4;
+    this.bodyActor.body.linearDamping = 0.7;
 
     this.leftFireDebouncer = new Debouncer(1);
     this.rightFireDebouncer = new Debouncer(1);

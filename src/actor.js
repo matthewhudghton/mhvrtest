@@ -50,8 +50,10 @@ export class Actor extends Entity {
 
     switch (options.shapeType) {
       case "box":
-        geometry = new THREE.BoxGeometry(this.width, this.height, 0.6);
-        this.shape = new CANNON.Box(new CANNON.Vec3(0.15, 0.1, 0.3));
+        geometry = new THREE.BoxGeometry(this.width, this.height, this.width);
+        this.shape = new CANNON.Box(
+          new CANNON.Vec3(this.width / 2, this.height / 2, this.width / 2)
+        );
         break;
       case "sphere":
       default:
