@@ -40,8 +40,22 @@ export class Gun extends Actor {
         THREE: this.THREE,
         scene: this.scene,
         type: "gun1",
-        useLoaded: true,
-        colorA: "#" + this.color.getHexString()
+        colorA: "#" + this.color.getHexString(),
+        useSpring: true,
+        position: this.body.position,
+        useEmitterRotate: true,
+        emitterRotateX: 1,
+        emitterRotateY: 1,
+        emitterRotateZ: 1,
+        driftX: 5 * size,
+        driftY: 5 * size,
+        driftZ: 5 * size,
+        rotateX: 10,
+        rotateY: 10,
+        rotateZ: 10,
+        scaleA: 0.5 * size,
+        scaleB: 0.2 * size,
+        radialVelocityRadius: size * 3
       })
     );
 
