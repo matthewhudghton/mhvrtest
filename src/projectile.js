@@ -8,6 +8,7 @@ export class Projectile extends Actor {
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
     options.lifeSpan ??= 8;
+    options.invisible ??= true;
     const size = options.rawShapeData.size;
 
     const blue = Math.min(-100 + size * 80, 255);
@@ -29,7 +30,7 @@ export class Projectile extends Actor {
         scene: this.scene,
         type: "fireball",
         colorA: "#" + this.color.getHexString(),
-        scaleA: size * 0.5,
+        scaleA: 0.5 + size * 0.5,
         scaleB: size,
         position: this.body.position
       })
@@ -37,7 +38,7 @@ export class Projectile extends Actor {
 
     const light = new this.THREE.PointLight(
       this.color,
-      this.size * this.size * 0.01,
+      this.size * this.size,
       0,
       2
     );

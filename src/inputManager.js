@@ -106,6 +106,15 @@ export class InputManager {
       });
     }
 
+    if (this.input.isDown("i")) {
+      this.player.addMessage({
+        magic: {
+          position: new this.THREE.Vector3(1, 1, 1),
+          shapeMatches: [{ name: "square", size: 2, width: 2, height: 2 }]
+        }
+      });
+    }
+
     var first = true;
     /* Quest controller*/
 

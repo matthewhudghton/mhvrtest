@@ -18,7 +18,7 @@ export class Actor extends Entity {
     this.width = this.rawShapeData.width;
     this.height = this.rawShapeData.height;
     this.color = options.color;
-
+    this.invisible = options.invisible ?? false;
     this.initShape(options);
 
     if (options.velocity) {
@@ -47,17 +47,22 @@ export class Actor extends Entity {
     const THREE = this.THREE;
     const CANNON = this.CANNON;
     let geometry;
-
+    const invisible = this.invisible;
     switch (options.shapeType) {
       case "box":
-        geometry = new THREE.BoxGeometry(this.width, this.height, this.width);
+        if (!invisible) {
+          geometry = new THREE.BoxGeometry(this.width, this.height, this.width);
+        }
         this.shape = new CANNON.Box(
           new CANNON.Vec3(this.width / 2, this.height / 2, this.width / 2)
         );
         break;
       case "sphere":
       default:
-        geometry = new THREE.IcosahedronGeometry(this.size, 3);
+        if (!invisible) {
+          geometry = new THREE.IcosahedronGeometry(this.size, 3);
+        }
+
         this.shape = new CANNON.Sphere(this.size);
         break;
     }
@@ -65,11 +70,12 @@ export class Actor extends Entity {
     this.mesh = new THREE.Mesh(
       geometry,
       new THREE.MeshPhongMaterial({
-        color: this.color
-        //bumpScale: 0.1,
-        //normalMap: normalMap
+        color: this.color,
+        transparent: true,
+        opacity: 0.0
       })
     );
+
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
     this.body = new CANNON.Body({
@@ -82,6 +88,9 @@ export class Actor extends Entity {
   update(dt) {
     if (this.lifeSpan !== undefined) {
       this.lifeSpan -= dt;
+    }
+    if (this.mesh.material.opacity < 1) {
+      this.mesh.material.opacity += 0.01;
     }
 
     if (this.shouldBeKilled) {
