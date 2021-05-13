@@ -52,15 +52,17 @@ export class Explosion extends Actor {
 
     this.body.collisionFilterGroup = 1;
     this.body.collisionFilterMask = 2;
-    /*
+
     this.sounds.push(
       new Sound({
         THREE: this.THREE,
         actor: this,
         player: this.map.player,
+        name: "explosion01",
+        loop: false,
         detune: (5 - this.size) * 1000
       })
-    );*/
+    );
   }
 
   update(dt) {

@@ -1,6 +1,7 @@
 const soundsBasePath = "sounds/";
 const soundFileMapping = {
   woosh01: "woosh01.ogg",
+  explosion01: "explosion01.ogg",
   music01: "Acruta Lao Dnor.mp3"
 };
 
@@ -17,11 +18,13 @@ export class Sound {
     this.volume = options.volume ?? 0.3;
     this.name = options.name ?? "woosh01";
     this.soundLoaded = false;
+    this.loop = options.loop ?? true;
     this.sound = new this.THREE.PositionalAudio(this.player.listener);
     const sound = this.sound;
     const actor = this.actor;
     const volume = this.volume;
     const name = this.name;
+    const loop = this.loop;
     const self = this;
     this.mesh = options.mesh;
     this.audioLoader = new this.THREE.AudioLoader();
@@ -29,7 +32,7 @@ export class Sound {
       sound.setBuffer(buffer);
       sound.setRefDistance(20);
       actor.mesh.add(sound);
-      sound.setLoop(true);
+      sound.setLoop(loop);
       sound.setVolume(volume);
       sound.play();
       self.soundLoaded = true;
@@ -38,7 +41,9 @@ export class Sound {
 
   kill() {
     if (this.soundLoaded) {
-      this.sound.stop();
+      if (this.loop) {
+        this.sound.stop();
+      }
     }
   }
 }
