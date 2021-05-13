@@ -8,7 +8,7 @@ export class Projectile extends Actor {
     options.shapeType ??= "sphere";
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
-    options.lifeSpan ??= 4;
+    options.lifeSpan ??= 8;
     options.invisible ??= true;
     const size = options.rawShapeData.size;
 

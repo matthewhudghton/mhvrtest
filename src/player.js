@@ -111,7 +111,7 @@ export class Player extends Entity {
     const CANNON = this.CANNON;
     let direction = new THREE.Vector3();
     direction.copy(this.leftControllerGrip.position);
-    direction.y = direction.y - 0.5;
+    direction.y = direction.y - 1;
     direction.normalize();
     const force = new CANNON.Vec3(
       direction.x * speed,

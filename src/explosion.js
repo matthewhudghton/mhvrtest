@@ -33,8 +33,8 @@ export class Explosion extends Actor {
         scaleA: size * 2,
         scaleB: size,
         position: this.body.position,
-        radialVelocityY: 10 * this.size,
-        radialVelocityRadius: 14 * this.size,
+        radialVelocityY: 1 + 10 * this.size * this.size,
+        radialVelocityRadius: 14 * this.size * this.size,
         useLoaded: false,
         particlesMin: 2
       })
