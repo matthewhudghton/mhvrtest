@@ -64,7 +64,11 @@ function initCannon() {
 
   // add a floor
   var groundShape = new CANNON.Plane();
-  var groundBody = new CANNON.Body({ mass: 0 });
+  var groundBody = new CANNON.Body({
+    mass: 0,
+    collisionFilterGroup: 2,
+    collisionFilterMask: 0xffff
+  });
   groundBody.addShape(groundShape);
   groundBody.quaternion.setFromAxisAngle(
     new CANNON.Vec3(1, 0, 0),

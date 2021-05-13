@@ -41,6 +41,14 @@ export class Actor extends Entity {
     }
 
     this.map.addActor(this, options.ghost);
+
+    if (this.collideEvent) {
+      this.body.addEventListener("collide", this.collideEvent);
+    }
+    this.body.userData = { actor: this };
+
+    this.body.collisionFilterGroup = 2;
+    this.body.collisionFilterMask = 0xffff;
   }
 
   initShape(options) {
@@ -116,6 +124,8 @@ export class Actor extends Entity {
   }
 
   kill() {
+    this.lifeSpan = 0;
+
     // remove physics
     this.world.remove(this.body);
     this.scene.remove(this.mesh);
@@ -147,7 +157,7 @@ export class Actor extends Entity {
   }
 
   get shouldBeKilled() {
-    return this.lifeSpan < 0;
+    return this.lifeSpan <= 0;
   }
 
   get shouldBeDeleted() {

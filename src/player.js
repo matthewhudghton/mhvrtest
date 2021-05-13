@@ -106,6 +106,21 @@ export class Player extends Entity {
     this.messages.push(message);
   }
 
+  applyImpulseRelativeToController(speed) {
+    const THREE = this.THREE;
+    const CANNON = this.CANNON;
+    let direction = new THREE.Vector3();
+    direction.copy(this.leftControllerGrip.position);
+    direction.y = direction.y - 0.5;
+    direction.normalize();
+    const force = new CANNON.Vec3(
+      direction.x * speed,
+      direction.y * speed,
+      direction.z * speed
+    );
+    const pointOnBody = new CANNON.Vec3(0, 0, 0);
+    this.bodyActor.body.applyImpulse(force, pointOnBody);
+  }
   applyImpulseRelativeToCamera(speed) {
     const THREE = this.THREE;
     const CANNON = this.CANNON;
@@ -131,10 +146,10 @@ export class Player extends Entity {
     for (const message of messages) {
       /* Movement */
       if (message.forward) {
-        this.applyImpulseRelativeToCamera(0.5);
+        this.applyImpulseRelativeToController(0.5);
       }
       if (message.backward) {
-        this.applyImpulseRelativeToCamera(-0.5);
+        this.applyImpulseRelativeToController(-0.5);
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */

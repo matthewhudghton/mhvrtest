@@ -10,7 +10,7 @@ export class Gun extends Actor {
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
     options.lifeSpan ??= 3;
-    options.delay ??= 0.3;
+    options.delay ??= 0.2;
     options.ghost = true;
 
     const size = options.rawShapeData.size;
@@ -26,6 +26,9 @@ export class Gun extends Actor {
     );
 
     super(options);
+
+    this.body.collisionFilterGroup = 1;
+    this.body.collisionFilterMask = 2;
 
     this.countDelay = options.countDelay ?? 2;
     this.debouncer = new Debouncer(this.countDelay);

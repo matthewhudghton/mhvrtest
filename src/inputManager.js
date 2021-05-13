@@ -100,7 +100,7 @@ export class InputManager {
     if (this.input.isDown("o")) {
       this.player.addMessage({
         magic: {
-          position: new this.THREE.Vector3(1, 1, 1),
+          position: new this.THREE.Vector3(1, 4, 1),
           shapeMatches: [{ name: "circle", size: 2 }]
         }
       });

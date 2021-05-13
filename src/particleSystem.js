@@ -43,12 +43,14 @@ export class ParticleSystem {
     const data = update(base, {
       emitters: [
         {
+          rate: { $set: this.getEmitterRate(options) },
           initializers: { $set: this.getInitializers(options) },
           behaviours: { $set: this.getBehaviours(options) },
           emitterBehaviours: { $set: this.getEmitterBehaviours(options) }
         }
       ]
     });
+    console.log(data);
 
     return data;
   }
@@ -177,6 +179,7 @@ export class ParticleSystem {
     let spring = options.spring ?? 0.2;
     let springFriction = options.springFriction ?? 0.5;
     let springLife = options.springLife ?? null;
+
     const behaviorJson = [
       {
         type: "Alpha",
@@ -279,5 +282,18 @@ export class ParticleSystem {
     }
 
     return emitterBehaviour;
+  }
+  getEmitterRate(options) {
+    let particlesMin = options.particlesMin ?? 1;
+    let particlesMax = options.particlesMax ?? 2;
+    let perSecondMin = options.perSecondMin ?? 0.01;
+    let perSecondMax = options.perSecondMax ?? 0.02;
+
+    return {
+      particlesMin: particlesMin,
+      particlesMax: particlesMax,
+      perSecondMin: perSecondMin,
+      perSecondMax: perSecondMax
+    };
   }
 }

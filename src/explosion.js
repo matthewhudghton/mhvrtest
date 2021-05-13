@@ -1,14 +1,13 @@
 import { Actor } from "./actor.js";
-import { Explosion } from "./explosion.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
 
-export class Projectile extends Actor {
+export class Explosion extends Actor {
   constructor(options) {
     options.shapeType ??= "sphere";
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
-    options.lifeSpan ??= 4;
+    options.lifeSpan ??= 0.5;
     options.invisible ??= true;
     const size = options.rawShapeData.size;
 
@@ -23,9 +22,6 @@ export class Projectile extends Actor {
     );
 
     super(options);
-
-    this.exploding = false;
-    this.hasExploded = false;
     this.speed = options.speed ?? 15;
     this.body.linearDamping = 0;
     this.particleSystems.push(
@@ -34,15 +30,19 @@ export class Projectile extends Actor {
         scene: this.scene,
         type: "fireball",
         colorA: "#" + this.color.getHexString(),
-        scaleA: 0.5 + size * 0.5,
+        scaleA: size * 2,
         scaleB: size,
-        position: this.body.position
+        position: this.body.position,
+        radialVelocityY: 10 * this.size,
+        radialVelocityRadius: 14 * this.size,
+        useLoaded: false,
+        particlesMin: 2
       })
     );
 
     const light = new this.THREE.PointLight(
       this.color,
-      this.size * this.size,
+      this.size * this.size * 5,
       0,
       2
     );
@@ -50,6 +50,9 @@ export class Projectile extends Actor {
     this.lights.push(light);
     this.mesh.add(light);
 
+    this.body.collisionFilterGroup = 1;
+    this.body.collisionFilterMask = 2;
+    /*
     this.sounds.push(
       new Sound({
         THREE: this.THREE,
@@ -57,54 +60,10 @@ export class Projectile extends Actor {
         player: this.map.player,
         detune: (5 - this.size) * 1000
       })
-    );
-
-    this.body.collisionFilterGroup = 1;
-    this.body.collisionFilterMask = 2;
-  }
-
-  kill() {
-    Actor.prototype.kill.call(this);
+    );*/
   }
 
   update(dt) {
     Actor.prototype.update.call(this, dt);
-
-    this.body.applyLocalImpulse(
-      new this.CANNON.Vec3(0, 3.75 * dt, -this.speed * dt),
-      new this.CANNON.Vec3(0, 0, 0)
-    );
-
-    if (this.lifeSpan < 1) {
-      this.exploding = true;
-    }
-    if (this.exploding && !this.hasExploded) {
-      console.log("Explode!");
-      new Explosion({
-        THREE: this.THREE,
-        CANNON: this.CANNON,
-        map: this.map,
-        lifeSpan: undefined,
-        rawShapeData: this.rawShapeData,
-        position: this.body.position,
-        bodySettings: {
-          quaternion: this.body.quaternion
-        }
-      });
-
-      this.hasExploded = true;
-      this.lifeSpan = 0;
-    }
-  }
-
-  explode() {
-    this.exploding = true;
-  }
-
-  collideEvent(event) {
-    event.target.userData.actor.explode();
-    if (event.body?.userData?.actor) {
-      event.body.userData.actor.lifeSpan = 0;
-    }
   }
 }

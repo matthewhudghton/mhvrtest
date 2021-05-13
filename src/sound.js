@@ -16,11 +16,13 @@ export class Sound {
     this.player = options.player;
     this.volume = options.volume ?? 0.3;
     this.name = options.name ?? "woosh01";
+    this.soundLoaded = false;
     this.sound = new this.THREE.PositionalAudio(this.player.listener);
     const sound = this.sound;
     const actor = this.actor;
     const volume = this.volume;
     const name = this.name;
+    const self = this;
     this.mesh = options.mesh;
     this.audioLoader = new this.THREE.AudioLoader();
     this.audioLoader.load(getSoundFile(name), function (buffer) {
@@ -30,10 +32,13 @@ export class Sound {
       sound.setLoop(true);
       sound.setVolume(volume);
       sound.play();
+      self.soundLoaded = true;
     });
   }
 
   kill() {
-    this.sound.stop();
+    if (this.soundLoaded) {
+      this.sound.stop();
+    }
   }
 }
