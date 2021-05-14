@@ -56,27 +56,29 @@ export class Gun extends Actor {
         rotateX: 10,
         rotateY: 10,
         rotateZ: 10,
-        scaleA: 0.5 * size,
+        scaleA: 0.3 * size,
         scaleB: 0.2 * size,
         radialVelocityRadius: size * 3
       })
     );
 
-    const light = new this.THREE.PointLight(
+    /*const light = new this.THREE.PointLight(
       this.color,
       this.size * this.size * 0.01,
       0,
       2
-    );
-    light.position.set(0, 0, 0);
-    this.lights.push(light);
-    this.mesh.add(light);
+    );*/
+    //light.position.set(0, 0, 0);
+    //this.lights.push(light);
+    //this.mesh.add(light);
 
     this.sounds.push(
       new Sound({
         THREE: this.THREE,
         actor: this,
         player: this.map.player,
+        name: "cast01",
+        loop: false,
         detune: (5 - this.size) * 1000
       })
     );
@@ -98,6 +100,7 @@ export class Gun extends Actor {
       lifeSpan: undefined,
       rawShapeData: this.rawShapeData,
       position: this.body.position,
+      velocity: this.map.player.bodyActor.body.velocity,
       bodySettings: {
         quaternion: this.body.quaternion
       }

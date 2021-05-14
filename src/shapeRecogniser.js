@@ -97,7 +97,7 @@ export class ShapeRecogniser {
         [1, -1],
         [0, -1]
       ],
-      maxTries: 20
+      maxTries: 3
     });
     const downLeft = new ShapeRecord({
       name: "downLeft",

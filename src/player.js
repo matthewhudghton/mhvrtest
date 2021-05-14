@@ -35,6 +35,9 @@ export class Player extends Entity {
     this.bodyActor.body.fixedRotation = true;
     this.bodyActor.body.linearDamping = 0.7;
 
+    this.bodyActor.body.collisionFilterGroup = 1;
+    this.bodyActor.body.collisionFilterMask = 2;
+
     this.leftFireDebouncer = new Debouncer(1);
     this.rightFireDebouncer = new Debouncer(1);
     this.leftControllerGrip = options.leftControllerGrip;
@@ -164,7 +167,8 @@ export class Player extends Entity {
               lifeSpan: undefined,
               rawShapeData: message.magic.shapeMatches[0],
               shapeType: "box",
-              position: message.magic.position
+              position: message.magic.position,
+              velocity: this.bodyActor.body.velocity
             });
             break;
           case "circle":
@@ -188,7 +192,8 @@ export class Player extends Entity {
               position: message.magic.position,
               bodySettings: {
                 quaternion: message.magic.quaternion
-              }
+              },
+              attachedTo: message.magic.attachedTo
             });
 
             break;

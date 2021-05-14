@@ -19,16 +19,17 @@ export class ControllerHandler {
 
     if (this.wasSelecting && !this?.controller?.userData?.isSelecting) {
       this.wasSelecting = false;
-      const shapeMatches = this.shapeRecogniser.getShapeInfo();
+      /*const shapeMatches = this.shapeRecogniser.getShapeInfo();
       if (shapeMatches.length > 0) {
         this.player.addMessage({
           magic: {
             position: this.getControllerPosition(),
             quaternion: this.controller.quaternion,
+            attachedTo: this.controllerGrip,
             shapeMatches: shapeMatches
           }
         });
-      }
+      }*/
       //this.shapeRecogniser.clear();
       this.shapeRecogniser = new ShapeRecogniser();
       this.debugMesh.forEach((mesh) => {
@@ -54,10 +55,24 @@ export class ControllerHandler {
         new Date().getTime()
       );
 
-      const mesh = new this.THREE.Mesh(
+      const shapeMatches = this.shapeRecogniser.getShapeInfo();
+      if (shapeMatches.length > 0) {
+        this.player.addMessage({
+          magic: {
+            position: this.getControllerPosition(),
+            quaternion: this.controller.quaternion,
+            attachedTo: this.controllerGrip,
+            shapeMatches: shapeMatches
+          }
+        });
+        this.shapeRecogniser = new ShapeRecogniser();
+      }
+
+      /*const mesh = new this.THREE.Mesh(
         new this.THREE.IcosahedronGeometry(0.03, 3),
         new this.THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
-      );
+      );*/
+
       //mesh.position.copy(positionRelativeToCamera);
 
       //mesh.position.copy(position);

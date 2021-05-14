@@ -2,7 +2,8 @@ const soundsBasePath = "sounds/";
 const soundFileMapping = {
   woosh01: "woosh01.ogg",
   explosion01: "explosion01.ogg",
-  music01: "Acruta Lao Dnor.mp3"
+  music01: "Acruta Lao Dnor.mp3",
+  cast01: "cast01.ogg"
 };
 
 function getSoundFile(name) {
@@ -19,6 +20,7 @@ export class Sound {
     this.name = options.name ?? "woosh01";
     this.soundLoaded = false;
     this.loop = options.loop ?? true;
+    this.duration = options.duration ?? undefined;
     this.sound = new this.THREE.PositionalAudio(this.player.listener);
     const sound = this.sound;
     const actor = this.actor;
@@ -26,6 +28,7 @@ export class Sound {
     const name = this.name;
     const loop = this.loop;
     const self = this;
+    const duration = this.duration;
     this.mesh = options.mesh;
     this.audioLoader = new this.THREE.AudioLoader();
     this.audioLoader.load(getSoundFile(name), function (buffer) {
@@ -34,6 +37,7 @@ export class Sound {
       actor.mesh.add(sound);
       sound.setLoop(loop);
       sound.setVolume(volume);
+      sound.duration = duration;
       sound.play();
       self.soundLoaded = true;
     });

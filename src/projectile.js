@@ -34,7 +34,7 @@ export class Projectile extends Actor {
         scene: this.scene,
         type: "fireball",
         colorA: "#" + this.color.getHexString(),
-        scaleA: 0.5 + size * 0.5,
+        scaleA: size * 0.5,
         scaleB: size,
         position: this.body.position
       })
@@ -55,7 +55,8 @@ export class Projectile extends Actor {
         THREE: this.THREE,
         actor: this,
         player: this.map.player,
-        detune: (5 - this.size) * 1000
+        detune: (5 - this.size) * 1000,
+        duration: 20
       })
     );
 

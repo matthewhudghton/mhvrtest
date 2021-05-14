@@ -5,6 +5,7 @@ export class Actor extends Entity {
     super(options);
 
     this.lifeSpan = options.lifeSpan;
+    this.attachedTo = options.attachedTo ?? undefined;
     this.particleSystems = [];
     this.debouncers = [];
     this.lights = [];
@@ -22,8 +23,7 @@ export class Actor extends Entity {
     this.initShape(options);
 
     if (options.velocity) {
-      const velocity = options.velocity;
-      this.body.angularVelocity.set(velocity.x, velocity.y, velocity.z);
+      this.body.velocity.copy(options.velocity);
     } else {
       this.body.angularVelocity.set(0, 0, 0);
     }
@@ -97,8 +97,19 @@ export class Actor extends Entity {
     if (this.lifeSpan !== undefined) {
       this.lifeSpan -= dt;
     }
+
     if (this.mesh.material.opacity < 1) {
       this.mesh.material.opacity += 0.01;
+    }
+
+    if (this.attachedTo) {
+      this.attachedTo.getWorldPosition(this.mesh.position);
+      this.attachedTo.getWorldQuaternion(this.mesh.quaternion);
+      this.body.position.copy(this.mesh.position);
+      this.body.quaternion.copy(this.mesh.quaternion);
+    } else {
+      this.mesh.position.copy(this.body.position);
+      this.mesh.quaternion.copy(this.body.quaternion);
     }
 
     if (this.shouldBeKilled) {
@@ -108,9 +119,9 @@ export class Actor extends Entity {
     const mesh = this.mesh;
 
     // Copy coordinates from Cannon.js to Three.js
-    this.mesh.position.copy(this.body.position);
+
     //console.log(this.body.position);
-    this.mesh.quaternion.copy(this.body.quaternion);
+
     //console.log(this.body.position);
 
     this.particleSystems.forEach((particleSystem) => {
