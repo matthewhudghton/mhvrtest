@@ -1,10 +1,12 @@
 import { Actor } from "./actor";
+import * as YUKA from "yuka";
 
 export class Map {
   constructor(scene, world, player) {
     this.scene = scene;
     this.world = world;
     this.actors = [];
+    this.aiManager = new YUKA.EntityManager();
   }
 
   addActor(actor, ghost) {
@@ -22,7 +24,7 @@ export class Map {
     }
 
     this.world.step(dt);
-
+    this.aiManager.update(dt);
     /* Delete any actor marked as should remove */
     const actors = this.actors;
     let i = actors.length;

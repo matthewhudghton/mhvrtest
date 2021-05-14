@@ -7,6 +7,7 @@ import { Actor } from "./actor.js";
 import { Player } from "./player.js";
 import { Map } from "./map.js";
 import * as CANNON from "cannon";
+import { Ai } from "./ai.js";
 
 import { Mouse } from "./mouse.js";
 import System, {
@@ -34,7 +35,7 @@ let camera, scene, renderer;
 let controller1, controller2;
 let controllerGrip1, controllerGrip2;
 let user = new THREE.Group();
-
+let aiManager;
 const radius = 0.08;
 
 const relativeVelocity = new THREE.Vector3();
@@ -213,6 +214,16 @@ function init() {
   });
   map.player = player;
 
+  aiManager = new Ai({
+    THREE: THREE,
+    CANNON: CANNON,
+    camera: camera,
+    cameraGroup: user,
+    map: map,
+    leftControllerGrip: controllerGrip1,
+    rightControllerGrip: controllerGrip2
+  });
+
   //
   inputManager = new InputManager(
     THREE,
@@ -252,6 +263,7 @@ function render() {
 
   map.update(dt);
   player.update(dt);
+  aiManager.update(dt);
 
   /* Track controller position with actor */
   const controller1 = inputManager.controller1;

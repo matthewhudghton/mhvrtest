@@ -14,9 +14,8 @@ export class Entity {
     this.children = options.children ?? [];
   }
   update(dt) {
-    this.children.array.forEach((child) => {
+    this.children.forEach((child) => {
       child.update(dt);
     });
   }
-
 }
