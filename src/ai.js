@@ -1,8 +1,12 @@
 import { Entity } from "./entity.js";
+import { Actor } from "./actor.js";
 import * as YUKA from "yuka";
-
-function sync(entity, renderComponent) {
-  renderComponent.matrix.copy(entity.worldMatrix);
+let once = 1;
+function sync(vehicle, actor) {
+  actor.body.velocity.copy(vehicle.velocity);
+  //if (once == 0) return;
+  //console.log(vehicle);
+  //once = 0;
 }
 
 export class Ai extends Entity {
@@ -15,6 +19,15 @@ export class Ai extends Entity {
     const alignmentBehavior = new YUKA.AlignmentBehavior();
     const cohesionBehavior = new YUKA.CohesionBehavior();
     const separationBehavior = new YUKA.SeparationBehavior();
+    this.actor = new Actor({
+      THREE: this.THREE,
+      CANNON: this.CANNON,
+      map: this.map,
+      lifespan: undefined,
+      velocity: undefined,
+      mass: 1,
+      bodySettings: { fixedRotation: true, material: "playerMaterial" }
+    });
     const params = {
       alignment: 1,
       cohesion: 0.9,
@@ -24,30 +37,21 @@ export class Ai extends Entity {
     cohesionBehavior.weight = params.cohesion;
     separationBehavior.weight = params.separation;
 
-    for (let i = 0; i < 50; i++) {
-      const vehicleMesh = new THREE.Mesh(vehicleGeometry, vehicleMaterial);
-      vehicleMesh.matrixAutoUpdate = false;
-      this.map.scene.add(vehicleMesh);
+    const vehicle = new YUKA.Vehicle();
+    vehicle.maxSpeed = 1.5;
+    vehicle.updateNeighborhood = true;
+    vehicle.neighborhoodRadius = 10;
 
-      const vehicle = new YUKA.Vehicle();
-      vehicle.maxSpeed = 1.5;
-      vehicle.updateNeighborhood = true;
-      vehicle.neighborhoodRadius = 10;
-      vehicle.rotation.fromEuler(0, Math.PI * Math.random(), 0);
-      vehicle.position.x = 10 - Math.random() * 20;
-      vehicle.position.z = 10 - Math.random() * 20;
+    vehicle.setRenderComponent(this.actor, sync);
 
-      vehicle.setRenderComponent(vehicleMesh, sync);
+    vehicle.steering.add(alignmentBehavior);
+    vehicle.steering.add(cohesionBehavior);
+    vehicle.steering.add(separationBehavior);
 
-      vehicle.steering.add(alignmentBehavior);
-      vehicle.steering.add(cohesionBehavior);
-      vehicle.steering.add(separationBehavior);
+    const wanderBehavior = new YUKA.WanderBehavior();
+    wanderBehavior.weight = 0.5;
+    vehicle.steering.add(wanderBehavior);
 
-      const wanderBehavior = new YUKA.WanderBehavior();
-      wanderBehavior.weight = 0.5;
-      vehicle.steering.add(wanderBehavior);
-
-      this.map.aiManager.add(vehicle);
-    }
+    this.map.aiManager.add(vehicle);
   }
 }

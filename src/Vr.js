@@ -214,15 +214,17 @@ function init() {
   });
   map.player = player;
 
-  aiManager = new Ai({
-    THREE: THREE,
-    CANNON: CANNON,
-    camera: camera,
-    cameraGroup: user,
-    map: map,
-    leftControllerGrip: controllerGrip1,
-    rightControllerGrip: controllerGrip2
-  });
+  for (let i = 0; i < 30; i++) {
+    new Ai({
+      THREE: THREE,
+      CANNON: CANNON,
+      camera: camera,
+      cameraGroup: user,
+      map: map,
+      leftControllerGrip: controllerGrip1,
+      rightControllerGrip: controllerGrip2
+    });
+  }
 
   //
   inputManager = new InputManager(
@@ -263,7 +265,6 @@ function render() {
 
   map.update(dt);
   player.update(dt);
-  aiManager.update(dt);
 
   /* Track controller position with actor */
   const controller1 = inputManager.controller1;
