@@ -63,13 +63,13 @@ export class Ai extends Entity {
     vehicle.steering.add(seekBehavior);*/
     const pursuitBehavior = new YUKA.OffsetPursuitBehavior(
       this.map.player.vehicle,
-      1
+      5
     );
     vehicle.steering.add(pursuitBehavior);
 
     const wanderBehavior = new YUKA.WanderBehavior();
-    wanderBehavior.weight = 0.5;
-    vehicle.steering.add(wanderBehavior);
+    wanderBehavior.weight = 0.1;
+    //vehicle.steering.add(wanderBehavior);
 
     const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(
       this.map.obstacles
@@ -79,7 +79,7 @@ export class Ai extends Entity {
 
     const vision = new YUKA.Vision(vehicle);
     vision.range = 5;
-    vision.fieldOfView = Math.PI * 0.5;
+    vision.fieldOfView = Math.PI * 2; //* 0.5;
     vision.addObstacle(this.map.obstacles);
     vehicle.vision = vision;
 
