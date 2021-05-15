@@ -63,7 +63,6 @@ function initCannon() {
   world.broadphase = new CANNON.NaiveBroadphase();
   world.solver.iterations = 10;
 
-
   // Materials
   var playerMaterial = new CANNON.Material("playerMaterial");
 
@@ -113,7 +112,6 @@ function init() {
     10000
   );
 
-
   camera.position.set(0, 1.6, 3);
   user.add(camera);
 
@@ -130,7 +128,7 @@ function init() {
   renderer.shadowMapSoft = true;
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(scene.fog.color, 1);
-  map = new Map({THREE, CANNON, scene, world});
+  map = new Map({ THREE, CANNON, scene, world });
   document.body.appendChild(renderer.domElement);
 
   document.body.appendChild(VRButton.createButton(renderer));
@@ -192,7 +190,7 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 1; i++) {
     new Ai({
       THREE: THREE,
       CANNON: CANNON,

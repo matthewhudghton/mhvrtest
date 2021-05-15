@@ -66,27 +66,67 @@ export class Ai extends Entity {
     vehicle.steering.add(pursuitBehavior);
 
     const wanderBehavior = new YUKA.WanderBehavior();
-    wanderBehavior.weight = 0.2;
+    wanderBehavior.weight = 0.5;
     vehicle.steering.add(wanderBehavior);
 
     const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(
       this.map.obstacles
     );
+    console.log(this.map.obstacles);
     vehicle.steering.add(obstacleAvoidanceBehavior);
+
+    const vision = new YUKA.Vision(vehicle);
+    vision.range = 5;
+    vision.fieldOfView = Math.PI * 0.5;
+    vision.addObstacle(this.map.obstacles);
+    vehicle.vision = vision;
+
+    const helper = this.createVisionHelper(vision);
+    this.actor.mesh.add(helper);
 
     this.map.aiManager.add(vehicle);
     this.map.ais.push(this);
   }
 
   update(dt) {
-    this.actor.body.applyImpulse(
+    this.actor.body.applyLocalImpulse(
       new this.CANNON.Vec3(0, 3.75 * dt, 0),
-      this.actor.body.position
-      //new this.CANNON.Vec3(0, 0, 0)
+      new this.CANNON.Vec3(0, 0, 0)
     );
   }
 
   kill() {
     this.map.aiManager.remove(this.vehicle);
+  }
+
+  createVisionHelper(vision, division = 8) {
+    const THREE = this.THREE;
+    const fieldOfView = vision.fieldOfView;
+    const range = vision.range;
+
+    const geometry = new THREE.BufferGeometry();
+    const material = new THREE.MeshBasicMaterial({ wireframe: true });
+
+    const mesh = new THREE.Mesh(geometry, material);
+
+    const positions = [];
+
+    const foV05 = fieldOfView / 2;
+    const step = fieldOfView / division;
+
+    // for now, let's create a simple helper that lies in the xz plane
+
+    for (let i = -foV05; i < foV05; i += step) {
+      positions.push(0, 0, 0);
+      positions.push(Math.sin(i) * range, 0, Math.cos(i) * range);
+      positions.push(Math.sin(i + step) * range, 0, Math.cos(i + step) * range);
+    }
+
+    geometry.addAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(positions, 3)
+    );
+
+    return mesh;
   }
 }
