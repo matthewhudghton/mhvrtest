@@ -3,10 +3,12 @@ import { Actor } from "./actor.js";
 import * as YUKA from "yuka";
 let once = 1;
 function sync(vehicle, actor) {
-  actor.body.velocity.lerp(vehicle.velocity, 0.6, actor.body.velocity);
+  actor.body.velocity.lerp(vehicle.velocity, 1, actor.body.velocity);
   vehicle.velocity.copy(actor.body.velocity);
   vehicle.position.copy(actor.body.position);
   actor.body.quaternion.copy(vehicle.rotation);
+  if (once) console.log(vehicle.rotation);
+  once = 0;
 }
 
 export class Ai extends Entity {

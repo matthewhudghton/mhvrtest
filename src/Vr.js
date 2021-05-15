@@ -190,7 +190,7 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 10; i++) {
     new Ai({
       THREE: THREE,
       CANNON: CANNON,
