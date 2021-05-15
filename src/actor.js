@@ -20,6 +20,7 @@ export class Actor extends Entity {
     this.height = this.rawShapeData.height;
     this.color = options.color;
     this.invisible = options.invisible ?? false;
+    this.ai = options.ai;
     this.initShape(options);
 
     if (options.velocity) {
@@ -61,6 +62,13 @@ export class Actor extends Entity {
         if (!invisible) {
           geometry = new THREE.BoxGeometry(this.width, this.height, this.width);
         }
+        this.shape = new CANNON.Box(
+          new CANNON.Vec3(this.width / 2, this.height / 2, this.width / 2)
+        );
+        break;
+      case "cone":
+        geometry = new THREE.ConeBufferGeometry(this.width, this.height);
+        geometry.rotateX(Math.PI * 0.5);
         this.shape = new CANNON.Box(
           new CANNON.Vec3(this.width / 2, this.height / 2, this.width / 2)
         );
@@ -136,6 +144,8 @@ export class Actor extends Entity {
 
   kill() {
     this.lifeSpan = 0;
+
+    this.ai.kill();
 
     // remove physics
     this.world.remove(this.body);

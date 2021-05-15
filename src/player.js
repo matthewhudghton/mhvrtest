@@ -5,6 +5,7 @@ import { Entity } from "./entity.js";
 import { Gun } from "./gun.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
+import * as YUKA from "yuka";
 
 export class Player extends Entity {
   leftHandPosition = new Vector3(0, 0, 0);
@@ -20,6 +21,7 @@ export class Player extends Entity {
     this.THREE = options.THREE;
     this.listener = new this.THREE.AudioListener();
     this.camera.add(this.listener);
+    this.vehicle = new YUKA.Vehicle();
 
     let position = new this.CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
@@ -32,6 +34,7 @@ export class Player extends Entity {
       mass: 1,
       bodySettings: { fixedRotation: true, material: "playerMaterial" }
     });
+
     this.bodyActor.body.fixedRotation = true;
     this.bodyActor.body.linearDamping = 0.7;
 
@@ -70,9 +73,19 @@ export class Player extends Entity {
     });
   }
 
+  updateAiTracking(dt) {
+    const body = this.bodyActor.body;
+    const vehicle = this.vehicle;
+    vehicle.velocity.copy(body.velocity);
+    vehicle.position.copy(body.position);
+    vehicle.rotation.copy(body.quaternion);
+  }
+
   update(dt) {
     const CANNON = this.CANNON;
     const k = 0.05;
+
+    this.updateAiTracking(dt);
 
     this.leftHandParticleSystem.setPosition(this.leftHandPosition);
 

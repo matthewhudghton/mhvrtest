@@ -63,19 +63,6 @@ function initCannon() {
   world.broadphase = new CANNON.NaiveBroadphase();
   world.solver.iterations = 10;
 
-  // add a floor
-  var groundShape = new CANNON.Plane();
-  var groundBody = new CANNON.Body({
-    mass: 0,
-    collisionFilterGroup: 2,
-    collisionFilterMask: 0xffff
-  });
-  groundBody.addShape(groundShape);
-  groundBody.quaternion.setFromAxisAngle(
-    new CANNON.Vec3(1, 0, 0),
-    -Math.PI / 2
-  );
-  world.addBody(groundBody);
 
   // Materials
   var playerMaterial = new CANNON.Material("playerMaterial");
@@ -126,15 +113,6 @@ function init() {
     10000
   );
 
-  let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
-  floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
-
-  let material = new THREE.MeshLambertMaterial({ color: 0xaaaaaa });
-
-  let mesh = new THREE.Mesh(floorGeometry, material);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  scene.add(mesh);
 
   camera.position.set(0, 1.6, 3);
   user.add(camera);
@@ -152,7 +130,7 @@ function init() {
   renderer.shadowMapSoft = true;
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(scene.fog.color, 1);
-  map = new Map(scene, world);
+  map = new Map({THREE, CANNON, scene, world});
   document.body.appendChild(renderer.domElement);
 
   document.body.appendChild(VRButton.createButton(renderer));
