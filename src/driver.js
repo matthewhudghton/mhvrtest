@@ -25,7 +25,9 @@ export class Driver extends Entity {
   update(dt) {
     let direction = this.localDirectionToTargetDelta;
     let speed = 2;
-    if (this.distanceSquaredToTarget < 2) {
+    let stopDistanceSquared = 3;
+
+    if (this.distanceSquaredToTarget < stopDistanceSquared) {
       speed = -2;
     }
 
@@ -42,8 +44,22 @@ export class Driver extends Entity {
       new CANNON.Vec3(-direction.x, -direction.y, 0),
       new CANNON.Vec3(0, 0, -1 * dt)
     );
+
+    let angleFireTollerance = 0.5 * Math.pi;
+
+    if (this.angleToTarget < angleFireTollerance) {
+    }
   }
 
+  get angleToTarget() {
+    let direction = new this.THREE.Vector3(0, 0, 1);
+    this.actor.mesh.localToWorld(direction);
+    let moveToTarget = this.moveToTarget;
+
+    return direction.angleTo(
+      new this.THREE.Vector3(moveToTarget.x, moveToTarget.y, moveToTarget.z)
+    );
+  }
   get moveToTarget() {
     return this.map.player.bodyActor.body.position;
   }
