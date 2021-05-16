@@ -24,24 +24,32 @@ export class Driver extends Entity {
 
   update(dt) {
     let direction = this.localDirectionToTargetDelta;
-    let speed = 1;
+    let speed = 2;
+    if (this.distanceSquaredToTarget < 2) {
+      speed = -2;
+    }
+
     this.body.applyLocalForce(
       new CANNON.Vec3(direction.x, 0, 0),
       new CANNON.Vec3(1, 0, 0)
     );
 
     this.body.applyLocalForce(
-      new CANNON.Vec3(0, direction.y, 0),
+      new CANNON.Vec3(direction.x, direction.y, speed * dt),
       new CANNON.Vec3(0, 0, 1 * dt)
     );
     this.body.applyLocalForce(
-      new CANNON.Vec3(0, -direction.y, 0),
+      new CANNON.Vec3(-direction.x, -direction.y, 0),
       new CANNON.Vec3(0, 0, -1 * dt)
     );
   }
 
   get moveToTarget() {
     return this.map.player.bodyActor.body.position;
+  }
+
+  get distanceSquaredToTarget() {
+    return this.body.position.distanceSquared(this.moveToTarget);
   }
 
   get body() {
