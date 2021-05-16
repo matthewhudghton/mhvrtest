@@ -8,6 +8,7 @@ import { Player } from "./player.js";
 import { Map } from "./map.js";
 import * as CANNON from "cannon";
 import { Ai } from "./ai.js";
+import { Driver } from "./driver.js";
 
 import { Mouse } from "./mouse.js";
 import System, {
@@ -60,6 +61,7 @@ var world;
 function initCannon() {
   world = new CANNON.World();
   world.gravity.set(0, -3.8, 0);
+  world.gravity.set(0, 0, 0);
   world.broadphase = new CANNON.NaiveBroadphase();
   world.solver.iterations = 10;
 
@@ -191,15 +193,13 @@ function init() {
   map.player = player;
 
   for (let i = 0; i < 3; i++) {
-    new Ai({
+    new Driver({
       THREE: THREE,
       CANNON: CANNON,
       camera: camera,
       cameraGroup: user,
-      position: new CANNON.Vec3(3 + i * 2, 3 + i * 2, 3),
-      map: map,
-      leftControllerGrip: controllerGrip1,
-      rightControllerGrip: controllerGrip2
+      position: new CANNON.Vec3(0, 2 + i * 2, -1 - i),
+      map: map
     });
   }
 
