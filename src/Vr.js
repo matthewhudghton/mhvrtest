@@ -190,12 +190,13 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 3; i++) {
     new Ai({
       THREE: THREE,
       CANNON: CANNON,
       camera: camera,
       cameraGroup: user,
+      position: new CANNON.Vec3(3 + i * 2, 3 + i * 2, 3),
       map: map,
       leftControllerGrip: controllerGrip1,
       rightControllerGrip: controllerGrip2

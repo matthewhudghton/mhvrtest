@@ -22,6 +22,7 @@ export class Player extends Entity {
     this.listener = new this.THREE.AudioListener();
     this.camera.add(this.listener);
     this.vehicle = new YUKA.Vehicle();
+    this.map.aiManager.add(this.vehicle);
 
     let position = new this.CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({

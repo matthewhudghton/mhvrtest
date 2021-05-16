@@ -26,20 +26,21 @@ export class Map {
     floorMesh.castShadow = true;
     floorMesh.receiveShadow = true;
     scene.add(floorMesh);
-    this.obstacles.push(floorMesh);
 
     // add a floor
     var groundShape = new CANNON.Plane();
     var groundBody = new CANNON.Body({
       mass: 0,
       collisionFilterGroup: 2,
-      collisionFilterMask: 0xffff
+      collisionFilterMask: 0xffff,
+      position: new CANNON.Vec3(-5, 0, 0)
     });
     groundBody.addShape(groundShape);
     groundBody.quaternion.setFromAxisAngle(
       new CANNON.Vec3(1, 0, 0),
       -Math.PI / 2
     );
+    floorMesh.position.copy(groundBody.position);
     world.addBody(groundBody);
   }
 

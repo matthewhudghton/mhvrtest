@@ -29,14 +29,15 @@ export class Ai extends Entity {
       ai: this,
       lifespan: undefined,
       velocity: undefined,
+      position: options.position,
       mass: 1,
       bodySettings: { fixedRotation: true, material: "playerMaterial" }
     });
     this.actor.body.fixedRotation = true;
     const params = {
-      alignment: 1,
-      cohesion: 0.9,
-      separation: 0.3
+      alignment: 0,
+      cohesion: 0.2,
+      separation: 2
     };
     alignmentBehavior.weight = params.alignment;
     cohesionBehavior.weight = params.cohesion;
@@ -47,25 +48,34 @@ export class Ai extends Entity {
     vehicle.maxSpeed = 1.5;
     vehicle.updateNeighborhood = true;
     vehicle.neighborhoodRadius = 10;
+    vehicle.boundingRadius = 3;
+    vehicle.smoother = new YUKA.Smoother(20);
 
     vehicle.setRenderComponent(this.actor, sync);
 
     vehicle.steering.add(alignmentBehavior);
     vehicle.steering.add(cohesionBehavior);
     vehicle.steering.add(separationBehavior);
+    /*
     const fleeBehavior = new YUKA.FleeBehavior(
       this.map.player.bodyActor.mesh.position
     );
-    //vehicle.steering.add(fleeBehavior);
-    /*const seekBehavior = new YUKA.SeekBehavior(
+    fleeBehavior.weight = 0.1;
+    vehicle.steering.add(fleeBehavior);*/
+
+    const seekBehavior = new YUKA.SeekBehavior(
       this.map.player.bodyActor.mesh.position
     );
-    vehicle.steering.add(seekBehavior);*/
+
+    vehicle.steering.add(seekBehavior);
+
+    /*
     const pursuitBehavior = new YUKA.OffsetPursuitBehavior(
       this.map.player.vehicle,
-      5
+      0
     );
-    vehicle.steering.add(pursuitBehavior);
+    pursuitBehavior.weight = 1;
+    vehicle.steering.add(pursuitBehavior);*/
 
     const wanderBehavior = new YUKA.WanderBehavior();
     wanderBehavior.weight = 0.1;
@@ -74,12 +84,13 @@ export class Ai extends Entity {
     const obstacleAvoidanceBehavior = new YUKA.ObstacleAvoidanceBehavior(
       this.map.obstacles
     );
-    console.log(this.map.obstacles);
+
+    obstacleAvoidanceBehavior.weight = 1;
     vehicle.steering.add(obstacleAvoidanceBehavior);
 
     const vision = new YUKA.Vision(vehicle);
     vision.range = 5;
-    vision.fieldOfView = Math.PI * 2; //* 0.5;
+    vision.fieldOfView = Math.PI * 0.1; //* 0.5;
     vision.addObstacle(this.map.obstacles);
     vehicle.vision = vision;
 

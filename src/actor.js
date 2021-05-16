@@ -67,7 +67,7 @@ export class Actor extends Entity {
         );
         break;
       case "cone":
-        geometry = new THREE.ConeBufferGeometry(this.width, this.height);
+        geometry = new THREE.ConeBufferGeometry(this.width, this.height, 4);
         geometry.rotateX(Math.PI * 0.5);
         this.shape = new CANNON.Box(
           new CANNON.Vec3(this.width / 2, this.height / 2, this.width / 2)
