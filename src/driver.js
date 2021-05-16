@@ -1,7 +1,9 @@
 import { Entity } from "./entity.js";
 import { Actor } from "./actor.js";
 import { SpotLightHelper } from "three";
+import { Gun } from "./gun.js";
 import * as CANNON from "cannon";
+import { Debouncer } from "./debouncer.js";
 
 export class Driver extends Entity {
   constructor(options) {
@@ -20,13 +22,18 @@ export class Driver extends Entity {
       bodySettings: { material: "playerMaterial" }
     });
     this.map.ais.push(this);
+    this.debouncer = new Debouncer(5);
+    this.shouldBeDeleted = false;
   }
 
   update(dt) {
+    if (this.shouldBeDeleted) {
+      return;
+    }
     let direction = this.localDirectionToTargetDelta;
     let speed = 2;
-    let stopDistanceSquared = 3;
-
+    let stopDistanceSquared = 9;
+    this.debouncer.update(dt);
     if (this.distanceSquaredToTarget < stopDistanceSquared) {
       speed = -2;
     }
@@ -45,9 +52,26 @@ export class Driver extends Entity {
       new CANNON.Vec3(0, 0, -1 * dt)
     );
 
-    let angleFireTollerance = 0.5 * Math.pi;
-
-    if (this.angleToTarget < angleFireTollerance) {
+    let angleFireTollerance = 0.5 * Math.PI;
+    //console.log(this.angleToTarget, angleFireTollerance);
+    if (
+      this.angleToTarget < angleFireTollerance &&
+      this.debouncer.tryFireAndReset()
+    ) {
+      new Gun({
+        THREE: this.THREE,
+        CANNON: this.CANNON,
+        map: this.map,
+        lifeSpan: undefined,
+        collisionFilterGroup: 1,
+        collisionFilterMask: 2,
+        rawShapeData: { name: "cirle", size: 1, height: 1, width: 1 },
+        position: this.position,
+        bodySettings: {
+          quaternion: this.quaternion
+        },
+        attachedTo: this.actor.mesh
+      });
     }
   }
 
@@ -97,5 +121,9 @@ export class Driver extends Entity {
     newQuaternion.inverse(inverseQuaternion);
     result = inverseQuaternion.vmult(result);
     return result;*/
+  }
+
+  kill() {
+    this.shouldBeDeleted = true;
   }
 }

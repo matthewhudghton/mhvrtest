@@ -48,8 +48,8 @@ export class Actor extends Entity {
     }
     this.body.userData = { actor: this };
 
-    this.body.collisionFilterGroup = 2;
-    this.body.collisionFilterMask = 0xffff;
+    this.body.collisionFilterGroup = options.collisionFilterGroup ?? 1;
+    this.body.collisionFilterMask = options.collisionFilterMask ?? 0xffff;
   }
 
   initShape(options) {
@@ -145,8 +145,9 @@ export class Actor extends Entity {
   kill() {
     this.lifeSpan = 0;
 
-    this.ai.kill();
-
+    if (this.ai) {
+      this.ai.kill();
+    }
     // remove physics
     this.world.remove(this.body);
     this.scene.remove(this.mesh);

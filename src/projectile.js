@@ -10,6 +10,7 @@ export class Projectile extends Actor {
     options.bodySettings.fixedRotation = true;
     options.lifeSpan ??= 8;
     options.invisible ??= true;
+
     const size = options.rawShapeData.size;
 
     const blue = Math.min(-100 + size * 80, 255);
@@ -21,6 +22,8 @@ export class Projectile extends Actor {
       green / 255,
       blue / 255
     );
+    options.collisionFilterGroup ??= 1;
+    options.collisionFilterMask ??= 2;
 
     super(options);
 
@@ -59,9 +62,6 @@ export class Projectile extends Actor {
         duration: 20
       })
     );
-
-    this.body.collisionFilterGroup = 1;
-    this.body.collisionFilterMask = 2;
   }
 
   kill() {
@@ -72,7 +72,7 @@ export class Projectile extends Actor {
     Actor.prototype.update.call(this, dt);
 
     this.body.applyLocalImpulse(
-      new this.CANNON.Vec3(0, 3.75 * dt, -this.speed * dt),
+      new this.CANNON.Vec3(0, 3.75 * dt, this.speed * dt),
       new this.CANNON.Vec3(0, 0, 0)
     );
 
