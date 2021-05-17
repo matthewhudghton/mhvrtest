@@ -39,17 +39,16 @@ export class Explosion extends Actor {
         particlesMin: 2
       })
     );
-    if (Math.random() * 15 < this.size) {
-      const light = new this.THREE.PointLight(
-        this.color,
-        this.size * this.size * 5,
-        0,
-        2
-      );
-      light.position.set(0, 0, 0);
-      this.lights.push(light);
-      this.mesh.add(light);
-    }
+
+    const light = new this.THREE.PointLight(
+      this.color,
+      this.size * this.size * 5,
+      0,
+      2
+    );
+    light.position.set(0, 0, 0);
+    this.lights.push(light);
+    this.mesh.add(light);
     this.sounds.push(
       new Sound({
         THREE: this.THREE,
