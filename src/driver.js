@@ -27,6 +27,7 @@ export class Driver extends Entity {
   }
 
   update(dt) {
+    return;
     if (this.shouldBeDeleted) {
       return;
     }

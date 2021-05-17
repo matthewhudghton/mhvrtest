@@ -22,14 +22,16 @@ export class Projectile extends Actor {
       green / 255,
       blue / 255
     );
-    options.collisionFilterGroup ??= 1;
-    options.collisionFilterMask ??= 2;
 
     super(options);
 
     this.exploding = false;
     this.hasExploded = false;
     this.speed = options.speed ?? 15;
+    if (options.reverseProjectile) {
+      this.speed = -this.speed;
+    }
+
     this.body.linearDamping = 0;
     this.particleSystems.push(
       new ParticleSystem({
@@ -80,7 +82,15 @@ export class Projectile extends Actor {
       this.exploding = true;
     }
     if (this.exploding && !this.hasExploded) {
-      console.log("Explode!");
+      /*console.log(
+        "projectile collisionFilterGroup",
+        this.body.collisionFilterGroup
+      );
+      console.log(
+        "projectile collisionFilterMask",
+        this.body.collisionFilterMask
+      );*/
+
       new Explosion({
         THREE: this.THREE,
         CANNON: this.CANNON,

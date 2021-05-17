@@ -49,10 +49,6 @@ export class Explosion extends Actor {
     light.position.set(0, 0, 0);
     this.lights.push(light);
     this.mesh.add(light);
-
-    this.body.collisionFilterGroup = 1;
-    this.body.collisionFilterMask = 2;
-
     this.sounds.push(
       new Sound({
         THREE: this.THREE,
@@ -63,6 +59,9 @@ export class Explosion extends Actor {
         detune: (5 - this.size) * 1000
       })
     );
+
+    //console.log("explo collisionFilterGroup", this.body.collisionFilterGroup);
+    //console.log("explo collisionFilterMask", this.body.collisionFilterMask);
   }
 
   update(dt) {

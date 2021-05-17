@@ -114,7 +114,7 @@ export class Actor extends Entity {
 
     if (this.attachedTo) {
       this.attachedTo.getWorldPosition(this.mesh.position);
-      this.attachedTo.getWorldQuaternion(this.mesh.quaternion.invert());
+      this.attachedTo.getWorldQuaternion(this.mesh.quaternion);
       this.body.position.copy(this.mesh.position);
       this.body.quaternion.copy(this.mesh.quaternion);
     } else {

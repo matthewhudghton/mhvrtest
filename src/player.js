@@ -23,7 +23,8 @@ export class Player extends Entity {
     this.camera.add(this.listener);
     this.vehicle = new YUKA.Vehicle();
     this.map.aiManager.add(this.vehicle);
-
+    this.collisionFilterGroup = 2;
+    this.collisionFilterMask = 5;
     let position = new this.CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
       THREE: this.THREE,
@@ -34,8 +35,8 @@ export class Player extends Entity {
       velocity: undefined,
       mass: 1,
       bodySettings: { fixedRotation: true, material: "playerMaterial" },
-      collisionFilterGroup: 2,
-      collisionFilterMask: 5
+      collisionFilterGroup: this.collisionFilterGroup,
+      collisionFilterMask: this.collisionFilterMask
     });
 
     this.bodyActor.body.fixedRotation = true;
@@ -211,7 +212,8 @@ export class Player extends Entity {
               },
               attachedTo: message.magic.attachedTo,
               collisionFilterGroup: this.collisionFilterGroup,
-              collisionFilterMask: this.collisionFilterMask
+              collisionFilterMask: this.collisionFilterMask,
+              reverseProjectile: true
             });
 
             break;

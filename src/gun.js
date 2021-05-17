@@ -26,10 +26,7 @@ export class Gun extends Actor {
     );
 
     super(options);
-
-    this.body.collisionFilterGroup = 1;
-    this.body.collisionFilterMask = 2;
-
+    this.reverseProjectile = options.reverseProjectile ?? false;
     this.countDelay = options.countDelay ?? 2;
     this.debouncer = new Debouncer(this.countDelay);
     this.debouncers.push(this.debouncer);
@@ -93,6 +90,9 @@ export class Gun extends Actor {
   }
 
   fire() {
+    //console.log("gun collisionFilterGroup", this.body.collisionFilterGroup);
+    //console.log("gun collisionFilterMask", this.body.collisionFilterMask);
+
     new Projectile({
       THREE: this.THREE,
       CANNON: this.CANNON,
@@ -105,7 +105,8 @@ export class Gun extends Actor {
         quaternion: this.body.quaternion
       },
       collisionFilterGroup: this.collisionFilterGroup,
-      collisionFilterMask: this.collisionFilterMask
+      collisionFilterMask: this.collisionFilterMask,
+      reverseProjectile: this.reverseProjectile
     });
   }
 }

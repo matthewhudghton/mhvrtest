@@ -31,7 +31,7 @@ export class Map {
     var groundShape = new CANNON.Plane();
     var groundBody = new CANNON.Body({
       mass: 0,
-      collisionFilterGroup: 2,
+      collisionFilterGroup: 1,
       collisionFilterMask: 0xffff,
       position: new CANNON.Vec3(-5, 0, 0)
     });
