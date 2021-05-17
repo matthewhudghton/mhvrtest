@@ -76,7 +76,7 @@ export class Gun extends Actor {
         player: this.map.player,
         name: "cast01",
         loop: false,
-        detune: (5 - this.size) * 1000
+        detune: (5 - this.size, 1) * 1000
       })
     );
   }

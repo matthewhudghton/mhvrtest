@@ -9,6 +9,10 @@ export class Driver extends Entity {
   constructor(options) {
     super(options);
 
+    this.collisionFilterGroup = options.collisionFilterGroup ?? 4;
+    this.collisionFilterMask = options.collisionFilterMask ?? 3;
+    this.size = options.size ?? 1;
+
     this.actor = new Actor({
       THREE: this.THREE,
       CANNON: this.CANNON,
@@ -19,11 +23,18 @@ export class Driver extends Entity {
       velocity: undefined,
       position: options.position,
       mass: 1,
-      rawShapeData: { size: 1, width: 0.5, height: 0.5 },
-      bodySettings: { material: "playerMaterial" }
+      color: new this.THREE.Color(Math.random(), Math.random(), Math.random()),
+      rawShapeData: {
+        size: this.size,
+        width: this.size / 2,
+        height: this.size / 2
+      },
+      bodySettings: { material: "playerMaterial" },
+      collisionFilterGroup: this.collisionFilterGroup,
+      collisionFilterMask: this.collisionFilterMask
     });
     this.map.ais.push(this);
-    this.debouncer = new Debouncer(4 + Math.random() * 4);
+    this.debouncer = new Debouncer(this.size + 2 + Math.random() * 4);
     this.shouldBeDeleted = false;
   }
 
@@ -58,6 +69,13 @@ export class Driver extends Entity {
       this.body.position
     );
 
+    if (this.position.y < 1 + this.size * 1.5) {
+      this.body.applyImpulse(
+        new this.CANNON.Vec3(0, 0.5 * dt, 0),
+        this.body.position
+      );
+    }
+
     let angleFireTollerance = 0.5 * Math.PI;
     //console.log(this.angleToTarget, angleFireTollerance);
     if (
@@ -69,9 +87,12 @@ export class Driver extends Entity {
         CANNON: this.CANNON,
         map: this.map,
         lifeSpan: undefined,
-        collisionFilterGroup: 1,
-        collisionFilterMask: 2,
-        rawShapeData: { name: "cirle", size: 1, height: 1, width: 1 },
+        collisionFilterGroup: this.collisionFilterGroup,
+        collisionFilterMask: this.collisionFilterMask,
+        rawShapeData: {
+          name: "cirle",
+          size: 1
+        },
         position: this.position,
         bodySettings: {
           quaternion: this.quaternion
