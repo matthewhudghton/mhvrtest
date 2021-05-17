@@ -33,6 +33,8 @@ export class Player extends Entity {
       lifespan: undefined,
       position,
       velocity: undefined,
+      rawShapeData: { size: 1 },
+      noDie: true,
       mass: 1,
       bodySettings: { fixedRotation: true, material: "playerMaterial" },
       collisionFilterGroup: this.collisionFilterGroup,
@@ -41,9 +43,6 @@ export class Player extends Entity {
 
     this.bodyActor.body.fixedRotation = true;
     this.bodyActor.body.linearDamping = 0.7;
-
-    this.bodyActor.body.collisionFilterGroup = 1;
-    this.bodyActor.body.collisionFilterMask = 2;
 
     this.leftFireDebouncer = new Debouncer(1);
     this.rightFireDebouncer = new Debouncer(1);

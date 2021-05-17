@@ -19,21 +19,21 @@ export class Driver extends Entity {
       velocity: undefined,
       position: options.position,
       mass: 1,
+      rawShapeData: { size: 1, width: 0.5, height: 0.5 },
       bodySettings: { material: "playerMaterial" }
     });
     this.map.ais.push(this);
-    this.debouncer = new Debouncer(5);
+    this.debouncer = new Debouncer(5 + Math.random() * 4);
     this.shouldBeDeleted = false;
   }
 
   update(dt) {
-    return;
     if (this.shouldBeDeleted) {
       return;
     }
     let direction = this.localDirectionToTargetDelta;
     let speed = 2;
-    let stopDistanceSquared = 9;
+    let stopDistanceSquared = 25;
     this.debouncer.update(dt);
     if (this.distanceSquaredToTarget < stopDistanceSquared) {
       speed = -2;
@@ -53,6 +53,11 @@ export class Driver extends Entity {
       new CANNON.Vec3(0, 0, -1 * dt)
     );
 
+    this.body.applyImpulse(
+      new this.CANNON.Vec3(0, 3.75 * dt, 0),
+      this.body.position
+    );
+
     let angleFireTollerance = 0.5 * Math.PI;
     //console.log(this.angleToTarget, angleFireTollerance);
     if (
@@ -66,7 +71,7 @@ export class Driver extends Entity {
         lifeSpan: undefined,
         collisionFilterGroup: 1,
         collisionFilterMask: 2,
-        rawShapeData: { name: "cirle", size: 1, height: 1, width: 1 },
+        rawShapeData: { name: "cirle", size: 0.7, height: 1, width: 1 },
         position: this.position,
         bodySettings: {
           quaternion: this.quaternion

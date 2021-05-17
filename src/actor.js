@@ -15,6 +15,7 @@ export class Actor extends Entity {
       height: 0.15,
       size: 0.1
     };
+    this.noDie = options.noDie ?? false;
     this.size = this.rawShapeData.size / 2;
     this.width = this.rawShapeData.width;
     this.height = this.rawShapeData.height;
@@ -145,6 +146,9 @@ export class Actor extends Entity {
   }
 
   kill() {
+    if (this.noDie) {
+      return;
+    }
     this.lifeSpan = 0;
 
     if (this.ai) {
