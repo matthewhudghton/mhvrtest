@@ -23,7 +23,7 @@ export class Driver extends Entity {
       bodySettings: { material: "playerMaterial" }
     });
     this.map.ais.push(this);
-    this.debouncer = new Debouncer(5 + Math.random() * 4);
+    this.debouncer = new Debouncer(4 + Math.random() * 4);
     this.shouldBeDeleted = false;
   }
 
@@ -33,7 +33,7 @@ export class Driver extends Entity {
     }
     let direction = this.localDirectionToTargetDelta;
     let speed = 2;
-    let stopDistanceSquared = 25;
+    let stopDistanceSquared = 38;
     this.debouncer.update(dt);
     if (this.distanceSquaredToTarget < stopDistanceSquared) {
       speed = -2;
@@ -71,7 +71,7 @@ export class Driver extends Entity {
         lifeSpan: undefined,
         collisionFilterGroup: 1,
         collisionFilterMask: 2,
-        rawShapeData: { name: "cirle", size: 0.7, height: 1, width: 1 },
+        rawShapeData: { name: "cirle", size: 1, height: 1, width: 1 },
         position: this.position,
         bodySettings: {
           quaternion: this.quaternion
