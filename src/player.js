@@ -33,7 +33,9 @@ export class Player extends Entity {
       position,
       velocity: undefined,
       mass: 1,
-      bodySettings: { fixedRotation: true, material: "playerMaterial" }
+      bodySettings: { fixedRotation: true, material: "playerMaterial" },
+      collisionFilterGroup: 2,
+      collisionFilterMask: 5
     });
 
     this.bodyActor.body.fixedRotation = true;
@@ -207,7 +209,9 @@ export class Player extends Entity {
               bodySettings: {
                 quaternion: message.magic.quaternion
               },
-              attachedTo: message.magic.attachedTo
+              attachedTo: message.magic.attachedTo,
+              collisionFilterGroup: this.collisionFilterGroup,
+              collisionFilterMask: this.collisionFilterMask
             });
 
             break;

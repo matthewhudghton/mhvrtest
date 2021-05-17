@@ -90,7 +90,9 @@ export class Projectile extends Actor {
         position: this.body.position,
         bodySettings: {
           quaternion: this.body.quaternion
-        }
+        },
+        collisionFilterGroup: this.collisionFilterGroup,
+        collisionFilterMask: this.collisionFilterMask
       });
 
       this.hasExploded = true;

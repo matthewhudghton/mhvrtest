@@ -31,7 +31,9 @@ export class Ai extends Entity {
       velocity: undefined,
       position: options.position,
       mass: 1,
-      bodySettings: { fixedRotation: true, material: "playerMaterial" }
+      bodySettings: { fixedRotation: true, material: "playerMaterial" },
+      collisionFilterGroup: 4,
+      collisionFilterMask: 3
     });
     this.actor.body.fixedRotation = true;
     const params = {

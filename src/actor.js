@@ -48,8 +48,10 @@ export class Actor extends Entity {
     }
     this.body.userData = { actor: this };
 
-    this.body.collisionFilterGroup = options.collisionFilterGroup ?? 1;
-    this.body.collisionFilterMask = options.collisionFilterMask ?? 0xffff;
+    this.collisionFilterGroup = options.collisionFilterGroup ?? 1;
+    this.collisionFilterMask = options.collisionFilterMask ?? 0xffff;
+    this.body.collisionFilterGroup = this.collisionFilterGroup;
+    this.body.collisionFilterMask = this.collisionFilterMask;
   }
 
   initShape(options) {
@@ -112,7 +114,7 @@ export class Actor extends Entity {
 
     if (this.attachedTo) {
       this.attachedTo.getWorldPosition(this.mesh.position);
-      this.attachedTo.getWorldQuaternion(this.mesh.quaternion);
+      this.attachedTo.getWorldQuaternion(this.mesh.quaternion.invert());
       this.body.position.copy(this.mesh.position);
       this.body.quaternion.copy(this.mesh.quaternion);
     } else {

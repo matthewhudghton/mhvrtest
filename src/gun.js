@@ -103,7 +103,9 @@ export class Gun extends Actor {
       velocity: this.map.player.bodyActor.body.velocity,
       bodySettings: {
         quaternion: this.body.quaternion
-      }
+      },
+      collisionFilterGroup: this.collisionFilterGroup,
+      collisionFilterMask: this.collisionFilterMask
     });
   }
 }
