@@ -90,7 +90,7 @@ export class Driver extends Entity {
         collisionFilterGroup: this.collisionFilterGroup,
         collisionFilterMask: this.collisionFilterMask,
         rawShapeData: {
-          name: "cirle",
+          name: "circle",
           size: 1
         },
         position: this.position,
