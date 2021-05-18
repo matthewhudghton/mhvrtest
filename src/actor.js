@@ -50,11 +50,14 @@ export class Actor extends Entity {
       this.body.addEventListener("collide", this.collideEvent);
     }
     this.body.userData = { actor: this };
+  }
 
-    this.collisionFilterGroup = options.collisionFilterGroup ?? 1;
-    this.collisionFilterMask = options.collisionFilterMask ?? 0xffff;
-    this.body.collisionFilterGroup = this.collisionFilterGroup;
-    this.body.collisionFilterMask = this.collisionFilterMask;
+  get collisionFilterGroup() {
+    return this.body.collisionFilterGroup;
+  }
+
+  get collisionFilterMask() {
+    return this.body.collisionFilterMask;
   }
 
   initShape(options) {
@@ -101,8 +104,11 @@ export class Actor extends Entity {
     this.mesh.receiveShadow = true;
     this.body = new CANNON.Body({
       ...options.bodySettings,
-      mass: options.mass ?? this.size
+      mass: options.mass ?? this.size,
+      collisionFilterGroup: options.collisionFilterGroup ?? 1,
+      collisionFilterMask: options.collisionFilterMask ?? 0xffff
     });
+
     this.body.addShape(this.shape);
   }
 
