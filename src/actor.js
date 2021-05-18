@@ -188,7 +188,7 @@ export class Actor extends Entity {
   }
 
   get shouldBeKilled() {
-    return this.lifeSpan <= 0;
+    return this.lifeSpan <= 0 && !this.noDie;
   }
 
   get shouldBeDeleted() {

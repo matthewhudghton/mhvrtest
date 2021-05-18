@@ -88,7 +88,7 @@ function init() {
   scene.background = new THREE.Color(0x000000);
   scene.fog = new THREE.Fog(0x000000, 0, 1000);
   let light2 = new THREE.SpotLight(0xffffff, 0.2);
-  light2.position.set(10, 30, 20);
+  light2.position.set(10, 80, 20);
   light2.target.position.set(0, 0, 0);
   if (true) {
     light2.castShadow = true;
@@ -107,6 +107,10 @@ function init() {
   }
 
   scene.add(light2);
+
+  let ambientLight = new THREE.AmbientLight(0x404040, 0.1); // soft white light
+  scene.add(ambientLight);
+
   camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
@@ -192,15 +196,15 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 1; i < 4; i++) {
     new Driver({
       THREE: THREE,
       CANNON: CANNON,
       camera: camera,
       cameraGroup: user,
-      position: new CANNON.Vec3(-2 + i, 2 + i * 2, -1 - i),
+      position: new CANNON.Vec3(-4 + i * 2, i * 3, -1 - i),
       map: map,
-      size: i
+      size: 1 + i
     });
   }
 
