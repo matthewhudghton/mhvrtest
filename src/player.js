@@ -38,7 +38,8 @@ export class Player extends Entity {
       mass: 1,
       bodySettings: { fixedRotation: true, material: "playerMaterial" },
       collisionFilterGroup: this.collisionFilterGroup,
-      collisionFilterMask: this.collisionFilterMask
+      collisionFilterMask: this.collisionFilterMask,
+      applyGravity: true
     });
 
     this.bodyActor.body.fixedRotation = true;

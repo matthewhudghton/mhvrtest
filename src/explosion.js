@@ -39,6 +39,7 @@ export class Explosion extends Actor {
         particlesMin: 2
       })
     );
+
     if (false && Math.random() * 15 < this.size) {
       const light = new this.THREE.PointLight(
         this.color,
@@ -60,9 +61,6 @@ export class Explosion extends Actor {
         detune: (5 - this.size) * 1000
       })
     );
-
-    //console.log("explo collisionFilterGroup", this.body.collisionFilterGroup);
-    //console.log("explo collisionFilterMask", this.body.collisionFilterMask);
   }
 
   update(dt) {

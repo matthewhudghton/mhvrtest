@@ -36,7 +36,6 @@ class ShapeRecord {
       let yDir = y > 0 ? 1 : y < 0 ? -1 : 0;
       if (xDir != 0 || yDir != 0) {
         if (this.index >= shape.length) {
-          console.log("Match " + this.name);
           var node = document.createTextNode(this.name + " ");
           document.getElementById("debugText").appendChild(node);
           return true;
@@ -260,7 +259,6 @@ export class ShapeRecogniser {
     `;
     console.log(logString);
     let normalisedPoints = this.normalisePoints(this.points);
-    console.log(normalisedPoints);
     this.initMatrix(normalisedPoints);
     console.log("this.matrix", this.matrix);
     //this.printMatrix(this.matrix);

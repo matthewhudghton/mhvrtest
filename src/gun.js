@@ -90,9 +90,6 @@ export class Gun extends Actor {
   }
 
   fire() {
-    //console.log("gun collisionFilterGroup", this.body.collisionFilterGroup);
-    //console.log("gun collisionFilterMask", this.body.collisionFilterMask);
-
     new Projectile({
       THREE: this.THREE,
       CANNON: this.CANNON,

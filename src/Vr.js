@@ -60,10 +60,10 @@ var world;
 
 function initCannon() {
   world = new CANNON.World();
-  world.gravity.set(0, -3.8, 0);
-  //world.gravity.set(0, 0, 0);
+  //world.gravity.set(0, -3.8, 0);
+  world.gravity.set(0, 0, 0);
   world.broadphase = new CANNON.NaiveBroadphase();
-  world.solver.iterations = 10;
+  world.solver.iterations = 2;
 
   // Materials
   var playerMaterial = new CANNON.Material("playerMaterial");
@@ -200,7 +200,7 @@ function init() {
       cameraGroup: user,
       position: new CANNON.Vec3(-2 + i, 2 + i * 2, -1 - i),
       map: map,
-      size: 1 + i
+      size: this.size
     });
   }
 

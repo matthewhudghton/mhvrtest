@@ -7,8 +7,6 @@ function sync(vehicle, actor) {
   vehicle.velocity.copy(actor.body.velocity);
   vehicle.position.copy(actor.body.position);
   actor.body.quaternion.copy(vehicle.rotation);
-  if (once) console.log(vehicle.rotation);
-  once = 0;
 }
 
 export class Ai extends Entity {

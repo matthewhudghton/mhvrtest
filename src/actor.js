@@ -15,6 +15,7 @@ export class Actor extends Entity {
       height: 0.15,
       size: 0.1
     };
+    this.applyGravity = options.applyGravity ?? false;
     this.noDie = options.noDie ?? false;
     this.size = this.rawShapeData.size / 2;
     this.width = this.rawShapeData.width;
@@ -119,6 +120,13 @@ export class Actor extends Entity {
       this.body.position.copy(this.mesh.position);
       this.body.quaternion.copy(this.mesh.quaternion);
     } else {
+      if (this.applyGravity) {
+        this.body.applyImpulse(
+          new this.CANNON.Vec3(0, -3.75 * dt, 0),
+          this.body.position
+        );
+      }
+
       this.mesh.position.copy(this.body.position);
       this.mesh.quaternion.copy(this.body.quaternion);
     }
@@ -130,11 +138,6 @@ export class Actor extends Entity {
     const mesh = this.mesh;
 
     // Copy coordinates from Cannon.js to Three.js
-
-    //console.log(this.body.position);
-
-    //console.log(this.body.position);
-
     this.particleSystems.forEach((particleSystem) => {
       particleSystem.setPosition(this.mesh.position);
       particleSystem.update(dt);

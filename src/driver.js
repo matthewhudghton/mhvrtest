@@ -64,11 +64,6 @@ export class Driver extends Entity {
       new CANNON.Vec3(0, 0, -1 * dt)
     );
 
-    this.body.applyImpulse(
-      new this.CANNON.Vec3(0, 3.75 * dt, 0),
-      this.body.position
-    );
-
     if (this.position.y < 1 + this.size * 1.5) {
       this.body.applyImpulse(
         new this.CANNON.Vec3(0, 0.5 * dt, 0),
@@ -77,7 +72,7 @@ export class Driver extends Entity {
     }
 
     let angleFireTollerance = 0.5 * Math.PI;
-    //console.log(this.angleToTarget, angleFireTollerance);
+
     if (
       this.angleToTarget < angleFireTollerance &&
       this.debouncer.tryFireAndReset()

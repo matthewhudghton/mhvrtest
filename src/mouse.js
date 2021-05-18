@@ -15,7 +15,7 @@ export class Mouse {
         if (this.mousePressed) {
           this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
           this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-          //console.log(this.mouse.x, this.mouse.y);
+
           this.recordPos(this.mouse.x, this.mouse.y);
         }
       }.bind(this),

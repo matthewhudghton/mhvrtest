@@ -76,24 +76,16 @@ export class Projectile extends Actor {
   update(dt) {
     Actor.prototype.update.call(this, dt);
 
+    /*
     this.body.applyLocalImpulse(
       new this.CANNON.Vec3(0, 3.75 * dt, this.speed * dt),
       new this.CANNON.Vec3(0, 0, 0)
-    );
+    );*/
 
     if (this.lifeSpan < 1) {
       this.exploding = true;
     }
     if (this.exploding && !this.hasExploded) {
-      /*console.log(
-        "projectile collisionFilterGroup",
-        this.body.collisionFilterGroup
-      );
-      console.log(
-        "projectile collisionFilterMask",
-        this.body.collisionFilterMask
-      );*/
-
       new Explosion({
         THREE: this.THREE,
         CANNON: this.CANNON,
