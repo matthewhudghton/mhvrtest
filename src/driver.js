@@ -17,19 +17,20 @@ export class Driver extends Entity {
       THREE: this.THREE,
       CANNON: this.CANNON,
       map: this.map,
-      shapeType: "cone",
+      shapeType: "box",
       ai: this,
       lifespan: undefined,
       velocity: undefined,
       position: options.position,
-      mass: 1,
+      applyGravity: false,
       color: new this.THREE.Color(Math.random(), Math.random(), Math.random()),
       rawShapeData: {
         size: this.size,
-        width: this.size / 2,
-        height: this.size / 2
+        width: this.size / 3,
+        height: this.size / 5,
+        depth: this.size / 2
       },
-      bodySettings: { material: "playerMaterial" },
+      bodySettings: { material: "playerMaterial", angularDamping: 0 },
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask
     });
@@ -47,7 +48,7 @@ export class Driver extends Entity {
     let stopDistanceSquared = 38;
     this.debouncer.update(dt);
     if (this.distanceSquaredToTarget < stopDistanceSquared) {
-      speed = -2;
+      speed = -speed;
     }
 
     this.body.applyLocalForce(

@@ -116,19 +116,6 @@
             "life": null,
             "easing": "easeLinear"
           }
-        },
-        {
-          "id": "b27e1fc2-b18c-11eb-a046-9d24321db48f",
-          "type": "Spring",
-          "properties": {
-            "x": 1,
-            "y": 1,
-            "z": 0,
-            "spring": 0.2,
-            "friction": 0.5,
-            "life": null,
-            "easing": "easeLinear"
-          }
         }
       ],
       "emitterBehaviours": [

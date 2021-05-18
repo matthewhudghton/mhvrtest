@@ -9,6 +9,7 @@ export class Explosion extends Actor {
     options.bodySettings.fixedRotation = true;
     options.lifeSpan ??= 0.5;
     options.invisible ??= true;
+    options.applyGravity ??= false;
     const size = options.rawShapeData.size;
 
     const blue = Math.min(-100 + size * 80, 255);
@@ -40,7 +41,7 @@ export class Explosion extends Actor {
       })
     );
 
-    if (false && Math.random() * 15 < this.size) {
+    if (true || Math.random() * 15 < this.size) {
       const light = new this.THREE.PointLight(
         this.color,
         this.size * this.size * 5,

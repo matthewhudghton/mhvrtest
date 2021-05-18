@@ -9,7 +9,8 @@ export class Projectile extends Actor {
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
     options.lifeSpan ??= 8;
-    options.invisible ??= true;
+    options.invisible ??= false;
+    options.applyGravity ??= false;
 
     const size = options.rawShapeData.size;
 
@@ -45,7 +46,7 @@ export class Projectile extends Actor {
       })
     );
 
-    if (false && Math.random() * 15 < this.size) {
+    if (true || Math.random() * 15 < this.size) {
       const light = new this.THREE.PointLight(
         this.color,
         this.size * this.size,

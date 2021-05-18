@@ -204,7 +204,7 @@ function init() {
       cameraGroup: user,
       position: new CANNON.Vec3(-4 + i * 2, i * 3, -1 - i),
       map: map,
-      size: 1 + i
+      size: 1 + i / 2
     });
   }
 

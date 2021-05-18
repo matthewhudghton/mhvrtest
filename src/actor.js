@@ -15,11 +15,12 @@ export class Actor extends Entity {
       height: 0.15,
       size: 0.1
     };
-    this.applyGravity = options.applyGravity ?? false;
+    this.applyGravity = options.applyGravity ?? true;
     this.noDie = options.noDie ?? false;
     this.size = this.rawShapeData.size / 2;
     this.width = this.rawShapeData.width;
     this.height = this.rawShapeData.height;
+    this.depth = this.rawShapeData.depth ?? 0.5;
     this.color = options.color;
     this.invisible = options.invisible ?? false;
     this.ai = options.ai;
@@ -67,7 +68,7 @@ export class Actor extends Entity {
           geometry = new THREE.BoxGeometry(this.width, this.height, this.width);
         }
         this.shape = new CANNON.Box(
-          new CANNON.Vec3(this.width / 2, this.height / 2, this.width / 2)
+          new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2)
         );
         break;
       case "cone":
