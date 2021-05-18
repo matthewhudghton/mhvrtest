@@ -158,7 +158,7 @@ export class Actor extends Entity {
       this.ai.kill();
     }
     // remove physics
-    this.world.remove(this.body);
+    this.world.removeBody(this.body);
     this.scene.remove(this.mesh);
 
     // remove lights

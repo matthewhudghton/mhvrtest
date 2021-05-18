@@ -6,7 +6,7 @@ import { InputManager } from "./inputManager.js";
 import { Actor } from "./actor.js";
 import { Player } from "./player.js";
 import { Map } from "./map.js";
-import * as CANNON from "cannon";
+import * as CANNON from "cannon-es";
 import { Ai } from "./ai.js";
 import { Driver } from "./driver.js";
 

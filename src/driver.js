@@ -2,7 +2,7 @@ import { Entity } from "./entity.js";
 import { Actor } from "./actor.js";
 import { SpotLightHelper } from "three";
 import { Gun } from "./gun.js";
-import * as CANNON from "cannon";
+import * as CANNON from "cannon-es";
 import { Debouncer } from "./debouncer.js";
 
 export class Driver extends Entity {
