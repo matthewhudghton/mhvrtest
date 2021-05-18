@@ -257,10 +257,10 @@ export class ShapeRecogniser {
     x: ${this.minX} ${this.maxX}
     y: ${this.minY} ${this.maxY}
     `;
-    console.log(logString);
+
     let normalisedPoints = this.normalisePoints(this.points);
     this.initMatrix(normalisedPoints);
-    console.log("this.matrix", this.matrix);
+
     //this.printMatrix(this.matrix);
     //this.printMatrixToDom(this.matrix);
     //this.checkForShape(normalisedPoints);

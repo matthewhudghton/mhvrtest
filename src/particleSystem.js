@@ -284,8 +284,8 @@ export class ParticleSystem {
   getEmitterRate(options) {
     let particlesMin = options.particlesMin ?? 1;
     let particlesMax = options.particlesMax ?? 2;
-    let perSecondMin = options.perSecondMin ?? 10;
-    let perSecondMax = options.perSecondMax ?? 20;
+    let perSecondMin = options.perSecondMin ?? 0.1;
+    let perSecondMax = options.perSecondMax ?? 0.2;
 
     return {
       particlesMin: particlesMin,
