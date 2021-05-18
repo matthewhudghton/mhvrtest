@@ -22,7 +22,18 @@ export class Map {
 
     let material = new THREE.MeshLambertMaterial({ color: 0xaaaaaa });
 
-    const floorMesh = new THREE.Mesh(floorGeometry, material);
+    const loader = new THREE.TextureLoader();
+    const groundTexture = loader.load("textures/grasslight-big.jpg");
+    groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+    groundTexture.repeat.set(25, 25);
+    groundTexture.anisotropy = 16;
+    groundTexture.encoding = THREE.sRGBEncoding;
+
+    const groundMaterial = new THREE.MeshLambertMaterial({
+      map: groundTexture
+    });
+
+    const floorMesh = new THREE.Mesh(floorGeometry, groundMaterial);
     floorMesh.castShadow = true;
     floorMesh.receiveShadow = true;
     scene.add(floorMesh);
