@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { Entity } from "./entity.js";
 
 export class Actor extends Entity {
@@ -65,6 +66,7 @@ export class Actor extends Entity {
     const CANNON = this.CANNON;
     let geometry;
     const invisible = this.invisible;
+
     switch (options.shapeType) {
       case "box":
         if (!invisible) {
@@ -91,9 +93,17 @@ export class Actor extends Entity {
         break;
     }
     //let normalMap = new THREE.TextureLoader().load("bumpmaps/noise.jpg");
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load("textures/texture.jpeg");
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    //texture.repeat.set(25, 25);
+    //texture.anisotropy = 16;
+    texture.encoding = THREE.sRGBEncoding;
+
     this.mesh = new THREE.Mesh(
       geometry,
-      new THREE.MeshPhongMaterial({
+      new THREE.MeshLambertMaterial({
+        map: texture,
         color: this.color,
         transparent: true,
         opacity: 0.0

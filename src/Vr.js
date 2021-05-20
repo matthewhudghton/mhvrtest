@@ -9,6 +9,7 @@ import { Map } from "./map.js";
 import * as CANNON from "cannon-es";
 import { Ai } from "./ai.js";
 import { Driver } from "./driver.js";
+import { Character } from "./character.js";
 
 import { Mouse } from "./mouse.js";
 import System, {
@@ -85,8 +86,19 @@ function initCannon() {
 function init() {
   initCannon();
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
-  scene.fog = new THREE.Fog(0x000000, 0, 1000);
+  //scene.background = new THREE.Color(0x87ceeb);
+
+  new THREE.CubeTextureLoader()
+    .setPath("textures/")
+    .load(
+      ["sky.jpg", "sky.jpg", "sky.jpg", "sky.jpg", "sky.jpg", "sky.jpg"],
+      function (texture) {
+        scene.background = texture;
+        console.log("loaded texture");
+      }
+    );
+
+  scene.fog = new THREE.Fog(0x000000, 5, 50);
   let light2 = new THREE.SpotLight(0xffffff, 0.2);
   light2.position.set(10, 80, 20);
   light2.target.position.set(0, 0, 0);
@@ -196,7 +208,7 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 1; i < 4; i++) {
+  for (let i = 0; i < 4; i++) {
     new Driver({
       THREE: THREE,
       CANNON: CANNON,
@@ -207,6 +219,18 @@ function init() {
       size: 1 + i / 2
     });
   }
+  /*
+  for (let i = 0; i < 1; i++) {
+    new Character({
+      THREE: THREE,
+      CANNON: CANNON,
+      camera: camera,
+      cameraGroup: user,
+      position: new CANNON.Vec3(0, 4, -2),
+      map: map,
+      size: 4
+    });
+  }*/
 
   //
   inputManager = new InputManager(
