@@ -185,6 +185,9 @@ export class Player extends Entity {
               rawShapeData: message.magic.shapeMatches[0],
               shapeType: "box",
               position: message.magic.position,
+              bodySettings: {
+                quaternion: message.magic.quaternion
+              },
               velocity: this.bodyActor.body.velocity
             });
             break;

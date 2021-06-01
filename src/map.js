@@ -1,4 +1,5 @@
 import { Actor } from "./actor";
+import { Block } from "./block";
 import * as YUKA from "yuka";
 
 export class Map {
@@ -16,6 +17,7 @@ export class Map {
     this.aiManager = new YUKA.EntityManager();
     this.obstacles = [];
     this.ais = [];
+    this.blocks = [];
 
     let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
     floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
@@ -53,6 +55,28 @@ export class Map {
     );
     floorMesh.position.copy(groundBody.position);
     world.addBody(groundBody);
+
+    for (var i = 0; i < 5; i++) {
+      new Block({
+        THREE: this.THREE,
+        CANNON: this.CANNON,
+        map: this,
+        shapeType: "box",
+        lifespan: undefined,
+        velocity: undefined,
+        position: new CANNON.Vec3(-4 + i * 2, i * 3, -1 - i),
+        applyGravity: false,
+        color: new THREE.Color(Math.random(), Math.random(), Math.random()),
+        rawShapeData: {
+          size: 1,
+          width: 5 / 3,
+          height: 5 / 5,
+          depth: 5 / 2
+        },
+        bodySettings: { material: "playerMaterial", angularDamping: 0 },
+        mass: 0
+      });
+    }
   }
 
   addActor(actor, ghost) {

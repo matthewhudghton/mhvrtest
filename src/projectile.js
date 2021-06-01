@@ -9,7 +9,7 @@ export class Projectile extends Actor {
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
     options.lifeSpan ??= 8;
-    options.invisible ??= false;
+    options.invisible ??= true;
     options.applyGravity ??= false;
 
     const size = options.rawShapeData.size;

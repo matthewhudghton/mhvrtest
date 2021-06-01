@@ -16,7 +16,7 @@ export class Actor extends Entity {
       height: 0.15,
       size: 0.1
     };
-    this.applyGravity = options.applyGravity ?? true;
+    this.applyGravity = options.applyGravity ?? false;
     this.noDie = options.noDie ?? false;
     this.size = this.rawShapeData.size / 2;
     this.width = this.rawShapeData.width;
@@ -25,6 +25,12 @@ export class Actor extends Entity {
     this.color = options.color;
     this.invisible = options.invisible ?? false;
     this.ai = options.ai;
+
+    options.bodySettings ??= {};
+    options.bodySettings.linearDamping ??= 0.05;
+    options.bodySettings.angularDamping ??= 0.5;
+    options.bodySettings.mass ??= 5;
+
     this.initShape(options);
 
     if (options.velocity) {
@@ -32,8 +38,6 @@ export class Actor extends Entity {
     } else {
       this.body.angularVelocity.set(0, 0, 0);
     }
-    this.body.linearDamping = 0.05;
-    this.body.angularDamping = 0.5;
 
     if (options.position) {
       this.body.position.copy(options.position);
@@ -70,7 +74,7 @@ export class Actor extends Entity {
     switch (options.shapeType) {
       case "box":
         if (!invisible) {
-          geometry = new THREE.BoxGeometry(this.width, this.height, this.width);
+          geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
         }
         this.shape = new CANNON.Box(
           new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2)

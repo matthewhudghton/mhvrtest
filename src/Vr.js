@@ -9,6 +9,7 @@ import { Map } from "./map.js";
 import * as CANNON from "cannon-es";
 import { Ai } from "./ai.js";
 import { Driver } from "./driver.js";
+import { Block } from "./block.js";
 import { Character } from "./character.js";
 
 import { Mouse } from "./mouse.js";
@@ -61,10 +62,10 @@ var world;
 
 function initCannon() {
   world = new CANNON.World();
-  //world.gravity.set(0, -3.8, 0);
-  world.gravity.set(0, 0, 0);
+  world.gravity.set(0, -3.8, 0);
+  //world.gravity.set(0, 0, 0);
   world.broadphase = new CANNON.NaiveBroadphase();
-  world.solver.iterations = 2;
+  world.solver.iterations = 5;
 
   // Materials
   var playerMaterial = new CANNON.Material("playerMaterial");
@@ -88,17 +89,29 @@ function init() {
   scene = new THREE.Scene();
   //scene.background = new THREE.Color(0x87ceeb);
 
-  new THREE.CubeTextureLoader()
-    .setPath("textures/")
-    .load(
-      ["sky.jpg", "sky.jpg", "sky.jpg", "sky.jpg", "sky.jpg", "sky.jpg"],
-      function (texture) {
-        scene.background = texture;
-        console.log("loaded texture");
-      }
-    );
+  /*new THREE.CubeTextureLoader().setPath("textures/").load(
+    [
+      "sky/sky-1-1.jpg", // left middle
+      "sky/sky-3-1.jpg", // right middle
+      "sky/sky-2-0.jpg", // top
+      "sky/sky-0-0.jpg", // bottom
+      "sky/sky-0-1.jpg", // back middle
+      "sky/sky-2-1.jpg" // in-front
+    ],
+    function (texture) {
+      scene.background = texture;
+      console.log("loaded texture");
+    }
+  );*/
+  const loader = new THREE.TextureLoader();
 
-  scene.fog = new THREE.Fog(0x000000, 5, 50);
+  const texture = loader.load("textures/sky04.png", () => {
+    const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+    rt.fromEquirectangularTexture(renderer, texture);
+    scene.background = rt.texture;
+  });
+
+  scene.fog = new THREE.Fog(0x000000, 10, 100);
   let light2 = new THREE.SpotLight(0xffffff, 0.2);
   light2.position.set(10, 80, 20);
   light2.target.position.set(0, 0, 0);
@@ -120,7 +133,7 @@ function init() {
 
   scene.add(light2);
 
-  let ambientLight = new THREE.AmbientLight(0x404040, 0.1); // soft white light
+  let ambientLight = new THREE.AmbientLight(0xffffff, 0.05); // soft white light
   scene.add(ambientLight);
 
   camera = new THREE.PerspectiveCamera(
@@ -219,6 +232,7 @@ function init() {
       size: 1 + i / 2
     });
   }
+
   /*
   for (let i = 0; i < 1; i++) {
     new Character({
