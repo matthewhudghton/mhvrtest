@@ -56,7 +56,20 @@ export class Map {
     floorMesh.position.copy(groundBody.position);
     world.addBody(groundBody);
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 15; i++) {
+      const width = 10 + Math.random() * 150;
+      const height = 10 + Math.random() * 150;
+      const depth = 10 + Math.random() * 150;
+      let x = Math.random() * 500 - 250;
+      let y = height / 2;
+      let z = Math.random() * 500 - 250;
+      if (x < width) {
+        x -= width;
+      }
+      if (x > width) {
+        x += width;
+      }
+
       new Block({
         THREE: this.THREE,
         CANNON: this.CANNON,
@@ -64,14 +77,14 @@ export class Map {
         shapeType: "box",
         lifespan: undefined,
         velocity: undefined,
-        position: new CANNON.Vec3(-4 + i * 2, i * 3, -1 - i),
+        position: new CANNON.Vec3(x, y, z),
         applyGravity: false,
         color: new THREE.Color(Math.random(), Math.random(), Math.random()),
         rawShapeData: {
           size: 1,
-          width: 5 / 3,
-          height: 5 / 5,
-          depth: 5 / 2
+          width: width,
+          height: height,
+          depth: depth
         },
         bodySettings: { material: "playerMaterial", angularDamping: 0 },
         mass: 0
