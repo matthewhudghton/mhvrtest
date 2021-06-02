@@ -23,8 +23,9 @@ export class BlockManager {
 
   addBlocksForCurrentSegment() {
     let segment = this.currentSegment;
+    console.log("Adding blocks for segment" + JSON.stringify(segment));
     for (let i = 0; i < this.blocksPerSegment; i++) {
-      let block = this.makeNewBlock(segment.x, segment.y, segment.z);
+      let block = this.makeNewBlock(segment);
       this.addBlockForSegment(segment.x, segment.y, segment.z, block);
     }
   }
@@ -32,6 +33,7 @@ export class BlockManager {
   addBlockForSegment(x, y, z, block) {
     this.blocks[x] ??= { [y]: { [z]: [] } };
     this.blocks[x][y] ??= { [z]: [] };
+    this.blocks[x][y][z] ??= [];
     this.blocks[x][y][z].push(block);
   }
 
@@ -56,18 +58,18 @@ export class BlockManager {
 
   getRandom1DPositionWithInSegment(segment1DPosition) {
     return (
-      (segment1DPosition - 1) * this.segmentSize +
+      segment1DPosition * this.segmentSize +
       (Math.random() * this.segmentSize - this.segmentSize / 2)
     );
   }
 
-  makeNewBlock(position) {
+  makeNewBlock(segment) {
     const width = this.blockBaseSize + Math.random() * this.blockMaxSize;
     const height = this.blockBaseSize + Math.random() * this.blockMaxSize;
     const depth = this.blockBaseSize + Math.random() * this.blockMaxSize;
-    let x = this.getRandom1DPositionWithInSegment(position.x);
-    let y = this.getRandom1DPositionWithInSegment(position.y);
-    let z = this.getRandom1DPositionWithInSegment(position.z);
+    let x = this.getRandom1DPositionWithInSegment(segment.x);
+    let y = this.getRandom1DPositionWithInSegment(segment.y);
+    let z = this.getRandom1DPositionWithInSegment(segment.z);
 
     /* protect the player starting point */
     if (x < width) {
@@ -78,8 +80,6 @@ export class BlockManager {
     }
 
     return new Block({
-      THREE: THREE,
-      CANNON: CANNON,
       map: this.map,
       shapeType: "box",
       lifespan: undefined,

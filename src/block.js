@@ -9,7 +9,7 @@ export class Block extends Actor {
     options.invisible ??= false;
     options.applyGravity ??= false;
     options.bodySettings.mass ??= 0;
-
+    console.log("position " + JSON.stringify(options.position));
     const size = options.rawShapeData.size;
 
     const blue = Math.min(-100 + size * 80, 255);
@@ -21,7 +21,7 @@ export class Block extends Actor {
       green / 255,
       blue / 255
     );
-    console.log("rawShapeData" + JSON.stringify(options.rawShapeData));
+
     super(options);
   }
 
