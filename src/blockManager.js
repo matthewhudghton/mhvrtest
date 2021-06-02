@@ -4,27 +4,45 @@ import * as CANNON from "cannon-es";
 
 export class BlockManager {
   constructor(options) {
-    this.player = options.player;
     this.blocks = {};
+    this.map = options.map;
     this.segmentSize = 500;
     this.blockBaseSize = 10;
     this.blockMaxSize = 150;
     this.blocksPerSegment = 15;
   }
 
-  addBlocksForCurrentPosition() {
-    let position = this.player.position;
-    let block = this.makeNewBlock(position.x, position.y, position.z);
-    this.addBlockForPosition(position.x, position.y, position.z, block);
+  update(dt) {
+    if (this.player === undefined) {
+      return;
+    }
+    if (!this.hasBlockForCurrentSegment()) {
+      this.addBlocksForCurrentSegment();
+    }
   }
 
-  addBlockForPosition(x, y, z, block) {
+  addBlocksForCurrentSegment() {
+    let segment = this.currentSegment;
+    for (let i = 0; i < this.blocksPerSegment; i++) {
+      let block = this.makeNewBlock(segment.x, segment.y, segment.z);
+      this.addBlockForSegment(segment.x, segment.y, segment.z, block);
+    }
+  }
+
+  addBlockForSegment(x, y, z, block) {
     this.blocks[x] ??= { [y]: { [z]: undefined } };
     this.blocks[x][y] ??= { [z]: [] };
     this.blocks[x][y][z].push(block);
   }
 
-  hasBlockForCurrentPlayerPosition(x, y, z) {
+  hasBlockForCurrentSegment() {
+    return this.hasBlockForSegment(this.currentSegment);
+  }
+
+  hasBlockForSegment(segment) {
+    const x = segment.x;
+    const y = segment.y;
+    const z = segment.z;
     if (
       this.blocks[x] !== undefined &&
       this.blocks[x][y] !== undefined &&
@@ -60,9 +78,9 @@ export class BlockManager {
     }
 
     return new Block({
-      THREE: this.THREE,
-      CANNON: this.CANNON,
-      map: this,
+      THREE: THREE,
+      CANNON: CANNON,
+      map: this.map,
       shapeType: "box",
       lifespan: undefined,
       velocity: undefined,
@@ -80,7 +98,20 @@ export class BlockManager {
     });
   }
 
+  get player() {
+    return this.map.player;
+  }
+
   get position() {
     return this.player.position;
+  }
+
+  get currentSegment() {
+    let position = this.position;
+    return {
+      x: Math.floor(position.x / this.segmentSize),
+      y: Math.floor(position.y / this.segmentSize),
+      z: Math.floor(position.z / this.segmentSize)
+    };
   }
 }

@@ -1,5 +1,6 @@
 import { Actor } from "./actor";
-import { Block } from "./block";
+import { BlockManager } from "./blockManager";
+
 import * as YUKA from "yuka";
 
 export class Map {
@@ -12,6 +13,7 @@ export class Map {
     const scene = this.scene;
     const world = this.world;
     const CANNON = this.CANNON;
+    this.blockManager = new BlockManager({ map: this });
 
     this.actors = [];
     this.aiManager = new YUKA.EntityManager();
@@ -54,7 +56,7 @@ export class Map {
     );
     floorMesh.position.copy(groundBody.position);
     world.addBody(groundBody);
-
+    /*
     for (var i = 0; i < 15; i++) {
       const width = 10 + Math.random() * 150;
       const height = 10 + Math.random() * 150;
@@ -88,7 +90,7 @@ export class Map {
         bodySettings: { material: "playerMaterial", angularDamping: 0 },
         mass: 0
       });
-    }
+    }*/
   }
 
   addActor(actor, ghost) {
@@ -110,6 +112,8 @@ export class Map {
     this.ais.forEach((ai) => {
       ai.update(dt);
     });
+
+    this.blockManager.update(dt);
     /* Delete any actor marked as should remove */
     const actors = this.actors;
     let i = actors.length;
