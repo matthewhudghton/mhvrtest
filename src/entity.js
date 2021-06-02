@@ -1,13 +1,12 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
+
 export class Entity {
-  THREE;
-  CANNON;
   map;
   world;
   scene;
   children;
   constructor(options) {
-    this.THREE = options.THREE;
-    this.CANNON = options.CANNON;
     this.map = options.map;
     this.world = options.map.world;
     this.scene = options.map.scene;

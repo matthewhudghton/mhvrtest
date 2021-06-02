@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import * as CANNON from "cannon-es";
+
 import { Entity } from "./entity.js";
 
 export class Actor extends Entity {
@@ -66,8 +68,6 @@ export class Actor extends Entity {
   }
 
   initShape(options) {
-    const THREE = this.THREE;
-    const CANNON = this.CANNON;
     let geometry;
     const invisible = this.invisible;
 

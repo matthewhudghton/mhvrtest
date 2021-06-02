@@ -1,9 +1,9 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { Actor } from "./actor.js";
 import { Explosion } from "./explosion.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
-import * as THREE from "three";
-import * as CANNON from "cannon-es";
 
 class LinkedBox {
   constructor(options) {

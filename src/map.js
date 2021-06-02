@@ -1,3 +1,5 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { Actor } from "./actor";
 import { BlockManager } from "./blockManager";
 
@@ -5,11 +7,8 @@ import * as YUKA from "yuka";
 
 export class Map {
   constructor(options) {
-    this.THREE = options.THREE;
-    this.CANNON = options.CANNON;
     this.scene = options.scene;
     this.world = options.world;
-    const THREE = this.THREE;
     const scene = this.scene;
     const world = this.world;
     const CANNON = this.CANNON;
@@ -72,7 +71,7 @@ export class Map {
       }
 
       new Block({
-        THREE: this.THREE,
+        THREE: THREE,
         CANNON: this.CANNON,
         map: this,
         shapeType: "box",

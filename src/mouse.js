@@ -1,8 +1,9 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { ShapeRecogniser } from "./shapeRecogniser.js";
 
 export class Mouse {
   constructor(THREE) {
-    this.THREE = THREE;
     this.mousePressed = false;
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();

@@ -6,6 +6,8 @@ import { Gun } from "./gun.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
 import * as YUKA from "yuka";
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 
 export class Player extends Entity {
   leftHandPosition = new Vector3(0, 0, 0);
@@ -18,8 +20,7 @@ export class Player extends Entity {
     super(options);
     this.cameraGroup = options.cameraGroup;
     this.camera = options.camera;
-    this.THREE = options.THREE;
-    this.listener = new this.THREE.AudioListener();
+    this.listener = new THREE.AudioListener();
     this.camera.add(this.listener);
     this.vehicle = new YUKA.Vehicle();
     this.map.aiManager.add(this.vehicle);
@@ -27,8 +28,6 @@ export class Player extends Entity {
     this.collisionFilterMask = 5;
     let position = new this.CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
-      THREE: this.THREE,
-      CANNON: this.CANNON,
       map: this.map,
       lifespan: undefined,
       position,
@@ -55,14 +54,12 @@ export class Player extends Entity {
     this.messages = [];
 
     this.leftHandParticleSystem = new ParticleSystem({
-      THREE: this.THREE,
       scene: this.scene,
       type: "left_hand",
       useLoaded: true
     });
 
     this.rightHandParticleSystem = new ParticleSystem({
-      THREE: this.THREE,
       scene: this.scene,
       type: "right_hand",
       useLoaded: true
@@ -70,7 +67,6 @@ export class Player extends Entity {
 
     // add music
     this.music = new Sound({
-      THREE: this.THREE,
       actor: this.bodyActor,
       player: this,
       name: "music01"
@@ -127,8 +123,6 @@ export class Player extends Entity {
   }
 
   applyImpulseRelativeToController(speed) {
-    const THREE = this.THREE;
-    const CANNON = this.CANNON;
     let direction = new THREE.Vector3();
     direction.copy(this.leftControllerGrip.position);
     direction.y = direction.y - 1;
@@ -142,8 +136,6 @@ export class Player extends Entity {
     this.bodyActor.body.applyImpulse(force, pointOnBody);
   }
   applyImpulseRelativeToCamera(speed) {
-    const THREE = this.THREE;
-    const CANNON = this.CANNON;
     let direction = new THREE.Vector3();
 
     direction.set(0, 0, 1);
@@ -178,8 +170,6 @@ export class Player extends Entity {
         switch (message.magic.shapeMatches[0].name) {
           case "square":
             new Actor({
-              THREE: this.THREE,
-              CANNON: this.CANNON,
               map: this.map,
               lifeSpan: undefined,
               rawShapeData: message.magic.shapeMatches[0],
@@ -204,8 +194,6 @@ export class Player extends Entity {
               }
             });*/
             new Gun({
-              THREE: this.THREE,
-              CANNON: this.CANNON,
               map: this.map,
               lifeSpan: undefined,
               rawShapeData: message.magic.shapeMatches[0],

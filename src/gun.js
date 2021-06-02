@@ -1,3 +1,5 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { Actor } from "./actor.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
@@ -37,7 +39,6 @@ export class Gun extends Actor {
 
     this.particleSystems.push(
       new ParticleSystem({
-        THREE: this.THREE,
         scene: this.scene,
         type: "gun1",
         colorA: "#" + this.color.getHexString(),
@@ -59,7 +60,7 @@ export class Gun extends Actor {
       })
     );
 
-    /*const light = new this.THREE.PointLight(
+    /*const light = new THREE.PointLight(
       this.color,
       this.size * this.size * 0.01,
       0,
@@ -71,7 +72,6 @@ export class Gun extends Actor {
 
     this.sounds.push(
       new Sound({
-        THREE: this.THREE,
         actor: this,
         player: this.map.player,
         name: "cast01",
@@ -91,8 +91,6 @@ export class Gun extends Actor {
 
   fire() {
     new Projectile({
-      THREE: this.THREE,
-      CANNON: this.CANNON,
       map: this.map,
       lifeSpan: undefined,
       rawShapeData: this.rawShapeData,

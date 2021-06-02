@@ -1,3 +1,5 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { Pinput } from "./pinput.js";
 import { ShapeRecogniser } from "./shapeRecogniser.js";
 import { Debouncer } from "./debouncer.js";
@@ -17,12 +19,10 @@ export class InputManager {
     controller2
   ) {
     this.input = new Pinput();
-    this.CANNON = CANNON;
     this.camera = camera;
     this.scene = scene;
     this.xr = xr;
     this.player = player;
-    this.THREE = THREE;
     this.user = user;
     this.controller1 = controller1;
     this.controller2 = controller2;
@@ -37,15 +37,13 @@ export class InputManager {
       controller: this.controller1,
       controllerGrip: this.player.leftControllerGrip,
       player: this.player,
-      camera: this.camera,
-      THREE: this.THREE
+      camera: this.camera
     });
     this.controllerHandler2 = new ControllerHandler({
       controller: this.controller2,
       controllerGrip: this.player.rightControllerGrip,
       player: this.player,
-      camera: this.camera,
-      THREE: this.THREE
+      camera: this.camera
     });
   }
   update(dt, hud) {
@@ -91,7 +89,7 @@ export class InputManager {
     if (this.input.isDown("p")) {
       this.player.addMessage({
         magic: {
-          position: new this.THREE.Vector3(1, 1, 1),
+          position: new THREE.Vector3(1, 1, 1),
           shapeMatches: [{ name: "circle", size: 0.5 }]
         }
       });
@@ -100,7 +98,7 @@ export class InputManager {
     if (this.input.isDown("o")) {
       this.player.addMessage({
         magic: {
-          position: new this.THREE.Vector3(1, 4, 1),
+          position: new THREE.Vector3(1, 4, 1),
           shapeMatches: [{ name: "circle", size: 2 }]
         }
       });
@@ -109,7 +107,7 @@ export class InputManager {
     if (this.input.isDown("i")) {
       this.player.addMessage({
         magic: {
-          position: new this.THREE.Vector3(1, 1, 1),
+          position: new THREE.Vector3(1, 1, 1),
           shapeMatches: [{ name: "square", size: 2, width: 2, height: 2 }]
         }
       });

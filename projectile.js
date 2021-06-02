@@ -11,14 +11,6 @@ export class Projectile extends Actor {
     this.speed = options.speed ?? 15;
     this.body.linearDamping = 0;
 
-    /*this.particleSystems.push(
-      new ParticleSystem({
-        THREE: this.THREE,
-        scene: this.scene,
-        type: "fireball"
-      })
-    );*/
-
     const light = new this.THREE.PointLight(0xffaa00, 1, 100, 1);
     light.position.set(50, 50, 50);
     this.lights.push(light);

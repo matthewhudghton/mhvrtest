@@ -1,3 +1,5 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { Actor } from "./actor.js";
 import { Explosion } from "./explosion.js";
 import { ParticleSystem } from "./particleSystem.js";
@@ -36,7 +38,6 @@ export class Projectile extends Actor {
     this.body.linearDamping = 0;
     this.particleSystems.push(
       new ParticleSystem({
-        THREE: this.THREE,
         scene: this.scene,
         type: "fireball",
         colorA: "#" + this.color.getHexString(),
@@ -47,7 +48,7 @@ export class Projectile extends Actor {
     );
 
     if (true || Math.random() * 15 < this.size) {
-      const light = new this.THREE.PointLight(
+      const light = new THREE.PointLight(
         this.color,
         this.size * this.size,
         0,
@@ -61,7 +62,6 @@ export class Projectile extends Actor {
     }
     this.sounds.push(
       new Sound({
-        THREE: this.THREE,
         actor: this,
         player: this.map.player,
         detune: (5 - this.size) * 1000,
@@ -87,8 +87,6 @@ export class Projectile extends Actor {
     }
     if (this.exploding && !this.hasExploded) {
       new Explosion({
-        THREE: this.THREE,
-        CANNON: this.CANNON,
         map: this.map,
         lifeSpan: undefined,
         rawShapeData: this.rawShapeData,

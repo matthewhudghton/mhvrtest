@@ -1,3 +1,5 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { Debouncer } from "./debouncer.js";
 import { ShapeRecogniser } from "./shapeRecogniser.js";
 
@@ -7,7 +9,6 @@ export class ControllerHandler {
     this.controllerGrip = options.controllerGrip;
     this.player = options.player;
     this.camera = options.camera;
-    this.THREE = options.THREE;
     this.shapeRecogniser = new ShapeRecogniser();
     this.wasSelecting = false;
     this.addPointsDebouncer = new Debouncer(0.01);
@@ -45,7 +46,7 @@ export class ControllerHandler {
     ) {
       this.wasSelecting = true;
 
-      let position = new this.THREE.Vector3(0, 0, 0);
+      let position = new THREE.Vector3(0, 0, 0);
       position.copy(this.getControllerPosition());
 
       position.applyMatrix4(this.camera.matrixWorldInverse);
@@ -87,7 +88,6 @@ export class ControllerHandler {
   }
 
   getControllerPosition() {
-    const THREE = this.THREE;
     let three_position = new THREE.Vector3();
 
     return this.controller.getWorldPosition(three_position);

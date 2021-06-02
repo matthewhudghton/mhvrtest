@@ -1,8 +1,9 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { Entity } from "./entity.js";
 import { Actor } from "./actor.js";
 import { SpotLightHelper } from "three";
 import { Gun } from "./gun.js";
-import * as CANNON from "cannon-es";
 import { Debouncer } from "./debouncer.js";
 
 export class Driver extends Entity {
@@ -14,8 +15,6 @@ export class Driver extends Entity {
     this.size = options.size ?? 1;
 
     this.actor = new Actor({
-      THREE: this.THREE,
-      CANNON: this.CANNON,
       map: this.map,
       shapeType: "box",
       ai: this,
@@ -23,7 +22,7 @@ export class Driver extends Entity {
       velocity: undefined,
       position: options.position,
       applyGravity: false,
-      color: new this.THREE.Color(Math.random(), Math.random(), Math.random()),
+      color: new THREE.Color(Math.random(), Math.random(), Math.random()),
       rawShapeData: {
         size: this.size,
         width: this.size / 3,
@@ -79,8 +78,6 @@ export class Driver extends Entity {
       this.debouncer.tryFireAndReset()
     ) {
       new Gun({
-        THREE: this.THREE,
-        CANNON: this.CANNON,
         map: this.map,
         lifeSpan: undefined,
         collisionFilterGroup: this.collisionFilterGroup,
@@ -99,12 +96,12 @@ export class Driver extends Entity {
   }
 
   get angleToTarget() {
-    let direction = new this.THREE.Vector3(0, 0, 1);
+    let direction = new THREE.Vector3(0, 0, 1);
     this.actor.mesh.localToWorld(direction);
     let moveToTarget = this.moveToTarget;
 
     return direction.angleTo(
-      new this.THREE.Vector3(moveToTarget.x, moveToTarget.y, moveToTarget.z)
+      new THREE.Vector3(moveToTarget.x, moveToTarget.y, moveToTarget.z)
     );
   }
   get moveToTarget() {

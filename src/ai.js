@@ -1,5 +1,8 @@
 import { Entity } from "./entity.js";
 import { Actor } from "./actor.js";
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
+
 import * as YUKA from "yuka";
 let once = 1;
 function sync(vehicle, actor) {
@@ -12,7 +15,6 @@ function sync(vehicle, actor) {
 export class Ai extends Entity {
   constructor(options) {
     super(options);
-    const THREE = this.THREE;
     const vehicleGeometry = new THREE.ConeBufferGeometry(0.1, 0.5, 8);
     vehicleGeometry.rotateX(Math.PI * 0.5);
     const vehicleMaterial = new THREE.MeshNormalMaterial();
@@ -20,7 +22,6 @@ export class Ai extends Entity {
     const cohesionBehavior = new YUKA.CohesionBehavior();
     const separationBehavior = new YUKA.SeparationBehavior();
     this.actor = new Actor({
-      THREE: this.THREE,
       CANNON: this.CANNON,
       map: this.map,
       shapeType: "cone",
@@ -113,7 +114,6 @@ export class Ai extends Entity {
   }
 
   createVisionHelper(vision, division = 8) {
-    const THREE = this.THREE;
     const fieldOfView = vision.fieldOfView;
     const range = vision.range;
 

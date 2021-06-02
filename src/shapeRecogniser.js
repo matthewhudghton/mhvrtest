@@ -1,3 +1,5 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 import { Actor } from "./actor.js";
 import { Debouncer } from "./debouncer.js";
 

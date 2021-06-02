@@ -21,14 +21,13 @@ let particles_json_map = {
 
 export class ParticleSystem {
   constructor(options) {
-    this.THREE = options.THREE;
     this.scene = options.scene;
     this.type = options.type;
     this.useLoaded = options.useLoaded ?? false;
 
-    Nebula.fromJSONAsync(this.getParticleJSON(options), this.THREE).then(
+    Nebula.fromJSONAsync(this.getParticleJSON(options), THREE).then(
       (system) => {
-        this.renderer = new SpriteRenderer(this.scene, this.THREE);
+        this.renderer = new SpriteRenderer(this.scene, THREE);
         this.nebula = system.addRenderer(this.renderer);
       }
     );

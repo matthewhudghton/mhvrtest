@@ -1,3 +1,5 @@
+import * as THREE from "three";
+import * as CANNON from "cannon-es";
 const soundsBasePath = "sounds/";
 const soundFileMapping = {
   woosh01: "woosh01.ogg",
@@ -13,7 +15,6 @@ function getSoundFile(name) {
 export class Sound {
   THREE;
   constructor(options) {
-    this.THREE = options.THREE;
     this.actor = options.actor;
     this.player = options.player;
     this.volume = options.volume ?? 0.3;
@@ -21,7 +22,7 @@ export class Sound {
     this.soundLoaded = false;
     this.loop = options.loop ?? true;
     this.duration = options.duration ?? undefined;
-    this.sound = new this.THREE.PositionalAudio(this.player.listener);
+    this.sound = new THREE.PositionalAudio(this.player.listener);
     const sound = this.sound;
     const actor = this.actor;
     const volume = this.volume;
@@ -30,7 +31,7 @@ export class Sound {
     const self = this;
     const duration = this.duration;
     this.mesh = options.mesh;
-    this.audioLoader = new this.THREE.AudioLoader();
+    this.audioLoader = new THREE.AudioLoader();
     this.audioLoader.load(getSoundFile(name), function (buffer) {
       sound.setBuffer(buffer);
       sound.setRefDistance(20);
