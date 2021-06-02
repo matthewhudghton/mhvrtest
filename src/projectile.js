@@ -20,11 +20,7 @@ export class Projectile extends Actor {
     const red = Math.max(Math.min(100 + size * 5, 255) - blue, 0);
     const green = 80 + size * 5 - blue;
 
-    options.color ??= new options.THREE.Color(
-      red / 255,
-      green / 255,
-      blue / 255
-    );
+    options.color ??= new THREE.Color(red / 255, green / 255, blue / 255);
 
     super(options);
 
@@ -78,8 +74,8 @@ export class Projectile extends Actor {
     Actor.prototype.update.call(this, dt);
 
     this.body.applyLocalImpulse(
-      new this.CANNON.Vec3(0, 0, this.speed * dt),
-      new this.CANNON.Vec3(0, 0, 0)
+      new CANNON.Vec3(0, 0, this.speed * dt),
+      new CANNON.Vec3(0, 0, 0)
     );
 
     if (this.lifeSpan < 1) {

@@ -7,17 +7,7 @@ import { ControllerHandler, controllerHandler } from "./controllerHandler.js";
 
 let lastPosition;
 export class InputManager {
-  constructor(
-    THREE,
-    CANNON,
-    xr,
-    camera,
-    scene,
-    user,
-    player,
-    controller1,
-    controller2
-  ) {
+  constructor(xr, camera, scene, user, player, controller1, controller2) {
     this.input = new Pinput();
     this.camera = camera;
     this.scene = scene;

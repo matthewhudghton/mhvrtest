@@ -22,7 +22,6 @@ export class Ai extends Entity {
     const cohesionBehavior = new YUKA.CohesionBehavior();
     const separationBehavior = new YUKA.SeparationBehavior();
     this.actor = new Actor({
-      CANNON: this.CANNON,
       map: this.map,
       shapeType: "cone",
       ai: this,
@@ -104,8 +103,8 @@ export class Ai extends Entity {
 
   update(dt) {
     this.actor.body.applyLocalImpulse(
-      new this.CANNON.Vec3(0, 3.75 * dt, 0),
-      new this.CANNON.Vec3(0, 0, 0)
+      new CANNON.Vec3(0, 3.75 * dt, 0),
+      new CANNON.Vec3(0, 0, 0)
     );
   }
 

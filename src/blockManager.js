@@ -30,7 +30,7 @@ export class BlockManager {
   }
 
   addBlockForSegment(x, y, z, block) {
-    this.blocks[x] ??= { [y]: { [z]: undefined } };
+    this.blocks[x] ??= { [y]: { [z]: [] } };
     this.blocks[x][y] ??= { [z]: [] };
     this.blocks[x][y][z].push(block);
   }

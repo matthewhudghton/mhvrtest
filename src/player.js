@@ -26,7 +26,7 @@ export class Player extends Entity {
     this.map.aiManager.add(this.vehicle);
     this.collisionFilterGroup = 2;
     this.collisionFilterMask = 5;
-    let position = new this.CANNON.Vec3(0, 1, 0);
+    let position = new CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
       map: this.map,
       lifespan: undefined,
@@ -82,7 +82,6 @@ export class Player extends Entity {
   }
 
   update(dt) {
-    const CANNON = this.CANNON;
     const k = 0.05;
 
     this.updateAiTracking(dt);
@@ -183,8 +182,6 @@ export class Player extends Entity {
             break;
           case "circle":
             /*new Projectile({
-              THREE: this.THREE,
-              CANNON: this.CANNON,
               map: this.map,
               lifeSpan: undefined,
               rawShapeData: message.magic.shapeMatches[0],

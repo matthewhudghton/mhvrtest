@@ -11,7 +11,6 @@ export class Map {
     this.world = options.world;
     const scene = this.scene;
     const world = this.world;
-    const CANNON = this.CANNON;
     this.blockManager = new BlockManager({ map: this });
 
     this.actors = [];

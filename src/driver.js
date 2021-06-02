@@ -67,7 +67,7 @@ export class Driver extends Entity {
     if (this.position.y < 1 + this.size * 1.5) {
     }
     this.body.applyImpulse(
-      new this.CANNON.Vec3(0, 3.8 * dt, 0),
+      new CANNON.Vec3(0, 3.8 * dt, 0),
       new CANNON.Vec3(0, 0, 0)
     );
 

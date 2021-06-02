@@ -21,11 +21,7 @@ export class Gun extends Actor {
     const red = Math.max(Math.min(100 + size * 5, 255) - blue, 0);
     const green = 80 + size * 5 - blue;
 
-    options.color ??= new options.THREE.Color(
-      red / 255,
-      green / 255,
-      blue / 255
-    );
+    options.color ??= new THREE.Color(red / 255, green / 255, blue / 255);
 
     super(options);
     this.reverseProjectile = options.reverseProjectile ?? false;

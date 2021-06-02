@@ -143,7 +143,7 @@ export class Actor extends Entity {
     } else {
       if (this.applyGravity) {
         this.body.applyImpulse(
-          new this.CANNON.Vec3(0, -3.75 * dt, 0),
+          new CANNON.Vec3(0, -3.75 * dt, 0),
           this.body.position
         );
       }
