@@ -227,6 +227,10 @@ export class Player extends Entity {
     }
   }
 
+  get position() {
+    return this.bodyActor.body.position;
+  }
+
   get shouldBeDeleted() {
     return false;
   }

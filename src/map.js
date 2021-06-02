@@ -17,7 +17,6 @@ export class Map {
     this.aiManager = new YUKA.EntityManager();
     this.obstacles = [];
     this.ais = [];
-    this.blocks = [];
 
     let floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
     floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
