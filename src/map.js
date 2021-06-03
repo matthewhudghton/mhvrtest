@@ -22,7 +22,7 @@ export class Map {
     floorGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
     let material = new THREE.MeshLambertMaterial({ color: 0xaaaaaa });
-
+    /*
     const loader = new THREE.TextureLoader();
     const groundTexture = loader.load("textures/grasslight-big.jpg");
     groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
@@ -53,7 +53,8 @@ export class Map {
       -Math.PI / 2
     );
     floorMesh.position.copy(groundBody.position);
-    world.addBody(groundBody);
+
+    world.addBody(groundBody);*/
     /*
     for (var i = 0; i < 15; i++) {
       const width = 10 + Math.random() * 150;

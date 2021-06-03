@@ -6,10 +6,10 @@ export class BlockManager {
   constructor(options) {
     this.blocks = {};
     this.map = options.map;
-    this.segmentSize = 500;
-    this.blockBaseSize = 10;
-    this.blockMaxSize = 150;
-    this.blocksPerSegment = 15;
+    this.segmentSize = 750;
+    this.blockBaseSize = 40;
+    this.blockMaxSize = 550;
+    this.blocksPerSegment = 5;
     this.segmentLookAhead = 1;
     this.segmentTooFarLimit = 2;
   }
@@ -34,9 +34,16 @@ export class BlockManager {
     }
   }
   removeFarAwaySegments() {
+    const segment = this.currentSegment;
+    const cx = segment.x;
+    const cy = segment.y;
+    const cz = segment.z;
     /* Delete all x */
     for (let x in this.blocks) {
-      if (x < -this.segmentTooFarLimit || x > this.segmentTooFarLimit) {
+      if (
+        x < cx - this.segmentTooFarLimit ||
+        x > cx + this.segmentTooFarLimit
+      ) {
         for (let y in this.blocks[x]) {
           for (let z in this.blocks[x][y]) {
             for (let i in this.blocks[x][y][z]) {
@@ -44,15 +51,18 @@ export class BlockManager {
               block.forceKill();
             }
           }
-          this.blocks[x] = undefined;
         }
+        this.blocks[x] = undefined;
       }
     }
 
     /* Delete all too far y */
     for (let x in this.blocks) {
       for (let y in this.blocks[x]) {
-        if (y < -this.segmentTooFarLimit || y > this.segmentTooFarLimit) {
+        if (
+          y < cy - this.segmentTooFarLimit ||
+          y > cy + this.segmentTooFarLimit
+        ) {
           for (let z in this.blocks[x][y]) {
             for (let i in this.blocks[x][y][z]) {
               const block = this.blocks[x][y][z][i];
@@ -68,7 +78,10 @@ export class BlockManager {
     for (let x in this.blocks) {
       for (let y in this.blocks[x]) {
         for (let z in this.blocks[x][y]) {
-          if (z < -this.segmentTooFarLimit || z > this.segmentTooFarLimit) {
+          if (
+            z < cz - this.segmentTooFarLimit ||
+            z > cz + this.segmentTooFarLimit
+          ) {
             for (let i in this.blocks[x][y][z]) {
               const block = this.blocks[x][y][z][i];
               block.forceKill();

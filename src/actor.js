@@ -171,7 +171,7 @@ export class Actor extends Entity {
 
   forceKill() {
     this.lifeSpan = 0;
-
+    console.log("Running force kill!!");
     if (this.ai) {
       this.ai.kill();
     }

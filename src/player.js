@@ -42,7 +42,7 @@ export class Player extends Entity {
     });
 
     this.bodyActor.body.fixedRotation = true;
-    this.bodyActor.body.linearDamping = 0.2;
+    this.bodyActor.body.linearDamping = 0.05;
 
     this.leftFireDebouncer = new Debouncer(1);
     this.rightFireDebouncer = new Debouncer(1);
@@ -157,10 +157,10 @@ export class Player extends Entity {
     for (const message of messages) {
       /* Movement */
       if (message.forward) {
-        this.applyImpulseRelativeToController(1);
+        this.applyImpulseRelativeToController(3);
       }
       if (message.backward) {
-        this.applyImpulseRelativeToController(-1);
+        this.applyImpulseRelativeToController(-3);
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */
