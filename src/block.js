@@ -9,7 +9,7 @@ export class Block extends Actor {
     options.invisible ??= false;
     options.applyGravity ??= false;
     options.bodySettings.mass ??= 0;
-    console.log("position " + JSON.stringify(options.position));
+
     const size = options.rawShapeData.size;
 
     const blue = Math.min(-100 + size * 80, 255);
@@ -23,6 +23,8 @@ export class Block extends Actor {
     );
 
     super(options);
+    this.mesh.castShadow = false;
+    this.mesh.receiveShadow = false;
   }
 
   kill() {}

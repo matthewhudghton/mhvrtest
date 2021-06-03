@@ -45,9 +45,9 @@ export class Explosion extends Actor {
         0,
         2
       );
-      light.position.set(0, 0, 0);
-      this.lights.push(light);
-      this.mesh.add(light);
+      //light.position.set(0, 0, 0);
+      //this.lights.push(light);
+      //this.mesh.add(light);
     }
     this.sounds.push(
       new Sound({

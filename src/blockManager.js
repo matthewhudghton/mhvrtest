@@ -11,12 +11,10 @@ export class BlockManager {
     this.blockMaxSize = 150;
     this.blocksPerSegment = 15;
     this.segmentLookAhead = 1;
+    this.segmentTooFarLimit = 2;
   }
 
-  update(dt) {
-    if (this.player === undefined) {
-      return;
-    }
+  addSegementsFromLookAhead() {
     const segment = this.currentSegment;
     for (let dx = -this.segmentLookAhead; dx <= this.segmentLookAhead; dx++) {
       for (let dy = -this.segmentLookAhead; dy <= this.segmentLookAhead; dy++) {
@@ -34,6 +32,60 @@ export class BlockManager {
         }
       }
     }
+  }
+  removeFarAwaySegments() {
+    /* Delete all x */
+    for (let x in this.blocks) {
+      if (x < -this.segmentTooFarLimit || x > this.segmentTooFarLimit) {
+        for (let y in this.blocks[x]) {
+          for (let z in this.blocks[x][y]) {
+            for (let i in this.blocks[x][y][z]) {
+              const block = this.blocks[x][y][z][i];
+              block.forceKill();
+            }
+          }
+          this.blocks[x] = undefined;
+        }
+      }
+    }
+
+    /* Delete all too far y */
+    for (let x in this.blocks) {
+      for (let y in this.blocks[x]) {
+        if (y < -this.segmentTooFarLimit || y > this.segmentTooFarLimit) {
+          for (let z in this.blocks[x][y]) {
+            for (let i in this.blocks[x][y][z]) {
+              const block = this.blocks[x][y][z][i];
+              block.forceKill();
+            }
+          }
+          this.blocks[x][y] = undefined;
+        }
+      }
+    }
+
+    /* Delete all too far z  */
+    for (let x in this.blocks) {
+      for (let y in this.blocks[x]) {
+        for (let z in this.blocks[x][y]) {
+          if (z < -this.segmentTooFarLimit || z > this.segmentTooFarLimit) {
+            for (let i in this.blocks[x][y][z]) {
+              const block = this.blocks[x][y][z][i];
+              block.forceKill();
+            }
+            this.blocks[x][y][z] = undefined;
+          }
+        }
+      }
+    }
+  }
+
+  update(dt) {
+    if (this.player === undefined) {
+      return;
+    }
+    this.addSegementsFromLookAhead();
+    this.removeFarAwaySegments();
   }
 
   addBlocksForSegment(x, y, z) {

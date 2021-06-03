@@ -51,10 +51,10 @@ export class Projectile extends Actor {
         2
       );
 
-      light.position.set(0, 0, 0);
-      this.lights.push(light);
+      //light.position.set(0, 0, 0);
+      //this.lights.push(light);
 
-      this.mesh.add(light);
+      //this.mesh.add(light);
     }
     this.sounds.push(
       new Sound({

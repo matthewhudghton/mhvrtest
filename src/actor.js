@@ -169,10 +169,7 @@ export class Actor extends Entity {
     });
   }
 
-  kill() {
-    if (this.noDie) {
-      return;
-    }
+  forceKill() {
     this.lifeSpan = 0;
 
     if (this.ai) {
@@ -198,6 +195,13 @@ export class Actor extends Entity {
     this.sounds.forEach((sound) => {
       sound.kill();
     });
+  }
+
+  kill() {
+    if (this.noDie) {
+      return;
+    }
+    this.forceKill();
   }
 
   delete() {

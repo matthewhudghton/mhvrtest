@@ -42,7 +42,7 @@ export class Player extends Entity {
     });
 
     this.bodyActor.body.fixedRotation = true;
-    this.bodyActor.body.linearDamping = 0.7;
+    this.bodyActor.body.linearDamping = 0.2;
 
     this.leftFireDebouncer = new Debouncer(1);
     this.rightFireDebouncer = new Debouncer(1);
