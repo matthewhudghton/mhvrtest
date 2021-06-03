@@ -111,7 +111,7 @@ function init() {
     scene.background = rt.texture;
   });
 
-  scene.fog = new THREE.Fog(0x000000, 10, 700);
+  scene.fog = new THREE.Fog(0x000000, 10, 500);
   let light2 = new THREE.SpotLight(0xffffff, 0.2);
   light2.position.set(10, 80, 20);
   light2.target.position.set(0, 0, 0);
@@ -221,7 +221,7 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 7; i++) {
     new Driver({
       THREE: THREE,
       CANNON: CANNON,

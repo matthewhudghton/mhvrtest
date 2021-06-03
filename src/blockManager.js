@@ -6,10 +6,10 @@ export class BlockManager {
   constructor(options) {
     this.blocks = {};
     this.map = options.map;
-    this.segmentSize = 750;
-    this.blockBaseSize = 40;
-    this.blockMaxSize = 550;
-    this.blocksPerSegment = 5;
+    this.segmentSize = 150;
+    this.blockBaseSize = 10;
+    this.blockMaxSize = 100;
+    this.blocksPerSegment = 1;
     this.segmentLookAhead = 1;
     this.segmentTooFarLimit = 2;
   }
