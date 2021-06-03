@@ -157,10 +157,10 @@ export class Player extends Entity {
     for (const message of messages) {
       /* Movement */
       if (message.forward) {
-        this.applyImpulseRelativeToController(0.5);
+        this.applyImpulseRelativeToController(1);
       }
       if (message.backward) {
-        this.applyImpulseRelativeToController(-0.5);
+        this.applyImpulseRelativeToController(-1);
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */

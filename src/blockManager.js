@@ -10,23 +10,36 @@ export class BlockManager {
     this.blockBaseSize = 10;
     this.blockMaxSize = 150;
     this.blocksPerSegment = 15;
+    this.segmentLookAhead = 1;
   }
 
   update(dt) {
     if (this.player === undefined) {
       return;
     }
-    if (!this.hasBlockForCurrentSegment()) {
-      this.addBlocksForCurrentSegment();
+    const segment = this.currentSegment;
+    for (let dx = -this.segmentLookAhead; dx <= this.segmentLookAhead; dx++) {
+      for (let dy = -this.segmentLookAhead; dy <= this.segmentLookAhead; dy++) {
+        for (
+          let dz = -this.segmentLookAhead;
+          dz <= this.segmentLookAhead;
+          dz++
+        ) {
+          const x = segment.x + dx;
+          const y = segment.y + dy;
+          const z = segment.z + dz;
+          if (!this.hasBlockForSegment(x, y, z)) {
+            this.addBlocksForSegment(x, y, z);
+          }
+        }
+      }
     }
   }
 
-  addBlocksForCurrentSegment() {
-    let segment = this.currentSegment;
-    console.log("Adding blocks for segment" + JSON.stringify(segment));
+  addBlocksForSegment(x, y, z) {
     for (let i = 0; i < this.blocksPerSegment; i++) {
-      let block = this.makeNewBlock(segment);
-      this.addBlockForSegment(segment.x, segment.y, segment.z, block);
+      let block = this.makeNewBlock(x, y, z);
+      this.addBlockForSegment(x, y, z, block);
     }
   }
 
@@ -37,14 +50,7 @@ export class BlockManager {
     this.blocks[x][y][z].push(block);
   }
 
-  hasBlockForCurrentSegment() {
-    return this.hasBlockForSegment(this.currentSegment);
-  }
-
-  hasBlockForSegment(segment) {
-    const x = segment.x;
-    const y = segment.y;
-    const z = segment.z;
+  hasBlockForSegment(x, y, z) {
     if (
       this.blocks[x] !== undefined &&
       this.blocks[x][y] !== undefined &&
@@ -63,13 +69,13 @@ export class BlockManager {
     );
   }
 
-  makeNewBlock(segment) {
+  makeNewBlock(segmentX, segmentY, segmentZ) {
     const width = this.blockBaseSize + Math.random() * this.blockMaxSize;
     const height = this.blockBaseSize + Math.random() * this.blockMaxSize;
     const depth = this.blockBaseSize + Math.random() * this.blockMaxSize;
-    let x = this.getRandom1DPositionWithInSegment(segment.x);
-    let y = this.getRandom1DPositionWithInSegment(segment.y);
-    let z = this.getRandom1DPositionWithInSegment(segment.z);
+    let x = this.getRandom1DPositionWithInSegment(segmentX);
+    let y = this.getRandom1DPositionWithInSegment(segmentY);
+    let z = this.getRandom1DPositionWithInSegment(segmentZ);
 
     /* protect the player starting point */
     if (x < width) {
@@ -109,9 +115,9 @@ export class BlockManager {
   get currentSegment() {
     let position = this.position;
     return {
-      x: Math.floor(position.x / this.segmentSize),
-      y: Math.floor(position.y / this.segmentSize),
-      z: Math.floor(position.z / this.segmentSize)
+      x: Math.round(position.x / this.segmentSize),
+      y: Math.round(position.y / this.segmentSize),
+      z: Math.round(position.z / this.segmentSize)
     };
   }
 }
