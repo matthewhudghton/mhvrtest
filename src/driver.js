@@ -22,6 +22,7 @@ export class Driver extends Entity {
       velocity: undefined,
       position: options.position,
       applyGravity: false,
+      mass: 5,
       color: new THREE.Color(Math.random(), Math.random(), Math.random()),
       rawShapeData: {
         size: this.size,
@@ -43,8 +44,8 @@ export class Driver extends Entity {
       return;
     }
     let direction = this.localDirectionToTargetDelta;
-    let speed = 2;
-    let stopDistanceSquared = 38;
+    let speed = 10;
+    let stopDistanceSquared = 10;
     this.debouncer.update(dt);
     if (this.distanceSquaredToTarget < stopDistanceSquared) {
       speed = -speed;
@@ -56,7 +57,7 @@ export class Driver extends Entity {
     );
 
     this.body.applyLocalForce(
-      new CANNON.Vec3(direction.x, direction.y, speed * dt),
+      new CANNON.Vec3(0, 0, speed * this.actor.body.mass * dt),
       new CANNON.Vec3(0, 0, 1 * dt)
     );
     this.body.applyLocalForce(
@@ -66,8 +67,13 @@ export class Driver extends Entity {
 
     if (this.position.y < 1 + this.size * 1.5) {
     }
+
     this.body.applyImpulse(
-      new CANNON.Vec3(0, 3.8 * dt, 0),
+      new CANNON.Vec3(
+        0,
+        -this.map.gravity * 1.01 * this.actor.body.mass * dt,
+        0
+      ),
       new CANNON.Vec3(0, 0, 0)
     );
 

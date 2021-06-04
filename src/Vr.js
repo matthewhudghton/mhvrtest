@@ -62,7 +62,7 @@ var world;
 
 function initCannon() {
   world = new CANNON.World();
-  world.gravity.set(0, -3.8, 0);
+
   //world.gravity.set(0, 0, 0);
   world.broadphase = new CANNON.NaiveBroadphase();
   world.solver.iterations = 5;
@@ -221,15 +221,15 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 5; i++) {
     new Driver({
       THREE: THREE,
       CANNON: CANNON,
       camera: camera,
       cameraGroup: user,
-      position: new CANNON.Vec3(-4 + i * 2, i * 3, -1 - i),
+      position: new CANNON.Vec3(-4 + i * 2, 2, -1 - i),
       map: map,
-      size: 1 + i / 2
+      size: 1
     });
   }
 

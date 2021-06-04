@@ -26,7 +26,7 @@ export class Projectile extends Actor {
 
     this.exploding = false;
     this.hasExploded = false;
-    this.speed = options.speed ?? 15;
+    this.speed = options.speed ?? 5;
     if (options.reverseProjectile) {
       this.speed = -this.speed;
     }

@@ -9,6 +9,8 @@ export class Map {
   constructor(options) {
     this.scene = options.scene;
     this.world = options.world;
+    this.gravity = options.gravity ?? -7.9;
+    this.world.gravity.set(0, this.gravity, 0);
     const scene = this.scene;
     const world = this.world;
     this.blockManager = new BlockManager({ map: this });
