@@ -9,7 +9,7 @@ export class Map {
   constructor(options) {
     this.scene = options.scene;
     this.world = options.world;
-    this.gravity = options.gravity ?? -7.9;
+    this.gravity = options.gravity ?? -9.8;
     this.world.gravity.set(0, this.gravity, 0);
     const scene = this.scene;
     const world = this.world;
@@ -107,7 +107,6 @@ export class Map {
     if (dt <= 0) {
       return;
     }
-
     this.world.step(dt);
     this.aiManager.update(dt);
     this.ais.forEach((ai) => {

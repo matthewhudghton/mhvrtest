@@ -9,6 +9,7 @@ export class Projectile extends Actor {
   constructor(options) {
     options.shapeType ??= "sphere";
     options.bodySettings ??= {};
+    //options.bodySettings.type ??= CANNON.Body.KINEMATIC;
     options.bodySettings.fixedRotation = true;
     options.lifeSpan ??= 8;
     options.invisible ??= true;
@@ -23,19 +24,20 @@ export class Projectile extends Actor {
     options.color ??= new THREE.Color(red / 255, green / 255, blue / 255);
 
     super(options);
-    this.initVelocity = options.velocity;
     this.exploding = false;
     this.hasExploded = false;
     this.speed = options.speed ?? 10;
     if (options.reverseProjectile) {
       this.speed = -this.speed;
     }
-    this.velocity = new CANNON.Vec3(
+
+    /*
+new CANNON.Vec3(
       this.initVelocity.x,
       this.initVelocity.y,
       this.initVelocity.z
-    ).vadd(this.body.pointToWorldFrame(new CANNON.Vec3(0, 0, this.speed)));
-
+    ).vadd(
+*/
     this.body.linearDamping = 0;
     this.particleSystems.push(
       new ParticleSystem({
@@ -78,11 +80,16 @@ export class Projectile extends Actor {
   update(dt) {
     Actor.prototype.update.call(this, dt);
 
-    /*this.body.applyImpulse(
-      new CANNON.Vec3(0, -this.map.gravity * dt, this.speed * dt),
-      new CANNON.Vec3(0, 0, 0)
-    );*/
+    this.body.applyLocalImpulse(new CANNON.Vec3(0, 0, this.speed * dt));
+
+    this.body.applyImpulse(new CANNON.Vec3(0, -this.map.gravity * dt, 0));
+
+    /*
+    let baseVelocity = new CANNON.Vec3(0, 0, this.speed);
+    this.body.pointToWorldFrame(baseVelocity, baseVelocity);
+    this.velocity = baseVelocity;
     this.body.velocity.copy(this.velocity);
+*/
     if (this.lifeSpan < 1) {
       this.exploding = true;
     }
