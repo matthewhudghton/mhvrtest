@@ -133,7 +133,7 @@ function init() {
 
   scene.add(light2);
 
-  let ambientLight = new THREE.AmbientLight(0xffffff, 0.05); // soft white light
+  let ambientLight = new THREE.AmbientLight(0xffffff, 0.1); // soft white light
   scene.add(ambientLight);
 
   camera = new THREE.PerspectiveCamera(
