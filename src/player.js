@@ -124,7 +124,9 @@ export class Player extends Entity {
   applyImpulseRelativeToController(speed) {
     let direction = new THREE.Vector3();
     direction.copy(this.leftControllerGrip.position);
-    direction.y = direction.y - 1;
+    direction.x = direction.x - this.camera.position.x;
+    direction.y = direction.y - this.camera.position.y;
+    direction.z = direction.z - this.camera.position.z;
     direction.normalize();
     const force = new CANNON.Vec3(
       direction.x * speed,

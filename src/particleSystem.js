@@ -62,7 +62,7 @@ export class ParticleSystem {
   }
 
   stop() {
-    this.nebula.emitters.forEach((emitter) => {
+    this.nebula?.emitters.forEach((emitter) => {
       emitter.rate.numPan.a = 0;
       emitter.rate.numPan.b = 0;
     });
