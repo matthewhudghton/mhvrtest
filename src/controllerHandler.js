@@ -13,6 +13,54 @@ export class ControllerHandler {
     this.wasSelecting = false;
     this.addPointsDebouncer = new Debouncer(0.01);
     this.debugMesh = [];
+
+    this.addPointerToControllerGrip(this.controllerGrip);
+  }
+
+  addPointerToControllerGrip(controllerGrip) {
+    const lineVertexShader = `
+  	varying vec3 vPos;
+    void main() 
+    {
+      vPos = position;
+      vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * modelViewPosition;
+    }
+  `;
+
+    const lineFragmentShader = `
+    uniform vec3 origin;
+    uniform vec3 color;
+  	varying vec3 vPos;
+    float limitDistance = 7.0;
+    void main() {
+    	float distance = clamp(length(vPos - origin), 0., limitDistance);
+      float opacity = 1. - distance / limitDistance;
+      gl_FragColor = vec4(color, opacity);
+    }
+  `;
+
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        color: {
+          value: new THREE.Color(0x00ff00)
+        },
+        origin: {
+          value: new THREE.Vector3()
+        }
+      },
+      vertexShader: lineVertexShader,
+      fragmentShader: lineFragmentShader,
+      transparent: true
+    });
+
+    const points = [];
+    points.push(new THREE.Vector3(0, 0, 0));
+    points.push(new THREE.Vector3(0, 0, -0.5));
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const line = new THREE.Line(geometry, material);
+    controllerGrip.add(line);
   }
 
   update(dt) {

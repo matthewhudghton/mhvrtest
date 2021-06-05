@@ -83,7 +83,7 @@ new CANNON.Vec3(
     this.body.applyLocalImpulse(new CANNON.Vec3(0, 0, this.speed * dt));
 
     this.body.applyForce(
-      new CANNON.Vec3(0, -this.map.gravity * this.body.mass * 0.9, 0)
+      new CANNON.Vec3(0, -this.map.gravity * this.body.mass, 0)
     );
 
     /*
