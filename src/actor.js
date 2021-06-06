@@ -32,6 +32,7 @@ export class Actor extends Entity {
     options.bodySettings.linearDamping ??= 0.05;
     options.bodySettings.angularDamping ??= 0.5;
     options.bodySettings.mass ??= 5;
+    this.spritePath = options.spritePath;
 
     this.initShape(options);
 
@@ -56,6 +57,18 @@ export class Actor extends Entity {
     if (this.collideEvent) {
       this.body.addEventListener("collide", this.collideEvent);
     }
+
+    if (this.spritePath !== undefined && this.mesh !== undefined) {
+      const map = new THREE.TextureLoader().load(this.spritePath);
+      const material = new THREE.SpriteMaterial({
+        map: map,
+        color: this.color
+      });
+
+      this.sprite = new THREE.Sprite(material);
+      this.mesh.add(this.sprite);
+    }
+
     this.body.userData = { actor: this };
   }
 
@@ -171,7 +184,7 @@ export class Actor extends Entity {
 
   forceKill() {
     this.lifeSpan = 0;
-    
+
     if (this.ai) {
       this.ai.kill();
     }

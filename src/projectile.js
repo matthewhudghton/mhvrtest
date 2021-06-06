@@ -27,6 +27,7 @@ export class Projectile extends Actor {
     this.exploding = false;
     this.hasExploded = false;
     this.speed = options.speed ?? 10;
+    this.spritePath = options.spritePath;
     if (options.reverseProjectile) {
       this.speed = -this.speed;
     }
@@ -95,6 +96,7 @@ new CANNON.Vec3(
     if (this.lifeSpan < 1) {
       this.exploding = true;
     }
+    this.sprite.material.rotation += this.speed * 2 * dt;
     if (this.exploding && !this.hasExploded) {
       new Explosion({
         map: this.map,

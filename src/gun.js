@@ -22,6 +22,7 @@ export class Gun extends Actor {
     const green = 80 + size * 5 - blue;
 
     options.color ??= new THREE.Color(red / 255, green / 255, blue / 255);
+    options.spritePath ??= "sprites/sprite.png";
 
     super(options);
     this.reverseProjectile = options.reverseProjectile ?? false;
@@ -30,7 +31,6 @@ export class Gun extends Actor {
     this.debouncers.push(this.debouncer);
 
     this.speed = options.speed ?? 15;
-
     this.body.linearDamping = 0;
 
     this.particleSystems.push(
@@ -91,13 +91,15 @@ export class Gun extends Actor {
       lifeSpan: undefined,
       rawShapeData: this.rawShapeData,
       position: this.body.position,
+      speed: this.speed,
       velocity: this.map.player.bodyActor.body.velocity,
       bodySettings: {
         quaternion: this.body.quaternion
       },
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask,
-      reverseProjectile: this.reverseProjectile
+      reverseProjectile: this.reverseProjectile,
+      spritePath: this.spritePath
     });
   }
 }
