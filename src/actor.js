@@ -33,6 +33,7 @@ export class Actor extends Entity {
     options.bodySettings.angularDamping ??= 0.5;
     options.bodySettings.mass ??= 5;
     this.spritePath = options.spritePath;
+    this.maxSpriteOpacity = options.maxSpriteOpacity ?? 1;
 
     this.initShape(options);
 
@@ -66,6 +67,8 @@ export class Actor extends Entity {
       });
       this.sprite = new THREE.Sprite(material);
       this.sprite.scale.set(this.size, this.size, 1);
+      this.sprite.material.opacity = this.maxSpriteOpacity;
+
       this.mesh.add(this.sprite);
     }
 

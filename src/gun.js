@@ -14,6 +14,7 @@ export class Gun extends Actor {
     options.lifeSpan ??= 3;
     options.delay ??= 0.2;
     options.ghost = true;
+    options.maxSpriteOpacity ??= 0.8;
 
     const size = options.rawShapeData.size;
 
@@ -77,6 +78,7 @@ export class Gun extends Actor {
     );
     /* init scale to 0 so can grow when about to fire */
     this.sprite.scale.set(0, 0, 1);
+    this.sprite.material.opacity = 0.0;
   }
 
   update(dt) {
@@ -89,6 +91,8 @@ export class Gun extends Actor {
         this.fire();
       } else {
         const newSize = this.size * this.debouncer.fractionComplete;
+        this.sprite.material.opacity =
+          this.maxSpriteOpacity * this.debouncer.fractionComplete;
         this.sprite.scale.set(newSize, newSize, 1);
         this.sprite.material.rotation += this.speed * 2 * dt;
       }
@@ -109,7 +113,8 @@ export class Gun extends Actor {
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask,
       reverseProjectile: this.reverseProjectile,
-      spritePath: this.spritePath
+      spritePath: this.spritePath,
+      maxSpriteOpacity: this.maxSpriteOpacity
     });
   }
 }
