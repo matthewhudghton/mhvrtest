@@ -157,13 +157,6 @@ export class Actor extends Entity {
       this.body.position.copy(this.mesh.position);
       this.body.quaternion.copy(this.mesh.quaternion);
     } else {
-      if (this.applyGravity) {
-        this.body.applyImpulse(
-          new CANNON.Vec3(0, -3.75 * dt, 0),
-          this.body.position
-        );
-      }
-
       this.mesh.position.copy(this.body.position);
       this.mesh.quaternion.copy(this.body.quaternion);
     }

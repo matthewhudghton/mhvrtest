@@ -280,9 +280,8 @@ function render() {
   if (hud) {
     hud.render();
   }
-
-  map.update(dt);
   player.update(dt);
+  map.update(dt);
 
   /* Track controller position with actor */
   const controller1 = inputManager.controller1;

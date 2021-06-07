@@ -108,6 +108,7 @@ export class Player extends Entity {
       this.cameraGroup.position.z * k +
       this.bodyActor.body.position.z * (1 - k);
 
+    this.cameraGroup.position.copy(this.bodyActor.body.position);
     //this.bodyActor.body.quaternion.copy(this.camera.quaternion);
     /* this.bodyActor.body.quaternion.setFromAxisAngle(
       new CANNON.Vec3(0, 0, 0),
@@ -121,9 +122,13 @@ export class Player extends Entity {
     this.messages.push(message);
   }
 
-  applyImpulseRelativeToController(speed) {
+  applyImpulseRelativeToController(useleftController, speed) {
     let direction = new THREE.Vector3();
-    direction.copy(this.leftControllerGrip.position);
+    if (useleftController) {
+      direction.copy(this.leftControllerGrip.position);
+    } else {
+      direction.copy(this.rightControllerGrip.position);
+    }
     direction.x = direction.x - this.camera.position.x;
     direction.y = direction.y - this.camera.position.y;
     direction.z = direction.z - this.camera.position.z;
@@ -157,12 +162,13 @@ export class Player extends Entity {
 
   handleMessages(messages) {
     for (const message of messages) {
+      const useLeftController = message.useLeftController;
       /* Movement */
       if (message.forward) {
-        this.applyImpulseRelativeToController(1);
+        this.applyImpulseRelativeToController(useLeftController, 1);
       }
       if (message.backward) {
-        this.applyImpulseRelativeToController(-1);
+        this.applyImpulseRelativeToController(useLeftController, -1);
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */

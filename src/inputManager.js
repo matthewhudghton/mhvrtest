@@ -109,11 +109,30 @@ export class InputManager {
     let controllerState = this.getQuest2ControllerData();
 
     if (controllerState) {
-      if (controllerState[0].axes[2] < 0) {
-        this.player.addMessage({ forward: controllerState[0].axes[2] });
-      }
       if (controllerState[0].axes[2] > 0) {
-        this.player.addMessage({ backward: controllerState[0].axes[2] });
+        this.player.addMessage({
+          useLeftController: true,
+          forward: controllerState[0].axes[2]
+        });
+      }
+      if (controllerState[0].axes[2] < 0) {
+        this.player.addMessage({
+          useLeftController: true,
+          backward: controllerState[0].axes[2]
+        });
+      }
+
+      if (controllerState[1].axes[2] < 0) {
+        this.player.addMessage({
+          useLeftController: false,
+          forward: controllerState[1].axes[2]
+        });
+      }
+      if (controllerState[1].axes[2] > 0) {
+        this.player.addMessage({
+          useLeftController: false,
+          backward: controllerState[1].axes[2]
+        });
       }
 
       this.player.leftSelecting = this?.controller1?.userData?.isSelecting;
