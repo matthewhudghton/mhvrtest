@@ -115,7 +115,7 @@ export class Player extends Entity {
       -Math.PI / 2
     );*/
 
-    this.handleMessages(this.messages);
+    this.handleMessages(this.messages, dt);
     while (this.messages.pop()) {}
   }
   addMessage(message) {
@@ -141,6 +141,50 @@ export class Player extends Entity {
     const pointOnBody = new CANNON.Vec3(0, 0, 0);
     this.bodyActor.body.applyImpulse(force, pointOnBody);
   }
+
+  applyStoppingImpulseRelativeToController(useleftController, speed) {
+    let direction = new THREE.Vector3();
+    if (useleftController) {
+      direction.copy(this.leftControllerGrip.position);
+    } else {
+      direction.copy(this.rightControllerGrip.position);
+    }
+    direction.x = direction.x - this.camera.position.x;
+    direction.y = direction.y - this.camera.position.y;
+    direction.z = direction.z - this.camera.position.z;
+    direction.normalize();
+    const force = new CANNON.Vec3(
+      direction.x * speed,
+      direction.y * speed,
+      direction.z * speed
+    );
+
+    const currentVelocity = this.body.velocity;
+    // let xDiff = Math.abs(currentVelocity.x - force.x);
+    //let yDiff = Math.abs(currentVelocity.x - force.x);
+    //let zDiff = Math.abs(currentVelocity.x - force.x);
+
+    //force.x = force.x * xDiff * 0.1;
+    //force.y = force.y * yDiff * 0.1;
+    //force.z = force.z * zDiff * 0.1;
+    const k = 0.01;
+
+    force.x = this.getMinAbsoluteSignedValue(currentVelocity.x * k, force.x);
+    force.y = this.getMinAbsoluteSignedValue(currentVelocity.y * k, force.y);
+    force.z = this.getMinAbsoluteSignedValue(currentVelocity.z * k, force.z);
+
+    const pointOnBody = new CANNON.Vec3(0, 0, 0);
+    this.body.applyImpulse(force, pointOnBody);
+  }
+
+  getMinAbsoluteSignedValue(signedValue, value) {
+    if (signedValue > 0) {
+      return Math.min(signedValue, value);
+    } else {
+      return Math.max(signedValue, value);
+    }
+  }
+
   applyImpulseRelativeToCamera(speed) {
     let direction = new THREE.Vector3();
 
@@ -160,15 +204,18 @@ export class Player extends Entity {
     this.bodyActor.body.applyImpulse(force, pointOnBody);
   }
 
-  handleMessages(messages) {
+  handleMessages(messages, dt) {
     for (const message of messages) {
       const useLeftController = message.useLeftController;
       /* Movement */
       if (message.forward) {
-        this.applyImpulseRelativeToController(useLeftController, 1);
+        this.applyImpulseRelativeToController(useLeftController, dt * 100);
       }
       if (message.backward) {
-        this.applyImpulseRelativeToController(useLeftController, -1);
+        this.applyStoppingImpulseRelativeToController(
+          useLeftController,
+          -dt * 100
+        );
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
         /* Fire */
@@ -222,6 +269,10 @@ export class Player extends Entity {
 
   get position() {
     return this.bodyActor.body.position;
+  }
+
+  get body() {
+    return this.bodyActor.body;
   }
 
   get shouldBeDeleted() {
