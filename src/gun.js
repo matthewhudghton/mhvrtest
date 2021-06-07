@@ -14,7 +14,7 @@ export class Gun extends Actor {
     options.lifeSpan ??= 3;
     options.delay ??= 0.2;
     options.ghost = true;
-    options.maxSpriteOpacity ??= 0.8;
+    options.maxSpriteOpacity ??= 1;
 
     const size = options.rawShapeData.size;
 
