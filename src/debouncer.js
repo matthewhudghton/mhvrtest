@@ -13,6 +13,10 @@ export class Debouncer {
     return this.current >= this.length;
   }
 
+  get fractionComplete() {
+    return this.current / this.length;
+  }
+
   tryFireAndReset() {
     if (this.shouldFire) {
       this.current = 0;

@@ -58,14 +58,14 @@ export class Actor extends Entity {
       this.body.addEventListener("collide", this.collideEvent);
     }
 
-    if (this.spritePath !== undefined && this.mesh !== undefined) {
+    if (this.spritePath !== undefined) {
       const map = new THREE.TextureLoader().load(this.spritePath);
       const material = new THREE.SpriteMaterial({
         map: map,
         color: this.color
       });
-
       this.sprite = new THREE.Sprite(material);
+      this.sprite.scale.set(this.size, this.size, 1);
       this.mesh.add(this.sprite);
     }
 

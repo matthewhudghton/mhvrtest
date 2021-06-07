@@ -95,8 +95,8 @@ export class Map {
   }
 
   addActor(actor, ghost) {
+    this.scene.add(actor.mesh);
     if (!ghost) {
-      this.scene.add(actor.mesh);
       this.world.addBody(actor.body);
     }
     this.actors.push(actor);

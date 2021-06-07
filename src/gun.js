@@ -23,7 +23,7 @@ export class Gun extends Actor {
 
     options.color ??= new THREE.Color(red / 255, green / 255, blue / 255);
     options.spritePath ??= "sprites/sprite.png";
-
+    options.invisible ??= true;
     super(options);
     this.reverseProjectile = options.reverseProjectile ?? false;
     this.countDelay = options.countDelay ?? 2;
@@ -75,13 +75,23 @@ export class Gun extends Actor {
         detune: (5 - this.size) * 1000
       })
     );
+    /* init scale to 0 so can grow when about to fire */
+    this.sprite.scale.set(0, 0, 1);
   }
 
   update(dt) {
     Actor.prototype.update.call(this, dt);
 
-    if (this.debouncer.tryFireAndReset() && !this.shouldBeKilled) {
-      this.fire();
+    if (this.shouldBeKilled) {
+      this.sprite.scale.set(0, 0, 1);
+    } else {
+      if (this.debouncer.tryFireAndReset()) {
+        this.fire();
+      } else {
+        const newSize = this.size * this.debouncer.fractionComplete;
+        this.sprite.scale.set(newSize, newSize, 1);
+        this.sprite.material.rotation += this.speed * 2 * dt;
+      }
     }
   }
 
