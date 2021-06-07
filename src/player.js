@@ -35,6 +35,7 @@ export class Player extends Entity {
       rawShapeData: { size: 1 },
       noDie: true,
       mass: 1,
+      invisible: true,
       bodySettings: { fixedRotation: true, material: "playerMaterial" },
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask,
@@ -209,12 +210,12 @@ export class Player extends Entity {
       const useLeftController = message.useLeftController;
       /* Movement */
       if (message.forward) {
-        this.applyImpulseRelativeToController(useLeftController, dt * 100);
+        this.applyImpulseRelativeToController(useLeftController, dt * 25);
       }
       if (message.backward) {
         this.applyStoppingImpulseRelativeToController(
           useLeftController,
-          -dt * 100
+          -dt * 25
         );
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
