@@ -56,7 +56,7 @@ export class Explosion extends Actor {
         player: this.map.player,
         name: "explosion01",
         loop: false,
-        detune: (5 - this.size) * 1000
+        detune: (1 - this.size) * 1200
       })
     );
   }

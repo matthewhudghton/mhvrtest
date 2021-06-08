@@ -22,6 +22,10 @@ export class Sound {
     this.soundLoaded = false;
     this.loop = options.loop ?? true;
     this.duration = options.duration ?? undefined;
+    this.detune = options.detune;
+    if (!isFinite(this.detune)) {
+      this.detune = 0;
+    }
     this.sound = new THREE.PositionalAudio(this.player.listener);
     const sound = this.sound;
     const actor = this.actor;
@@ -30,9 +34,11 @@ export class Sound {
     const loop = this.loop;
     const self = this;
     const duration = this.duration;
+    const detune = this.detune;
     this.mesh = options.mesh;
     this.audioLoader = new THREE.AudioLoader();
     this.audioLoader.load(getSoundFile(name), function (buffer) {
+      sound.detune = detune;
       sound.setBuffer(buffer);
       sound.setRefDistance(20);
       actor.mesh.add(sound);

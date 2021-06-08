@@ -68,7 +68,7 @@ new CANNON.Vec3(
       new Sound({
         actor: this,
         player: this.map.player,
-        detune: (5 - this.size) * 1000,
+        detune: (1 - this.size) * 1200,
         duration: 20
       })
     );
