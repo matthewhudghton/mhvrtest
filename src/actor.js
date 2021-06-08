@@ -165,8 +165,6 @@ export class Actor extends Entity {
       this.kill();
     }
 
-    const mesh = this.mesh;
-
     // Copy coordinates from Cannon.js to Three.js
     this.particleSystems.forEach((particleSystem) => {
       particleSystem.setPosition(this.mesh.position);

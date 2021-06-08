@@ -121,6 +121,7 @@ new CANNON.Vec3(
 
   collideEvent(event) {
     event.target.userData.actor.explode();
+    event.target.userData.actor.lifeSpan = 0;
     if (event.body?.userData?.actor) {
       event.body.userData.actor.lifeSpan = 0;
     }

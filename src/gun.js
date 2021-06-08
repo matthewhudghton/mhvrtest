@@ -79,6 +79,7 @@ export class Gun extends Actor {
     /* init scale to 0 so can grow when about to fire */
     this.sprite.scale.set(0, 0, 1);
     this.sprite.material.opacity = 0.0;
+    this.sprite.material.color = new THREE.Color(red / 255, green / 255, blue / 255)
   }
 
   update(dt) {
