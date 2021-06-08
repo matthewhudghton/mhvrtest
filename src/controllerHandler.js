@@ -12,6 +12,7 @@ export class ControllerHandler {
     this.shapeRecogniser = new ShapeRecogniser();
     this.wasSelecting = false;
     this.addPointsDebouncer = new Debouncer(0.01);
+    this.deflectDebounce = new Debouncer(1);
     this.debugMesh = [];
 
     this.addPointerToControllerGrip(this.controllerGrip);
@@ -63,9 +64,20 @@ export class ControllerHandler {
     controllerGrip.add(line);
   }
 
-  update(dt) {
-    this.addPointsDebouncer.update(dt);
+  update(dt, state) {
+    if (state.buttons[5] === 1 && this.deflectDebounce.tryFireAndReset()) {
+      this.player.addMessage({
+        magic: {
+          position: this.getControllerPosition(),
+          quaternion: this.controller.quaternion,
+          attachedTo: this.controllerGrip,
+          shapeMatches: [{ name: "circle", size: 2 }]
+        }
+      });
+    }
 
+    this.deflectDebounce.update(dt);
+    this.addPointsDebouncer.update(dt);
     if (this.wasSelecting && !this?.controller?.userData?.isSelecting) {
       this.wasSelecting = false;
       /*const shapeMatches = this.shapeRecogniser.getShapeInfo();

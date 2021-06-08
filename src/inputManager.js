@@ -21,6 +21,8 @@ export class InputManager {
     this.shapeDebouncer = new Debouncer(1);
     this.leftPointsDebouncer = new Debouncer(0.01);
     this.rightPointsDebouncer = new Debouncer(0.01);
+    this.leftDeflectDebouncer = new Debouncer(1);
+    this.rightDeflectDebouncer = new Debouncer(1);
     this.leftWasSelecting = false;
     this.rightWasSelecting = false;
     this.controllerHandler1 = new ControllerHandler({
@@ -41,6 +43,8 @@ export class InputManager {
     this.input.update();
     this.shapeDebouncer.update(dt);
     this.rightPointsDebouncer.update(dt);
+    this.leftDeflectDebouncer.update(dt);
+    this.rightDeflectDebouncer.update(dt);
 
     /// handle camera
     const value = 0.1;
@@ -133,13 +137,18 @@ export class InputManager {
           useLeftController: false,
           forward: controllerState[1].axes[2]
         });
+        /*
+        var node = document.createTextNode(
+          " " + JSON.stringify(controllerState[1]) + " "
+        );
+        document.getElementById("debugText").appendChild(node);*/
       }
 
       this.player.leftSelecting = this?.controller1?.userData?.isSelecting;
       this.player.rightSelecting = this?.controller2?.userData?.isSelecting;
 
-      this.controllerHandler1.update(dt);
-      this.controllerHandler2.update(dt);
+      this.controllerHandler1.update(dt, controllerState[0]);
+      this.controllerHandler2.update(dt, controllerState[1]);
     } // end of controller state
   }
 
