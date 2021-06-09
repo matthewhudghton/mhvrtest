@@ -62,29 +62,37 @@ export class ParticleSystem {
   }
 
   stop() {
-    this.nebula?.emitters.forEach((emitter) => {
-      emitter.rate.numPan.a = 0;
-      emitter.rate.numPan.b = 0;
-    });
+    if (this?.nebula?.emitters?.length > 0) {
+      this.nebula.emitters.forEach((emitter) => {
+        emitter.rate.numPan.a = 0;
+        emitter.rate.numPan.b = 0;
+      });
+    }
   }
 
   get hasParticles() {
-    for (const emitter of this.nebula.emitters) {
-      if (emitter.particles.length > 0) {
-        return true;
+    if (this?.nebula?.emitters?.length > 0) {
+      for (const emitter of this.nebula.emitters) {
+        if (emitter.particles.length > 0) {
+          return true;
+        }
       }
     }
     return false;
   }
 
   delete() {
-    this.nebula.emitters.forEach((emitter) => {
-      emitter.removeAllParticles();
-      emitter.dead = true;
-    });
-    this.nebula.update();
-    this.nebula.destroy();
-    delete this.nebula;
+    if (this?.nebula?.emitters?.length > 0) {
+      this.nebula.emitters.forEach((emitter) => {
+        emitter.removeAllParticles();
+        emitter.dead = true;
+      });
+    }
+    if (this?.nebula?.update) {
+      this.nebula.update();
+      this.nebula.destroy();
+      delete this.nebula;
+    }
   }
   setPosition(position) {
     if (

@@ -71,7 +71,7 @@ export class ControllerHandler {
           position: this.getControllerPosition(),
           quaternion: this.controller.quaternion,
           attachedTo: this.controllerGrip,
-          shapeMatches: [{ name: "circle", size: 2 }]
+          shapeMatches: [{ name: "deflect", size: 2 }]
         }
       });
     }

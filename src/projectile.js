@@ -10,7 +10,7 @@ export class Projectile extends Actor {
     options.shapeType ??= "sphere";
     options.bodySettings ??= {};
     //options.bodySettings.type ??= CANNON.Body.KINEMATIC;
-    options.bodySettings.fixedRotation = true;
+    options.bodySettings.fixedRotation ??= true;
     options.lifeSpan ??= 8;
     options.invisible ??= true;
     options.applyGravity ??= false;

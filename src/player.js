@@ -3,6 +3,7 @@ import { Actor } from "./actor.js";
 import { Debouncer } from "./debouncer.js";
 import { Entity } from "./entity.js";
 import { Gun } from "./gun.js";
+import { NoExplodeProjectile } from "./noExplodeProjectile.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
 import * as YUKA from "yuka";
@@ -237,15 +238,6 @@ export class Player extends Entity {
             });
             break;
           case "circle":
-            /*new Projectile({
-              map: this.map,
-              lifeSpan: undefined,
-              rawShapeData: message.magic.shapeMatches[0],
-              position: message.magic.position,
-              bodySettings: {
-                quaternion: message.magic.quaternion
-              }
-            });*/
             new Gun({
               map: this.map,
               lifeSpan: undefined,
@@ -259,7 +251,20 @@ export class Player extends Entity {
               collisionFilterMask: this.collisionFilterMask,
               reverseProjectile: true
             });
-
+            break;
+          case "deflect":
+            new NoExplodeProjectile({
+              map: this.map,
+              lifeSpan: undefined,
+              rawShapeData: message.magic.shapeMatches[0],
+              position: message.magic.position,
+              bodySettings: {
+                quaternion: message.magic.quaternion
+              },
+              collisionFilterGroup: this.collisionFilterGroup,
+              collisionFilterMask: this.collisionFilterMask,
+              reverseProjectile: true
+            });
             break;
           default:
             console.error("No match found");
