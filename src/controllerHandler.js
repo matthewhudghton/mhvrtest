@@ -12,7 +12,7 @@ export class ControllerHandler {
     this.shapeRecogniser = new ShapeRecogniser();
     this.wasSelecting = false;
     this.addPointsDebouncer = new Debouncer(0.01);
-    this.deflectDebounce = new Debouncer(1);
+    this.deflectDebounce = new Debouncer(0.3);
     this.debugMesh = [];
 
     this.addPointerToControllerGrip(this.controllerGrip);
@@ -71,7 +71,7 @@ export class ControllerHandler {
           position: this.getControllerPosition(),
           quaternion: this.controller.quaternion,
           attachedTo: this.controllerGrip,
-          shapeMatches: [{ name: "deflect", size: 2 }]
+          shapeMatches: [{ name: "portal", size: 2 }]
         }
       });
     }

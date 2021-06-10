@@ -26,6 +26,7 @@ export class Projectile extends Actor {
     super(options);
     this.exploding = false;
     this.hasExploded = false;
+    this.canExplode = options.canExplode ?? true;
     this.speed = options.speed ?? 10;
     this.spritePath = options.spritePath;
     if (options.reverseProjectile) {
@@ -40,16 +41,7 @@ new CANNON.Vec3(
     ).vadd(
 */
     this.body.linearDamping = 0;
-    this.particleSystems.push(
-      new ParticleSystem({
-        scene: this.scene,
-        type: "fireball",
-        colorA: "#" + this.color.getHexString(),
-        scaleA: size * 0.5,
-        scaleB: size,
-        position: this.body.position
-      })
-    );
+    this.initParticles();
 
     if (true || Math.random() * 15 < this.size) {
       const light = new THREE.PointLight(
@@ -64,6 +56,22 @@ new CANNON.Vec3(
 
       //this.mesh.add(light);
     }
+    this.initSounds();
+  }
+
+  initParticles() {
+    this.particleSystems.push(
+      new ParticleSystem({
+        scene: this.scene,
+        type: "fireball",
+        colorA: "#" + this.color.getHexString(),
+        scaleA: this.size * 0.5,
+        scaleB: this.size,
+        position: this.body.position
+      })
+    );
+  }
+  initSounds() {
     this.sounds.push(
       new Sound({
         actor: this,
@@ -96,8 +104,8 @@ new CANNON.Vec3(
     if (this.lifeSpan < 1) {
       this.exploding = true;
     }
-    this.sprite.material.rotation += this.speed * 2 * dt;
-    if (this.exploding && !this.hasExploded) {
+    this.sprite.material.rotation += Math.max(this.speed, 1) * 2 * dt;
+    if (this.canExplode && this.exploding && !this.hasExploded) {
       new Explosion({
         map: this.map,
         lifeSpan: undefined,

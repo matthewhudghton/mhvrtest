@@ -116,26 +116,26 @@ export class InputManager {
       if (controllerState[0].axes[2] > 0) {
         this.player.addMessage({
           useLeftController: true,
-          backward: controllerState[0].axes[2]
+          forward: controllerState[0].axes[2]
         });
       }
       if (controllerState[0].axes[2] < 0) {
         this.player.addMessage({
           useLeftController: true,
-          forward: controllerState[0].axes[2]
+          backward: controllerState[0].axes[2]
         });
       }
 
       if (controllerState[1].axes[2] < 0) {
         this.player.addMessage({
           useLeftController: false,
-          backward: controllerState[1].axes[2]
+          forward: controllerState[1].axes[2]
         });
       }
       if (controllerState[1].axes[2] > 0) {
         this.player.addMessage({
           useLeftController: false,
-          forward: controllerState[1].axes[2]
+          backward: controllerState[1].axes[2]
         });
         /*
         var node = document.createTextNode(

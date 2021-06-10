@@ -4,6 +4,7 @@ import { Debouncer } from "./debouncer.js";
 import { Entity } from "./entity.js";
 import { Gun } from "./gun.js";
 import { NoExplodeProjectile } from "./noExplodeProjectile.js";
+import { Portal } from "./portal.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
 import * as YUKA from "yuka";
@@ -36,7 +37,7 @@ export class Player extends Entity {
       rawShapeData: { size: 1 },
       noDie: true,
       mass: 1,
-      invisible: true,
+      invisible: false,
       bodySettings: { fixedRotation: true, material: "playerMaterial" },
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask,
@@ -45,7 +46,7 @@ export class Player extends Entity {
 
     this.bodyActor.body.fixedRotation = true;
     this.bodyActor.body.linearDamping = 0.4;
-
+    this.lastPortal = undefined;
     this.leftFireDebouncer = new Debouncer(1);
     this.rightFireDebouncer = new Debouncer(1);
     this.leftControllerGrip = options.leftControllerGrip;
@@ -265,6 +266,22 @@ export class Player extends Entity {
               collisionFilterMask: this.collisionFilterMask,
               reverseProjectile: true
             });
+            break;
+          case "portal":
+            let newPortal = new Portal({
+              map: this.map,
+              lifeSpan: undefined,
+              rawShapeData: message.magic.shapeMatches[0],
+              position: message.magic.position,
+              bodySettings: {
+                quaternion: message.magic.quaternion
+              },
+              collisionFilterGroup: 1,
+              collisionFilterMask: this.collisionFilterMask | 2,
+              reverseProjectile: true,
+              portalDestination: this.lastPortal
+            });
+            this.lastPortal = newPortal;
             break;
           default:
             console.error("No match found");

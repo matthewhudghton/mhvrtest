@@ -9,6 +9,7 @@ export class Block extends Actor {
     options.invisible ??= false;
     options.applyGravity ??= false;
     options.bodySettings.mass ??= 0;
+    options.canTravelPortal ??= false;
 
     const size = options.rawShapeData.size;
 

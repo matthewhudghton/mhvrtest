@@ -29,6 +29,7 @@ export class Actor extends Entity {
     this.ai = options.ai;
 
     options.bodySettings ??= {};
+    this.canTravelPortal = options.canTravelPortal ?? true;
     options.bodySettings.linearDamping ??= 0.05;
     options.bodySettings.angularDamping ??= 0.5;
     options.bodySettings.mass ??= 5;
@@ -145,6 +146,10 @@ export class Actor extends Entity {
   update(dt) {
     if (this.lifeSpan !== undefined) {
       this.lifeSpan -= dt;
+    }
+    if (this.newPosition) {
+      this.body.position.copy(this.newPosition);
+      this.newPosition = undefined;
     }
 
     if (this.mesh.material.opacity < 1) {
