@@ -34,6 +34,7 @@ export class Actor extends Entity {
     options.bodySettings.angularDamping ??= 0.5;
     options.bodySettings.mass ??= 5;
     this.spritePath = options.spritePath;
+
     this.maxSpriteOpacity = options.maxSpriteOpacity ?? 1;
 
     this.initShape(options);
@@ -59,7 +60,8 @@ export class Actor extends Entity {
     if (this.collideEvent) {
       this.body.addEventListener("collide", this.collideEvent);
     }
-
+    this.spriteWidth = options.spriteWidth ?? this.size;
+    this.spriteHeight = options.spriteHeight ?? this.size;
     if (this.spritePath !== undefined) {
       const map = new THREE.TextureLoader().load(this.spritePath);
       const material = new THREE.SpriteMaterial({
@@ -67,7 +69,7 @@ export class Actor extends Entity {
         color: this.color
       });
       this.sprite = new THREE.Sprite(material);
-      this.sprite.scale.set(this.size, this.size, 1);
+      this.sprite.scale.set(this.spriteWidth, this.spriteHeight, 1);
       this.sprite.material.opacity = this.maxSpriteOpacity;
 
       this.mesh.add(this.sprite);

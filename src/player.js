@@ -34,10 +34,11 @@ export class Player extends Entity {
       lifespan: undefined,
       position,
       velocity: undefined,
-      rawShapeData: { size: 1 },
+      shapeType: "box",
+      invisible: true,
+      rawShapeData: { size: 1, height: 3.1, width: 0.5, depth: 0.5 },
       noDie: true,
       mass: 1,
-      invisible: false,
       bodySettings: { fixedRotation: true, material: "playerMaterial" },
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask,
@@ -46,7 +47,7 @@ export class Player extends Entity {
 
     this.bodyActor.body.fixedRotation = true;
     this.bodyActor.body.linearDamping = 0.4;
-    this.lastPortal = undefined;
+    this.firstOfPortalPair = undefined;
     this.leftFireDebouncer = new Debouncer(1);
     this.rightFireDebouncer = new Debouncer(1);
     this.leftControllerGrip = options.leftControllerGrip;
@@ -276,12 +277,24 @@ export class Player extends Entity {
               bodySettings: {
                 quaternion: message.magic.quaternion
               },
+              spriteHeight: 2,
+              spriteWidth: 2,
               collisionFilterGroup: 1,
               collisionFilterMask: this.collisionFilterMask | 2,
               reverseProjectile: true,
-              portalDestination: this.lastPortal
+              portalDestination: this.firstOfPortalPair,
+              color: this.firstOfPortalPair
+                ? this.firstOfPortalPair.color
+                : new THREE.Color(0xffffff).setHex(Math.random() * 0xffffff)
             });
-            this.lastPortal = newPortal;
+            // link pairs of portals together
+            if (this.firstOfPortalPair) {
+              this.firstOfPortalPair.portalDestination = newPortal;
+              this.firstOfPortalPair = undefined;
+            } else {
+              this.firstOfPortalPair = newPortal;
+            }
+
             break;
           default:
             console.error("No match found");
