@@ -4,6 +4,7 @@ import { Actor } from "./actor.js";
 import { Explosion } from "./explosion.js";
 import { ParticleSystem } from "./particleSystem.js";
 import { Sound } from "./sound.js";
+import { Debouncer } from "./debouncer.js";
 import { Projectile } from "./projectile.js";
 
 export class Portal extends Projectile {
@@ -32,18 +33,27 @@ export class Portal extends Projectile {
     super(options);
 
     this.portalDestination = options.portalDestination;
+
+    this.rechargeDelay = new Debouncer(1);
+    this.debouncers.push(this.rechargeDelay);
   }
   initSounds() {}
   initParticles() {}
   collideEvent(event) {
     if (event.target?.userData?.actor?.portalDestination) {
+      const portal = event.target.userData.actor;
       const otherPortal = event.target.userData.actor.portalDestination;
       if (otherPortal?.body?.position !== undefined) {
         if (event.body?.userData?.actor?.canTravelPortal) {
           //event.body.userData.actor.newPosition = new CANNON.Vec3(0, 0, 0);
-          event.body.userData.actor.newPosition = otherPortal.body.pointToWorldFrame(
-            new CANNON.Vec3(0, 0, otherPortal.size + 0.2)
-          );
+          if (
+            otherPortal.rechargeDelay.tryFireAndReset() &&
+            portal.rechargeDelay.tryFireAndReset()
+          ) {
+            event.body.userData.actor.newPosition = otherPortal.body.pointToWorldFrame(
+              new CANNON.Vec3(0, 0, otherPortal.size + 0.8)
+            );
+          }
         }
       }
     }
