@@ -24,7 +24,7 @@ export class ControllerHandler {
       position: new CANNON.Vec3(0, 0, 0),
       velocity: undefined,
       shapeType: "sphere",
-      invisible: false,
+      invisible: true,
       rawShapeData: { size: 0.1 },
       noDie: true,
       mass: 0.2,

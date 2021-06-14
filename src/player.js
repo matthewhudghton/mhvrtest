@@ -247,6 +247,11 @@ export class Player extends Entity {
             });
             break;
           case "circle":
+            message.magic.shapeMatches[0].size +=
+              0.2 *
+              (message.magic.shapeMatches[0].size *
+                message.magic.shapeMatches[0].size);
+
             new Gun({
               map: this.map,
               lifeSpan: undefined,

@@ -104,7 +104,7 @@ new CANNON.Vec3(
     if (this.lifeSpan < 1) {
       this.exploding = true;
     }
-    this.sprite.material.rotation += Math.max(this.speed, 1) * 2 * dt;
+    this.sprite.material.rotation += Math.max(this.speed, 2) * 2 * dt;
     if (this.canExplode && this.exploding && !this.hasExploded) {
       new Explosion({
         map: this.map,
