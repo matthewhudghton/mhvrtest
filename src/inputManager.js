@@ -29,13 +29,15 @@ export class InputManager {
       controller: this.controller1,
       controllerGrip: this.player.leftControllerGrip,
       player: this.player,
-      camera: this.camera
+      camera: this.camera,
+      index: 0
     });
     this.controllerHandler2 = new ControllerHandler({
       controller: this.controller2,
       controllerGrip: this.player.rightControllerGrip,
       player: this.player,
-      camera: this.camera
+      camera: this.camera,
+      index: 1
     });
   }
   update(dt, hud) {
@@ -137,11 +139,11 @@ export class InputManager {
           useLeftController: false,
           backward: controllerState[1].axes[2]
         });
-        /*
+
         var node = document.createTextNode(
           " " + JSON.stringify(controllerState[1]) + " "
         );
-        document.getElementById("debugText").appendChild(node);*/
+        document.getElementById("debugText").appendChild(node);
       }
 
       this.player.leftSelecting = this?.controller1?.userData?.isSelecting;

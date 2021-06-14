@@ -28,6 +28,7 @@ export class Player extends Entity {
     this.map.aiManager.add(this.vehicle);
     this.collisionFilterGroup = 2;
     this.collisionFilterMask = 5;
+    this.grabRange = 20;
     let position = new CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
       map: this.map,
@@ -52,6 +53,7 @@ export class Player extends Entity {
     this.rightFireDebouncer = new Debouncer(1);
     this.leftControllerGrip = options.leftControllerGrip;
     this.rightControllerGrip = options.rightControllerGrip;
+    this.grabbedItems = [[], []];
 
     this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
@@ -300,7 +302,51 @@ export class Player extends Entity {
             console.error("No match found");
         }
       }
+      if (message.grab) {
+        this.doGrab(message.grab);
+      }
     }
+  }
+
+  doGrab(grabMessage) {
+    const threeStartPosition = grabMessage.position;
+    const startPosition = new CANNON.Vec3(
+      threeStartPosition.x,
+      threeStartPosition.y,
+      threeStartPosition.z
+    );
+    const threeQuaternion = grabMessage.quaternion;
+    const quaternion = new CANNON.Quaternion(
+      threeQuaternion.x,
+      threeQuaternion.y,
+      threeQuaternion.z,
+      threeQuaternion.w
+    );
+    const currentItems = this.grabbedItems[grabMessage.index];
+    /* Don't grab if already holding something in that hand */
+    if (currentItems.length !== 0) {
+      return;
+    }
+
+    const line = new CANNON.Vec3(0, 0, -this.grabRange);
+
+    const ray = new CANNON.Ray(
+      startPosition,
+      quaternion.vmult(line, line).vadd(startPosition)
+    );
+
+    if (ray.intersectWorld(this.map.world, { mode: CANNON.RAY_MODES.ALL })) {
+      const body = ray.result.body;
+      body.position.x += 1;
+    }
+
+    const points = [];
+    points.push(new THREE.Vector3(ray.from.x, ray.from.y, ray.from.z));
+    points.push(new THREE.Vector3(ray.to.x, ray.to.y, ray.to.z));
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const drawLine = new THREE.Line(geometry, new THREE.MeshBasicMaterial());
+    this.map.scene.add(drawLine);
   }
 
   get position() {

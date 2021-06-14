@@ -14,6 +14,8 @@ export class ControllerHandler {
     this.addPointsDebouncer = new Debouncer(0.01);
     this.deflectDebounce = new Debouncer(0.3);
     this.debugMesh = [];
+    this.isGripButtonPressed = false;
+    this.index = options.index;
 
     this.addPointerToControllerGrip(this.controllerGrip);
   }
@@ -75,6 +77,20 @@ export class ControllerHandler {
         }
       });
     }
+
+    const gripButtonIsNowPressed = state.buttons[1] === 1;
+    if (gripButtonIsNowPressed && !this.isGripButtonPressed) {
+      this.isGripButtonPressed = true;
+      this.player.addMessage({
+        grab: {
+          position: this.getControllerPosition(),
+          quaternion: this.controllerGrip.quaternion,
+          attachedTo: this.controllerGrip,
+          index: this.index
+        }
+      });
+    }
+    this.isGripButtonPressed = gripButtonIsNowPressed;
 
     this.deflectDebounce.update(dt);
     this.addPointsDebouncer.update(dt);
