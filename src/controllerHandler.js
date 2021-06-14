@@ -24,17 +24,40 @@ export class ControllerHandler {
       position: new CANNON.Vec3(0, 0, 0),
       velocity: undefined,
       shapeType: "sphere",
-      invisible: true,
+      invisible: false,
       rawShapeData: { size: 0.1 },
       noDie: true,
-      mass: 1,
-      bodySettings: { fixedRotation: true, material: "playerMaterial" },
+      mass: 0.2,
+      bodySettings: {
+        fixedRotation: true,
+        material: "playerMaterial",
+        linearDamping: 0.8
+      },
       collisionFilterGroup: this.player.collisionFilterGroup,
       collisionFilterMask: this.player.collisionFilterMask,
-      applyGravity: true
+      applyGravity: false
     });
 
+    this.handConstraint = new CANNON.DistanceConstraint(
+      this.bodyActor.body,
+      this.player.body,
+      1,
+      1000
+    );
     this.addPointerToControllerGrip(this.controllerGrip);
+    this.player.map.world.addConstraint(this.handConstraint);
+
+    /*
+    this.spring = new CANNON.Spring(this.bodyActor.body, this.player.body, {
+      restLength: 1,
+      stiffness: 50,
+      damping: 1
+    });
+    
+    // Compute the force after each step
+    this.player.map.world.addEventListener("postStep", (event) => {
+      this.spring.applyForce();
+    });*/
   }
 
   addPointerToControllerGrip(controllerGrip) {
@@ -86,10 +109,17 @@ export class ControllerHandler {
   update(dt, state) {
     this.bodyActor.body.position.copy(this.getControllerPosition());
     this.bodyActor.body.quaternion.copy(this.controllerGrip.quaternion);
-    this.bodyActor.body.velocity.x = 0;
-    this.bodyActor.body.velocity.y = 0;
-    this.bodyActor.body.velocity.z = 0;
+    //this.bodyActor.body.velocity.x = 0;
+    //this.bodyActor.body.velocity.y = 0;
+    //this.bodyActor.body.velocity.z = 0;
 
+    this.handConstraint.distance =
+      this.handConstraint.distance * 0.95 +
+      this.player.body.position.distanceTo(this.getControllerPosition()) * 0.05;
+    /*this.spring.restLength =
+      this.spring.restLength * 0.98 +
+      this.player.body.position.distanceTo(this.getControllerPosition()) * 0.02;
+*/
     if (state.buttons[5] === 1 && this.deflectDebounce.tryFireAndReset()) {
       this.player.addMessage({
         magic: {
@@ -109,7 +139,8 @@ export class ControllerHandler {
           position: this.getControllerPosition(),
           quaternion: this.controllerGrip.quaternion,
           attachedTo: this.controllerGrip,
-          index: this.index
+          index: this.index,
+          body: this.bodyActor.body
         }
       });
     }

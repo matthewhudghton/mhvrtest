@@ -39,7 +39,7 @@ export class Player extends Entity {
       invisible: true,
       rawShapeData: { size: 1, height: 3.1, width: 0.5, depth: 0.5 },
       noDie: true,
-      mass: 1,
+      mass: 10,
       bodySettings: { fixedRotation: true, material: "playerMaterial" },
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask,
@@ -53,7 +53,7 @@ export class Player extends Entity {
     this.rightFireDebouncer = new Debouncer(1);
     this.leftControllerGrip = options.leftControllerGrip;
     this.rightControllerGrip = options.rightControllerGrip;
-    this.grabbedItems = [[], []];
+    this.grabConstraints = [[], []];
 
     this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
@@ -215,12 +215,15 @@ export class Player extends Entity {
       const useLeftController = message.useLeftController;
       /* Movement */
       if (message.forward) {
-        this.applyImpulseRelativeToController(useLeftController, dt * 25);
+        this.applyImpulseRelativeToController(
+          useLeftController,
+          dt * 25 * this.body.mass
+        );
       }
       if (message.backward) {
         this.applyStoppingImpulseRelativeToController(
           useLeftController,
-          -dt * 25
+          -dt * 25 * this.body.mass
         );
       }
       if (message.fire && this.rightFireDebouncer.tryFireAndReset()) {
@@ -322,9 +325,9 @@ export class Player extends Entity {
       threeQuaternion.z,
       threeQuaternion.w
     );
-    const currentItems = this.grabbedItems[grabMessage.index];
+    const currentConstraints = this.grabConstraints[grabMessage.index];
     /* Don't grab if already holding something in that hand */
-    if (currentItems.length !== 0) {
+    if (currentConstraints.length !== 0) {
       return;
     }
 
@@ -337,8 +340,18 @@ export class Player extends Entity {
 
     if (ray.intersectWorld(this.map.world, { mode: CANNON.RAY_MODES.ALL })) {
       const body = ray.result.body;
-      body.position.x += 1;
-      const constraint = new CANNON.DistanceConstraint(this.body, body, 5, 10);
+
+      //const constraint = new CANNON.DistanceConstraint(this.body, body, 5, 10);
+
+      const constraint = new CANNON.PointToPointConstraint(
+        grabMessage.body,
+        new CANNON.Vec3(0, 0, -5),
+        body,
+        body.pointToLocalFrame(ray.result.hitPointWorld),
+        10
+      );
+      currentConstraints.push(constraint);
+
       this.map.world.addConstraint(constraint);
     }
 
