@@ -232,6 +232,8 @@ export class Player extends Entity {
       if (message.magic) {
         switch (message.magic.shapeMatches[0].name) {
           case "square":
+            message.magic.shapeMatches[0].width *= 2;
+            message.magic.shapeMatches[0].height *= 2;
             new Actor({
               map: this.map,
               lifeSpan: undefined,

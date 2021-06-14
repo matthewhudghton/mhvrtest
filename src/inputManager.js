@@ -139,11 +139,13 @@ export class InputManager {
           useLeftController: false,
           backward: controllerState[1].axes[2]
         });
-
+        /*
+Debug text for constroller state
         var node = document.createTextNode(
           " " + JSON.stringify(controllerState[1]) + " "
         );
         document.getElementById("debugText").appendChild(node);
+        */
       }
 
       this.player.leftSelecting = this?.controller1?.userData?.isSelecting;
