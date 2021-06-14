@@ -28,7 +28,7 @@ export class Player extends Entity {
     this.map.aiManager.add(this.vehicle);
     this.collisionFilterGroup = 2;
     this.collisionFilterMask = 5;
-    this.grabRange = 20;
+    this.grabRange = 25;
     let position = new CANNON.Vec3(0, 1, 0);
     this.bodyActor = new Actor({
       map: this.map,
@@ -348,23 +348,24 @@ export class Player extends Entity {
 
       const constraint = new CANNON.PointToPointConstraint(
         grabMessage.body,
-        new CANNON.Vec3(0, 0, -5),
+        new CANNON.Vec3(0, 0, -0.5),
         body,
         body.pointToLocalFrame(ray.result.hitPointWorld),
-        10
+        50
       );
       currentConstraints.push(constraint);
 
       this.map.world.addConstraint(constraint);
     }
-
+    /*
+    // Debug code to draw lines for ray cast
     const points = [];
     points.push(new THREE.Vector3(ray.from.x, ray.from.y, ray.from.z));
     points.push(new THREE.Vector3(ray.to.x, ray.to.y, ray.to.z));
 
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
     const drawLine = new THREE.Line(geometry, new THREE.MeshBasicMaterial());
-    this.map.scene.add(drawLine);
+    this.map.scene.add(drawLine);*/
   }
 
   releaseGrab(grabMessage) {
