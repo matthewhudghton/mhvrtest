@@ -34,11 +34,45 @@ export class Portal extends Projectile {
 
     this.portalDestination = options.portalDestination;
 
-    this.rechargeDelay = new Debouncer(1);
+    this.rechargeDelay = new Debouncer(1, 1);
     this.debouncers.push(this.rechargeDelay);
   }
   initSounds() {}
   initParticles() {}
+
+  update(dt) {
+    /* Check debouncer before update, so we can tell if its been fired */
+    if (this.rechargeDelay.hasFiredLastUpdate()) {
+      this.particleSystems.push(
+        new ParticleSystem({
+          scene: this.scene,
+          type: "fireball",
+          colorA: "#" + this.color.getHexString(),
+          scaleA: this.spriteHeight,
+          scaleB: this.spriteHeight * 0.5,
+          position: this.body.position,
+          radialVelocityY: 1 + 10 * this.spriteHeight,
+          radialVelocityZ: 1 + 10 * this.spriteHeight,
+          radialVelocityRadius: 14 * this.spriteHeight,
+          particlesMax: 5,
+          useLoaded: false,
+          particlesMin: 2,
+          emitterLife: 0.5
+        })
+      );
+    }
+    /* Delete particle system from previous fires */
+    if (this.rechargeDelay.shouldFire) {
+      this.particleSystems.forEach((particleSystem) => {
+        if (!particleSystem.hasParticles) {
+          particleSystem.delete();
+        }
+      });
+    }
+
+    Projectile.prototype.update.call(this, dt);
+  }
+
   collideEvent(event) {
     if (event.target?.userData?.actor?.portalDestination) {
       const portal = event.target.userData.actor;

@@ -1,7 +1,7 @@
 export class Debouncer {
-  constructor(length) {
+  constructor(length, current) {
     this.length = length;
-    this.current = 0;
+    this.current = current ?? 0;
   }
   update(dt) {
     if (this.current < this.length) {
@@ -15,6 +15,10 @@ export class Debouncer {
 
   get fractionComplete() {
     return this.current / this.length;
+  }
+
+  hasFiredLastUpdate() {
+    return this.current == 0;
   }
 
   tryFireAndReset() {

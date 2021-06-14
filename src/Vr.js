@@ -72,11 +72,12 @@ function initCannon() {
 
   // Adjust constraint equation parameters for ground/ground contact
   var playerMaterial_cm = new CANNON.ContactMaterial(
-    playerMaterial,
+    "default",
     playerMaterial,
     {
       friction: 0,
       restitution: 0.3,
+      frictionEquationRelaxation: 0,
       contactEquationStiffness: 1e8,
       contactEquationRelaxation: 3
     }

@@ -45,6 +45,7 @@ export class ParticleSystem {
     const data = update(base, {
       emitters: [
         {
+          life: { $set: options.emitterLife ?? null },
           rate: { $set: this.getEmitterRate(options) },
           initializers: { $set: this.getInitializers(options) },
           behaviours: { $set: this.getBehaviours(options) },

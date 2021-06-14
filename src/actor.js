@@ -201,13 +201,17 @@ export class Actor extends Entity {
 
     // stop any new particles
     // we'll wait for them to fade before we delete
-    this.particleSystems.forEach((particleSystem) => {
-      particleSystem.stop();
-    });
+    this.stopParticleSystems();
 
     // stop any sounds being played
     this.sounds.forEach((sound) => {
       sound.kill();
+    });
+  }
+
+  stopParticleSystems() {
+    this.particleSystems.forEach((particleSystem) => {
+      particleSystem.stop();
     });
   }
 
