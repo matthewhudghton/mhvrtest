@@ -5,7 +5,8 @@ const soundFileMapping = {
   woosh01: "woosh01.ogg",
   explosion01: "explosion01.ogg",
   music01: "Acruta Lao Dnor.mp3",
-  cast01: "cast01.ogg"
+  cast01: "cast01.ogg",
+  portal01: "portal01.ogg"
 };
 
 function getSoundFile(name) {

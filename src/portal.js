@@ -60,6 +60,16 @@ export class Portal extends Projectile {
           emitterLife: 0.5
         })
       );
+
+      this.sounds.push(
+        new Sound({
+          actor: this,
+          player: this.map.player,
+          duration: 10,
+          loop: false,
+          name: "portal01"
+        })
+      );
     }
     /* Delete particle system from previous fires */
     if (this.rechargeDelay.shouldFire) {
@@ -68,6 +78,12 @@ export class Portal extends Projectile {
           particleSystem.delete();
         }
       });
+      // stop any sounds being played
+      this.sounds.forEach((sound) => {
+        sound.kill();
+      });
+
+      this.sounds = [];
     }
 
     Projectile.prototype.update.call(this, dt);
