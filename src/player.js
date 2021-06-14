@@ -338,6 +338,8 @@ export class Player extends Entity {
     if (ray.intersectWorld(this.map.world, { mode: CANNON.RAY_MODES.ALL })) {
       const body = ray.result.body;
       body.position.x += 1;
+      const constraint = new CANNON.DistanceConstraint(this.body, body, 5, 10);
+      this.map.world.addConstraint(constraint);
     }
 
     const points = [];

@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
 import { Debouncer } from "./debouncer.js";
+import { Actor } from "./actor.js";
 import { ShapeRecogniser } from "./shapeRecogniser.js";
 
 export class ControllerHandler {
@@ -16,6 +17,22 @@ export class ControllerHandler {
     this.debugMesh = [];
     this.isGripButtonPressed = false;
     this.index = options.index;
+
+    this.bodyActor = new Actor({
+      map: this.player.map,
+      lifespan: undefined,
+      position: new CANNON.Vec3(0, 0, 0),
+      velocity: undefined,
+      shapeType: "sphere",
+      invisible: true,
+      rawShapeData: { size: 0.1 },
+      noDie: true,
+      mass: 1,
+      bodySettings: { fixedRotation: true, material: "playerMaterial" },
+      collisionFilterGroup: this.player.collisionFilterGroup,
+      collisionFilterMask: this.player.collisionFilterMask,
+      applyGravity: true
+    });
 
     this.addPointerToControllerGrip(this.controllerGrip);
   }
@@ -67,6 +84,12 @@ export class ControllerHandler {
   }
 
   update(dt, state) {
+    this.bodyActor.body.position.copy(this.getControllerPosition());
+    this.bodyActor.body.quaternion.copy(this.controllerGrip.quaternion);
+    this.bodyActor.body.velocity.x = 0;
+    this.bodyActor.body.velocity.y = 0;
+    this.bodyActor.body.velocity.z = 0;
+
     if (state.buttons[5] === 1 && this.deflectDebounce.tryFireAndReset()) {
       this.player.addMessage({
         magic: {
