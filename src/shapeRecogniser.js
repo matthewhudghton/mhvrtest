@@ -112,7 +112,22 @@ export class ShapeRecogniser {
       ]
     });
 
-    this.shapes = [square, circle];
+    const portal = new ShapeRecord({
+      name: "portal",
+      vectors: [
+        [0, -1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+        [0, 1],
+        [-1, 1],
+        [-1, 0],
+        [-1, -1]
+      ],
+      maxTries: 3
+    });
+
+    this.shapes = [square, circle, portal];
   }
   clear() {
     this.maxX = -Number.MAX_VALUE;
