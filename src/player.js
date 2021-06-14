@@ -308,6 +308,9 @@ export class Player extends Entity {
       if (message.grab) {
         this.doGrab(message.grab);
       }
+      if (message.releaseGrab) {
+        this.releaseGrab(message.releaseGrab);
+      }
     }
   }
 
@@ -362,6 +365,15 @@ export class Player extends Entity {
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
     const drawLine = new THREE.Line(geometry, new THREE.MeshBasicMaterial());
     this.map.scene.add(drawLine);
+  }
+
+  releaseGrab(grabMessage) {
+    const currentConstraints = this.grabConstraints[grabMessage.index];
+    currentConstraints.forEach((constraint) => {
+      this.map.world.removeConstraint(constraint);
+    });
+
+    this.grabConstraints[grabMessage.index] = [];
   }
 
   get position() {

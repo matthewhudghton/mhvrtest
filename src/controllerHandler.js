@@ -144,6 +144,14 @@ export class ControllerHandler {
         }
       });
     }
+    if (!gripButtonIsNowPressed && this.isGripButtonPressed) {
+      this.player.addMessage({
+        releaseGrab: {
+          index: this.index
+        }
+      });
+    }
+
     this.isGripButtonPressed = gripButtonIsNowPressed;
 
     this.deflectDebounce.update(dt);
