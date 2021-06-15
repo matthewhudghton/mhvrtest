@@ -44,7 +44,7 @@ export class Driver extends Entity {
       return;
     }
     let direction = this.localDirectionToTargetDelta;
-    let speed = 10;
+    let speed = 8 * this.actor.body.mass;
     let stopDistanceSquared = 10;
     this.debouncer.update(dt);
     if (this.distanceSquaredToTarget < stopDistanceSquared) {

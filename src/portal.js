@@ -11,7 +11,9 @@ export class Portal extends Projectile {
   constructor(options) {
     options.rawShapeData ??= {};
 
-    options.rawShapeData.size ??= 0.1;
+    options.rawShapeData.size ??= 1;
+    options.spriteHeight ??= options.rawShapeData.size * 1.35;
+    options.spriteWidth ??= options.rawShapeData.size * 1.35;
     //options.rawShapeData.width ??= 0.1;
     //options.rawShapeData.height ??= 3;
     //options.rawShapeData.depth ??= 0.1;
@@ -26,9 +28,9 @@ export class Portal extends Projectile {
     options.speed ??= 0.0;
     options.canExplode ??= false;
     options.noDie ??= true;
-    options.mass = 5;
+    options.mass = 0.1;
     options.canTravelPortal ??= false;
-    options.invisible ??= true;
+    options.invisible ??= false;
 
     super(options);
 
@@ -39,6 +41,16 @@ export class Portal extends Projectile {
   }
   initSounds() {}
   initParticles() {}
+  getMaterial() {
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load("textures/texture.jpeg");
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.encoding = THREE.sRGBEncoding;
+    return new THREE.MeshBasicMaterial({
+      color: this.color,
+      wireframe: true
+    });
+  }
 
   update(dt) {
     /* Check debouncer before update, so we can tell if its been fired */

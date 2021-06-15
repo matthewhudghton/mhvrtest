@@ -54,7 +54,7 @@ export class Player extends Entity {
     this.leftControllerGrip = options.leftControllerGrip;
     this.rightControllerGrip = options.rightControllerGrip;
     this.grabConstraints = [[], []];
-
+    this.grabForce = 25;
     this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
     this.messages = [];
@@ -289,8 +289,6 @@ export class Player extends Entity {
               bodySettings: {
                 quaternion: message.magic.quaternion
               },
-              spriteHeight: 2,
-              spriteWidth: 2,
               collisionFilterGroup: 1,
               collisionFilterMask: this.collisionFilterMask | 2,
               reverseProjectile: true,
@@ -355,10 +353,10 @@ export class Player extends Entity {
 
       const constraint = new CANNON.PointToPointConstraint(
         grabMessage.body,
-        new CANNON.Vec3(0, 0, -0.5),
+        new CANNON.Vec3(0, 0, -0.05),
         body,
         body.pointToLocalFrame(ray.result.hitPointWorld),
-        50
+        this.grabForce
       );
       currentConstraints.push(constraint);
 

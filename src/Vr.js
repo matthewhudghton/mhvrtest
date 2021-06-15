@@ -53,10 +53,9 @@ function appendDebug(text) {
   var node = document.createTextNode(text); // Create a text node
   document.getElementById("debugText").appendChild(node);
 }
-
+let inputManager;
 init();
 animate();
-let inputManager;
 
 var world;
 
@@ -247,7 +246,6 @@ function init() {
     });
   }*/
 
-  //
   inputManager = new InputManager(
     renderer.xr,
     camera,

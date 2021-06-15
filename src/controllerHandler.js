@@ -35,7 +35,8 @@ export class ControllerHandler {
       },
       collisionFilterGroup: this.player.collisionFilterGroup,
       collisionFilterMask: this.player.collisionFilterMask,
-      applyGravity: false
+      applyGravity: false,
+      canTravelPortal: false
     });
 
     this.handConstraint = new CANNON.DistanceConstraint(

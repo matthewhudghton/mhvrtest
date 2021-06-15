@@ -115,24 +115,8 @@ export class Actor extends Entity {
         this.shape = new CANNON.Sphere(this.size);
         break;
     }
-    //let normalMap = new THREE.TextureLoader().load("bumpmaps/noise.jpg");
-    const loader = new THREE.TextureLoader();
-    const texture = loader.load("textures/texture.jpeg");
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    //texture.repeat.set(25, 25);
-    //texture.anisotropy = 16;
-    texture.encoding = THREE.sRGBEncoding;
 
-    this.mesh = new THREE.Mesh(
-      geometry,
-      new THREE.MeshLambertMaterial({
-        map: texture,
-        color: this.color,
-        transparent: true,
-        opacity: 0.0
-      })
-    );
-
+    this.mesh = new THREE.Mesh(geometry, this.getMaterial());
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
     this.body = new CANNON.Body({
@@ -143,6 +127,19 @@ export class Actor extends Entity {
     });
 
     this.body.addShape(this.shape);
+  }
+
+  getMaterial() {
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load("textures/texture.jpeg");
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.encoding = THREE.sRGBEncoding;
+    return new THREE.MeshLambertMaterial({
+      map: texture,
+      color: this.color,
+      transparent: true,
+      opacity: 0.0
+    });
   }
 
   update(dt) {
