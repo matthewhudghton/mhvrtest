@@ -266,6 +266,7 @@ export class Player extends Entity {
               reverseProjectile: true
             });
             break;
+          /* Deflect */
           case "deflect":
             new NoExplodeProjectile({
               map: this.map,

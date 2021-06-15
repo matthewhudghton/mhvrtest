@@ -125,9 +125,9 @@ export class ControllerHandler {
       this.player.addMessage({
         magic: {
           position: this.getControllerPosition(),
-          quaternion: this.controller.quaternion,
+          quaternion: this.controllerGrip.quaternion,
           attachedTo: this.controllerGrip,
-          shapeMatches: [{ name: "portal", size: 0.1 }]
+          shapeMatches: [{ name: "deflect", size: 1 }]
         }
       });
     }
@@ -200,7 +200,7 @@ export class ControllerHandler {
         this.player.addMessage({
           magic: {
             position: this.getControllerPosition(),
-            quaternion: this.controller.quaternion,
+            quaternion: this.controllerGrip.quaternion,
             attachedTo: this.controllerGrip,
             shapeMatches: shapeMatches
           }

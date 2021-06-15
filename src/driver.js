@@ -30,7 +30,11 @@ export class Driver extends Entity {
         height: this.size / 5,
         depth: this.size / 2
       },
-      bodySettings: { material: "playerMaterial", angularDamping: 0 },
+      bodySettings: {
+        material: "playerMaterial",
+        angularDamping: 0.8,
+        linearDamping: 0.6
+      },
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask
     });
@@ -44,7 +48,8 @@ export class Driver extends Entity {
       return;
     }
     let direction = this.localDirectionToTargetDelta;
-    let speed = 8 * this.actor.body.mass;
+    let speed = 80 * this.actor.body.mass;
+    let turnSpeed = 5;
     let stopDistanceSquared = 10;
     this.debouncer.update(dt);
     if (this.distanceSquaredToTarget < stopDistanceSquared) {
@@ -52,30 +57,37 @@ export class Driver extends Entity {
     }
 
     this.body.applyLocalForce(
-      new CANNON.Vec3(direction.x, 0, 0),
-      new CANNON.Vec3(1, 0, 0)
+      new CANNON.Vec3(
+        direction.x * dt * this.actor.body.mass * turnSpeed,
+        0,
+        0
+      ),
+      new CANNON.Vec3(1 * this.size, 0, 0)
     );
 
     this.body.applyLocalForce(
       new CANNON.Vec3(0, 0, speed * this.actor.body.mass * dt),
-      new CANNON.Vec3(0, 0, 1 * dt)
+      new CANNON.Vec3(0, 0, 1 * this.size)
     );
     this.body.applyLocalForce(
-      new CANNON.Vec3(-direction.x, -direction.y, 0),
-      new CANNON.Vec3(0, 0, -1 * dt)
-    );
-
-    if (this.position.y < 1 + this.size * 1.5) {
-    }
-
-    this.body.applyImpulse(
       new CANNON.Vec3(
-        0,
-        -this.map.gravity * 1.01 * this.actor.body.mass * dt,
+        -direction.x * dt * this.actor.body.mass * turnSpeed,
+        -direction.y * dt * this.actor.body.mass * turnSpeed,
         0
       ),
-      new CANNON.Vec3(0, 0, 0)
+      new CANNON.Vec3(0, 0, -1 * this.size)
     );
+
+    if (this.position.y < 1) {
+      this.body.applyImpulse(
+        new CANNON.Vec3(
+          0,
+          -this.map.gravity * 1.01 * this.actor.body.mass * dt,
+          0
+        ),
+        new CANNON.Vec3(0, 0, 0)
+      );
+    }
 
     let angleFireTollerance = 0.5 * Math.PI;
 
@@ -111,7 +123,9 @@ export class Driver extends Entity {
     );
   }
   get moveToTarget() {
-    return this.map.player.bodyActor.body.position;
+    return new CANNON.Vec3(0, 1, 0).vadd(
+      this.map.player.bodyActor.body.position
+    );
   }
 
   get distanceSquaredToTarget() {

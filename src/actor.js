@@ -18,7 +18,7 @@ export class Actor extends Entity {
       height: 0.15,
       size: 0.1
     };
-    this.applyGravity = options.applyGravity ?? false;
+    this.applyGravity = options.applyGravity ?? true;
     this.noDie = options.noDie ?? false;
     this.size = this.rawShapeData.size / 2;
     this.width = this.rawShapeData.width;
@@ -146,9 +146,16 @@ export class Actor extends Entity {
     if (this.lifeSpan !== undefined) {
       this.lifeSpan -= dt;
     }
+
     if (this.newPosition) {
       this.body.position.copy(this.newPosition);
       this.newPosition = undefined;
+    }
+
+    if (!this.applyGravity) {
+      this.body.applyForce(
+        new CANNON.Vec3(0, -this.map.gravity * this.body.mass, 0)
+      );
     }
 
     if (this.mesh.material.opacity < 1) {
