@@ -60,6 +60,10 @@ new CANNON.Vec3(
   }
 
   initParticles() {
+    if (true) {
+      // disabling particle systems for projectiles for performance
+      return;
+    }
     this.particleSystems.push(
       new ParticleSystem({
         scene: this.scene,
@@ -90,8 +94,6 @@ new CANNON.Vec3(
     Actor.prototype.update.call(this, dt);
 
     this.body.applyLocalImpulse(new CANNON.Vec3(0, 0, this.speed * dt));
-
-
 
     /*
     let baseVelocity = new CANNON.Vec3(0, 0, this.speed);

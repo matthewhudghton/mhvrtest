@@ -34,28 +34,31 @@ export class Gun extends Actor {
     this.speed = options.speed ?? 15;
     this.body.linearDamping = 0;
 
-    this.particleSystems.push(
-      new ParticleSystem({
-        scene: this.scene,
-        type: "gun1",
-        colorA: "#" + this.color.getHexString(),
-        useSpring: true,
-        position: this.body.position,
-        useEmitterRotate: true,
-        emitterRotateX: 1,
-        emitterRotateY: 1,
-        emitterRotateZ: 1,
-        driftX: 5 * size,
-        driftY: 5 * size,
-        driftZ: 5 * size,
-        rotateX: 10,
-        rotateY: 10,
-        rotateZ: 10,
-        scaleA: 0.3 * size,
-        scaleB: 0.2 * size,
-        radialVelocityRadius: size * 3
-      })
-    );
+    if (false) {
+      // disabling particle system for performance
+      this.particleSystems.push(
+        new ParticleSystem({
+          scene: this.scene,
+          type: "gun1",
+          colorA: "#" + this.color.getHexString(),
+          useSpring: true,
+          position: this.body.position,
+          useEmitterRotate: true,
+          emitterRotateX: 1,
+          emitterRotateY: 1,
+          emitterRotateZ: 1,
+          driftX: 5 * size,
+          driftY: 5 * size,
+          driftZ: 5 * size,
+          rotateX: 10,
+          rotateY: 10,
+          rotateZ: 10,
+          scaleA: 0.3 * size,
+          scaleB: 0.2 * size,
+          radialVelocityRadius: size * 3
+        })
+      );
+    }
 
     /*const light = new THREE.PointLight(
       this.color,

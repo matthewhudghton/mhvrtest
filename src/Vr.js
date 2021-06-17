@@ -1,4 +1,5 @@
 import * as THREE from "three";
+//import * as THREE from "three";
 import { VRButton } from "./VRButton.js";
 import { XRControllerModelFactory } from "./jsm/webxr/XRControllerModelFactory.js";
 import { Hud } from "./hud.js";

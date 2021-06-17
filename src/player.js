@@ -58,7 +58,7 @@ export class Player extends Entity {
     this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
     this.messages = [];
-
+    /*
     this.leftHandParticleSystem = new ParticleSystem({
       scene: this.scene,
       type: "left_hand",
@@ -69,7 +69,7 @@ export class Player extends Entity {
       scene: this.scene,
       type: "right_hand",
       useLoaded: true
-    });
+    });*/
 
     // add music
     this.music = new Sound({
@@ -92,11 +92,12 @@ export class Player extends Entity {
 
     this.updateAiTracking(dt);
 
+    /*
+// disabling for speed
     this.leftHandParticleSystem.setPosition(this.leftHandPosition);
-
     this.rightHandParticleSystem.setPosition(this.rightHandPosition);
     this.leftHandParticleSystem.update(dt);
-    this.rightHandParticleSystem.update(dt);
+    this.rightHandParticleSystem.update(dt);*/
 
     this.debouncers.forEach((debouncer) => {
       debouncer.update(dt);

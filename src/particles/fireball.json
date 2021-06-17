@@ -54,16 +54,6 @@
       ],
       "behaviours": [
         {
-          "id": "51ca9456-3d8b-11e9-a1e8-4785d9606b75",
-          "type": "Alpha",
-          "properties": {
-            "alphaA": 1,
-            "alphaB": 0,
-            "life": null,
-            "easing": "easeLinear"
-          }
-        },
-        {
           "id": "51ca9458-3d8b-11e9-a1e8-4785d9606b75",
           "type": "Scale",
           "properties": {

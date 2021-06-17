@@ -165,8 +165,8 @@ export class ParticleSystem {
   }
 
   getBehaviours(options) {
-    let alphaA = options.alphaA ?? 1;
-    let alphaB = options.alphaB ?? 0;
+    //let alphaA = options.alphaA ?? 1;
+    //let alphaB = options.alphaB ?? 1;
     let scaleA = options.scaleA ?? 1;
     let scaleB = options.scaleB ?? 1;
     let colorA = options.colorA ?? "#ff2a00";
@@ -190,6 +190,7 @@ export class ParticleSystem {
     let springLife = options.springLife ?? null;
 
     const behaviorJson = [
+      /* // don't use alpha, it is slow
       {
         type: "Alpha",
         properties: {
@@ -198,7 +199,7 @@ export class ParticleSystem {
           life: null,
           easing: "easeLinear"
         }
-      },
+      },*/
       {
         type: "Scale",
         properties: {
