@@ -9,6 +9,7 @@ const soundFileMapping = {
   portal01: { path: "portal01.ogg" }
 };
 
+let SOUND_COUNT = 0;
 function getSoundFile(name) {
   return soundsBasePath + soundFileMapping[name].path;
 }
@@ -22,9 +23,13 @@ function cacheBufferForSoundFile(name, buffer) {
 }
 
 function playBufferedSound(options) {
+  if (SOUND_COUNT > 40) {
+    return;
+  }
   const sound = options.sound;
   const actor = options.actor;
   const self = options.self;
+  SOUND_COUNT++;
   sound.detune = options.detune;
   sound.setBuffer(options.buffer);
   sound.setRefDistance(20);
@@ -35,6 +40,9 @@ function playBufferedSound(options) {
   sound.play();
   self.soundLoaded = true;
   self.sound = sound;
+  sound.onEnded(function () {
+    options.self.forceKill();
+  });
 }
 
 export class Sound {
@@ -75,9 +83,18 @@ export class Sound {
 
   kill() {
     if (this.soundLoaded) {
-      if (this.loop) {
-        this.sound.stop();
-      }
+      this.sound.stop();
+      this.forceKill();
+    }
+  }
+
+  forceKill() {
+    if (this.hasBeenKilled !== true) {
+      this.soundLoaded = false;
+      this.actor.mesh.remove(this.sound);
+
+      SOUND_COUNT--;
+      this.hasBeenKilled = true;
     }
   }
 }

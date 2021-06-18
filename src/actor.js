@@ -211,6 +211,7 @@ export class Actor extends Entity {
     this.sounds.forEach((sound) => {
       sound.kill();
     });
+    this.sounds = [];
   }
 
   stopParticleSystems() {
