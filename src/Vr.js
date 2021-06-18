@@ -65,7 +65,7 @@ function initCannon() {
 
   //world.gravity.set(0, 0, 0);
   world.broadphase = new CANNON.NaiveBroadphase();
-  world.solver.iterations = 5;
+  world.solver.iterations = 2;
 
   // Materials
   var playerMaterial = new CANNON.Material("playerMaterial");
@@ -225,7 +225,7 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 20; i++) {
     new Driver({
       THREE: THREE,
       CANNON: CANNON,

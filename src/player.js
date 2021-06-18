@@ -75,7 +75,8 @@ export class Player extends Entity {
     this.music = new Sound({
       actor: this.bodyActor,
       player: this,
-      name: "music01"
+      name: "music01",
+      volume: 0.3
     });
   }
 

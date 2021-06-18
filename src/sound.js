@@ -18,7 +18,7 @@ export class Sound {
   constructor(options) {
     this.actor = options.actor;
     this.player = options.player;
-    this.volume = options.volume ?? 0.3;
+    this.volume = options.volume ?? 0.1;
     this.name = options.name ?? "woosh01";
     this.soundLoaded = false;
     this.loop = options.loop ?? true;
