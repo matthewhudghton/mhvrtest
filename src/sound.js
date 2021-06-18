@@ -2,53 +2,75 @@ import * as THREE from "three";
 import * as CANNON from "cannon-es";
 const soundsBasePath = "sounds/";
 const soundFileMapping = {
-  woosh01: "woosh01.ogg",
-  explosion01: "explosion01.ogg",
-  music01: "Acruta Lao Dnor.mp3",
-  cast01: "cast01.ogg",
-  portal01: "portal01.ogg"
+  woosh01: { path: "woosh01.ogg" },
+  explosion01: { path: "explosion01.ogg" },
+  music01: { path: "Acruta Lao Dnor.mp3" },
+  cast01: { path: "cast01.ogg" },
+  portal01: { path: "portal01.ogg" }
 };
 
 function getSoundFile(name) {
-  return soundsBasePath + soundFileMapping[name];
+  return soundsBasePath + soundFileMapping[name].path;
+}
+
+function getSoundFileCachedBuffer(name) {
+  return soundFileMapping[name].buffer;
+}
+
+function cacheBufferForSoundFile(name, buffer) {
+  return (soundFileMapping[name].buffer = buffer);
+}
+
+function playBufferedSound(options) {
+  const sound = options.sound;
+  const actor = options.actor;
+  const self = options.self;
+  sound.detune = options.detune;
+  sound.setBuffer(options.buffer);
+  sound.setRefDistance(20);
+  actor.mesh.add(options.sound);
+  sound.setLoop(options.loop);
+  sound.setVolume(options.volume);
+  sound.duration = options.duration;
+  sound.play();
+  self.soundLoaded = true;
+  self.sound = sound;
 }
 
 export class Sound {
   THREE;
   constructor(options) {
+    options.name ??= "woosh01";
+    options.volume ??= 0.1;
+    options.loop ??= true;
+
     this.actor = options.actor;
     this.player = options.player;
-    this.volume = options.volume ?? 0.1;
-    this.name = options.name ?? "woosh01";
+    this.volume = options.volume;
+    this.name = options.name;
     this.soundLoaded = false;
-    this.loop = options.loop ?? true;
+    this.loop = options.loop;
     this.duration = options.duration ?? undefined;
-    this.detune = options.detune;
-    if (!isFinite(this.detune)) {
-      this.detune = 0;
+    if (!isFinite(options.detune)) {
+      options.detune = 0;
     }
-    this.sound = new THREE.PositionalAudio(this.player.listener);
-    const sound = this.sound;
-    const actor = this.actor;
-    const volume = this.volume;
-    const name = this.name;
-    const loop = this.loop;
-    const self = this;
-    const duration = this.duration;
-    const detune = this.detune;
+    this.detune = options.detune;
+
+    options.sound = new THREE.PositionalAudio(this.player.listener);
+    options.self = this;
     this.mesh = options.mesh;
     this.audioLoader = new THREE.AudioLoader();
-    this.audioLoader.load(getSoundFile(name), function (buffer) {
-      sound.detune = detune;
-      sound.setBuffer(buffer);
-      sound.setRefDistance(20);
-      actor.mesh.add(sound);
-      sound.setLoop(loop);
-      sound.setVolume(volume);
-      sound.duration = duration;
-      sound.play();
-      self.soundLoaded = true;
-    });
+    const possibleCachedBuffer = getSoundFileCachedBuffer(options.name);
+    if (possibleCachedBuffer !== undefined) {
+      options.buffer = possibleCachedBuffer;
+      playBufferedSound(options);
+    } else {
+      this.audioLoader.load(getSoundFile(options.name), function (buffer) {
+        options.buffer = buffer;
+        cacheBufferForSoundFile(options.name, options.buffer);
+        playBufferedSound(options);
+      });
+    }
   }
 
   kill() {
