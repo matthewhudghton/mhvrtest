@@ -57,6 +57,12 @@ export class Map {
     floorMesh.position.copy(groundBody.position);
 
     world.addBody(groundBody);
+
+    /*this.worldWorker = new Worker("./worker_cannon.js");
+    this.worldWorker.onmessage = function (e) {
+      console.log("Message received from worker " + JSON.stringify(e));
+    };*/
+
     /*
     for (var i = 0; i < 15; i++) {
       const width = 10 + Math.random() * 150;
@@ -107,8 +113,12 @@ export class Map {
     if (dt <= 0) {
       return;
     }
-    //const worldWorker = new Worker("worker_cannon.js");
-    //worldWorker.postMessage({ world: this.world, dt: dt });
+
+    /* this.worldWorker.postMessage({
+      callFunction: "step",
+      callParameters: [dt]
+    });*/
+
     this.world.step(dt);
 
     this.aiManager.update(dt);

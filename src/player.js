@@ -36,7 +36,7 @@ export class Player extends Entity {
       position,
       velocity: undefined,
       shapeType: "box",
-      invisible: false,
+      invisible: true,
       rawShapeData: { size: 1, height: 3.1, width: 0.5, depth: 0.5 },
       noDie: true,
       mass: 10,
