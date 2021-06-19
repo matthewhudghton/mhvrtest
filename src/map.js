@@ -107,7 +107,10 @@ export class Map {
     if (dt <= 0) {
       return;
     }
+    //const worldWorker = new Worker("worker_cannon.js");
+    //worldWorker.postMessage({ world: this.world, dt: dt });
     this.world.step(dt);
+
     this.aiManager.update(dt);
     this.ais.forEach((ai) => {
       ai.update(dt);
