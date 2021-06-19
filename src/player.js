@@ -36,7 +36,7 @@ export class Player extends Entity {
       position,
       velocity: undefined,
       shapeType: "box",
-      invisible: true,
+      invisible: false,
       rawShapeData: { size: 1, height: 3.1, width: 0.5, depth: 0.5 },
       noDie: true,
       mass: 10,
@@ -54,7 +54,7 @@ export class Player extends Entity {
     this.leftControllerGrip = options.leftControllerGrip;
     this.rightControllerGrip = options.rightControllerGrip;
     this.grabConstraints = [[], []];
-    this.grabForce = 25;
+    this.grabForce = 2500;
     this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
     this.messages = [];
