@@ -6,7 +6,7 @@ export class ChargeBar extends Debouncer {
     //this.background =
     this.sprites = [];
 
-    this.backgroundSprite = this.createBarSprite(
+    this.backgroundSprite = this.addBarSprite(
       options.width,
       options.height,
       1,

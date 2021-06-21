@@ -5,6 +5,7 @@ import { Actor } from "./actor.js";
 import { SpotLightHelper } from "three";
 import { Gun } from "./gun.js";
 import { Debouncer } from "./debouncer.js";
+import { ChargeBar } from "./chargeBar.js";
 
 export class Driver extends Entity {
   constructor(options) {
@@ -39,8 +40,14 @@ export class Driver extends Entity {
       collisionFilterMask: this.collisionFilterMask
     });
     this.map.ais.push(this);
-    this.debouncer = new Debouncer(this.size + 2 + Math.random() * 4);
-
+    this.debouncer = new ChargeBar({
+      maxCharge: this.size + 2 + Math.random() * 4,
+      width: 1,
+      height: 0.2,
+      opacity: 1,
+      color: new THREE.Color(1, 0, 0)
+    });
+    this.actor.mesh.add(this.debouncer.sprites[0]);
     this.shouldBeDeleted = false;
   }
 
