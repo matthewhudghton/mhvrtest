@@ -45,9 +45,12 @@ export class Driver extends Entity {
       width: 1,
       height: 0.2,
       opacity: 1,
-      color: new THREE.Color(1, 0, 0)
+      backgroundColor: new THREE.Color(1, 0, 0),
+      foregroundColor: new THREE.Color(0, 1, 0)
     });
     this.actor.mesh.add(this.debouncer.sprites[0]);
+    this.actor.mesh.add(this.debouncer.sprites[1]);
+
     this.shouldBeDeleted = false;
   }
 
