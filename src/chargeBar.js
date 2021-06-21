@@ -7,19 +7,19 @@ export class ChargeBar extends Debouncer {
     this.sprites = [];
     this.width = options.width;
     this.height = options.height;
-
+    this.offsetY = options.offsetY;
     this.backgroundSprite = this.addBarSprite(
       options.width,
       options.height,
-      1,
+      -1,
       options.opacity,
       options.backgroundColor
     );
 
     this.foregroundSprite = this.addBarSprite(
-      options.width - 0.05,
-      options.height - 0.05,
-      1,
+      options.width,
+      options.height,
+      0,
       options.opacity,
       options.foregroundColor
     );
@@ -28,15 +28,18 @@ export class ChargeBar extends Debouncer {
     this.sprites.push(this.foregroundSprite);
   }
 
-  addBarSprite(width, height, depth, opacity, color) {
+  addBarSprite(width, height, renderOrder, opacity, color) {
     const material = new THREE.SpriteMaterial({
       color: color
     });
     const sprite = new THREE.Sprite(material);
-    sprite.scale.set(width, height, depth);
+    sprite.scale.set(width, height, 0);
+    sprite.renderOrder = renderOrder;
     sprite.center = new THREE.Vector2(0, 0.5);
     sprite.material.opacity = opacity;
     this.sprites.push(sprite);
+    sprite.position.x = -width / 2;
+    sprite.position.y = this.offsetY + this.height;
     return sprite;
   }
 

@@ -43,10 +43,11 @@ export class Driver extends Entity {
     this.debouncer = new ChargeBar({
       maxCharge: this.size + 2 + Math.random() * 4,
       width: 1,
-      height: 0.2,
+      height: 0.1,
+      offsetY: this.actor.body.aabb.upperBound.y,
       opacity: 1,
-      backgroundColor: new THREE.Color(1, 0, 0),
-      foregroundColor: new THREE.Color(0, 1, 0)
+      backgroundColor: new THREE.Color(0.2, 0.1, 0.2),
+      foregroundColor: new THREE.Color(0.05, 0.95, 0.05)
     });
     this.actor.mesh.add(this.debouncer.sprites[0]);
     this.actor.mesh.add(this.debouncer.sprites[1]);
