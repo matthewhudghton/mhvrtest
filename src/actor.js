@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
-
+import { ChargeBar } from "./chargeBar.js";
 import { Entity } from "./entity.js";
 
 export class Actor extends Entity {
@@ -28,6 +28,9 @@ export class Actor extends Entity {
     this.invisible = options.invisible ?? false;
     this.ai = options.ai;
 
+    this.maxHealth = options.maxHealth ?? -1;
+    this.health = options.health ?? options.maxHealth ?? -1;
+
     options.bodySettings ??= {};
     this.canTravelPortal = options.canTravelPortal ?? true;
     options.bodySettings.linearDamping ??= 0.05;
@@ -37,7 +40,10 @@ export class Actor extends Entity {
 
     this.maxSpriteOpacity = options.maxSpriteOpacity ?? 1;
 
+    this.chargeBars = [];
+
     this.initShape(options);
+    this.initHealth(options);
 
     if (options.velocity) {
       this.body.velocity.copy(options.velocity);
@@ -75,6 +81,29 @@ export class Actor extends Entity {
     }
 
     this.body.userData = { actor: this };
+  }
+
+  initHealth(options) {
+    if (this.maxHealth > 0) {
+      this.healthBar = new ChargeBar({
+        maxCharge: this.maxHealth,
+        currentCharge: this.health,
+        width: 1,
+        height: 0.1,
+        offsetY: this.body.aabb.upperBound.y,
+        opacity: 1,
+        backgroundColor: new THREE.Color(0.2, 0.1, 0.2),
+        foregroundColor: new THREE.Color(0.05, 0.95, 0.05)
+      });
+      this.addChargeBar(this.healthBar);
+    }
+  }
+
+  addChargeBar(chargeBar) {
+    this.chargeBars.push(chargeBar);
+    chargeBar.sprites.forEach((sprite) => {
+      this.mesh.add(sprite);
+    });
   }
 
   get collisionFilterGroup() {

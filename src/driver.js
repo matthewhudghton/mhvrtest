@@ -24,6 +24,7 @@ export class Driver extends Entity {
       position: options.position,
       applyGravity: false,
       mass: 5,
+      maxHealth: 100,
       color: new THREE.Color(Math.random(), Math.random(), Math.random()),
       rawShapeData: {
         size: this.size,
@@ -40,17 +41,20 @@ export class Driver extends Entity {
       collisionFilterMask: this.collisionFilterMask
     });
     this.map.ais.push(this);
-    this.debouncer = new ChargeBar({
+    this.debouncer = new Debouncer(this.size + 2 + Math.random() * 4);
+    /*
+    new ChargeBar({
       maxCharge: this.size + 2 + Math.random() * 4,
       width: 1,
       height: 0.1,
-      offsetY: this.actor.body.aabb.upperBound.y,
+      offsetY: this.actor.body.aabb.lowerBound.y,
       opacity: 1,
       backgroundColor: new THREE.Color(0.2, 0.1, 0.2),
       foregroundColor: new THREE.Color(0.05, 0.95, 0.05)
-    });
-    this.actor.mesh.add(this.debouncer.sprites[0]);
+    });*/
+    /*this.actor.mesh.add(this.debouncer.sprites[0]);
     this.actor.mesh.add(this.debouncer.sprites[1]);
+    */
 
     this.shouldBeDeleted = false;
   }
