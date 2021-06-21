@@ -1,11 +1,12 @@
 export class Debouncer {
-  constructor(length, current) {
+  constructor(length, current, rechargeRate) {
     this.length = length;
     this.current = current ?? 0;
+    this.rechargeRate = rechargeRate ?? 1;
   }
   update(dt) {
     if (this.current < this.length) {
-      this.current += dt;
+      this.current += this.rechargeRate * dt;
     }
   }
 
@@ -28,4 +29,13 @@ export class Debouncer {
     }
     return false;
   }
+
+  tryFireAndUseCharge(charge){
+    if(this.current >= charge){
+      this.current -= charge;
+      return true;
+    }
+    return false;
+  }
+
 }

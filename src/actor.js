@@ -71,7 +71,6 @@ export class Actor extends Entity {
       this.sprite = new THREE.Sprite(material);
       this.sprite.scale.set(this.spriteWidth, this.spriteHeight, 1);
       this.sprite.material.opacity = this.maxSpriteOpacity;
-
       this.mesh.add(this.sprite);
     }
 

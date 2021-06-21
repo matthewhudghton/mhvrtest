@@ -40,6 +40,7 @@ export class Driver extends Entity {
     });
     this.map.ais.push(this);
     this.debouncer = new Debouncer(this.size + 2 + Math.random() * 4);
+
     this.shouldBeDeleted = false;
   }
 
