@@ -23,6 +23,7 @@ export class Gun extends Actor {
     const green = 80 + size * 5 - blue;
 
     options.color ??= new THREE.Color(red / 255, green / 255, blue / 255);
+
     options.spritePath ??= "sprites/sprite.png";
     options.invisible ??= true;
     super(options);

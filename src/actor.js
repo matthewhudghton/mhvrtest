@@ -24,7 +24,7 @@ export class Actor extends Entity {
     this.width = this.rawShapeData.width;
     this.height = this.rawShapeData.height;
     this.depth = this.rawShapeData.depth ?? 0.5;
-    this.color = options.color;
+    this.color = options.color ?? new THREE.Color(1, 1, 1);
     this.invisible = options.invisible ?? false;
     this.ai = options.ai;
 

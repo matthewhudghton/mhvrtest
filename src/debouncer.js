@@ -30,12 +30,11 @@ export class Debouncer {
     return false;
   }
 
-  tryFireAndUseCharge(charge){
-    if(this.current >= charge){
+  tryFireAndUseCharge(charge) {
+    if (this.current >= charge) {
       this.current -= charge;
       return true;
     }
     return false;
   }
-
 }

@@ -10,14 +10,15 @@ export class ChargeBar extends Debouncer {
       options.width,
       options.height,
       1,
-      options.opacity
+      options.opacity,
+      options.color
     );
     this.sprites.push(this.backgroundSprite);
   }
 
-  addBarSprite(width, height, depth, opacity) {
+  addBarSprite(width, height, depth, opacity, color) {
     const material = new THREE.SpriteMaterial({
-      color: this.color
+      color: color
     });
     const sprite = new THREE.Sprite(material);
     sprite.scale.set(width, height, depth);
