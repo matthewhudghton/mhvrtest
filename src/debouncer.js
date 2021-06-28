@@ -44,7 +44,7 @@ export class Debouncer {
       return true;
     } else {
       this.current = 0;
-      return true;
+      return false;
     }
   }
 }

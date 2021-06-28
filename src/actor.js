@@ -269,12 +269,15 @@ export class Actor extends Entity {
 
   doDamage(amount) {
     if (this.healthBar) {
-      this.healthBar.tryFireAndUseCharge(amount);
+      this.healthBar.tryFireAndForceUseCharge(amount);
     }
   }
 
   get shouldBeKilled() {
-    return this.lifeSpan <= 0 && !this.noDie;
+    return (
+      !this.noDie &&
+      ((this.healthBar && this.healthBar.current <= 0) || this.lifeSpan <= 0)
+    );
   }
 
   get shouldBeDeleted() {
