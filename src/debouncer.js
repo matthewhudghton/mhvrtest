@@ -37,4 +37,14 @@ export class Debouncer {
     }
     return false;
   }
+
+  tryFireAndForceUseCharge(charge) {
+    if (this.current >= charge) {
+      this.current -= charge;
+      return true;
+    } else {
+      this.current = 0;
+      return true;
+    }
+  }
 }

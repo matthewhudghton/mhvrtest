@@ -63,6 +63,7 @@ export class Driver extends Entity {
     if (this.shouldBeDeleted) {
       return;
     }
+
     let direction = this.localDirectionToTargetDelta;
     let speed = 80 * this.actor.body.mass;
     let turnSpeed = 5;

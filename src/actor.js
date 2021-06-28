@@ -213,6 +213,10 @@ export class Actor extends Entity {
     this.debouncers.forEach((debouncer) => {
       debouncer.update(dt);
     });
+
+    this.chargeBars.forEach((chargeBar) => {
+      chargeBar.update(dt);
+    });
   }
 
   forceKill() {
@@ -261,6 +265,12 @@ export class Actor extends Entity {
       particleSystem.delete();
     });
     this.particleSystems = [];
+  }
+
+  doDamage(amount) {
+    if (this.healthBar) {
+      this.healthBar.tryFireAndUseCharge(amount);
+    }
   }
 
   get shouldBeKilled() {
