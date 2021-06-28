@@ -129,24 +129,23 @@ new CANNON.Vec3(
   }
 
   collideEvent(event) {
+    let shouldExplode = true;
+
     if (event.body?.userData?.actor) {
       if (
         event.target.userData.actor.damage &&
         event.body.userData.actor.damage
       ) {
         if (
-          event.target.userData.actor.damage < event.body.userData.actor.damage
+          event.target.userData.actor.damage >= event.body.userData.actor.damage
         ) {
-          event.target.userData.actor.explode();
-          event.target.userData.actor.lifeSpan = 0;
+          shouldExplode = false;
         }
-      } else {
-        event.target.userData.actor.explode();
-        event.target.userData.actor.lifeSpan = 0;
       }
-
       event.body.userData.actor.doDamage(event.target.userData.actor.damage);
-    } else {
+    }
+
+    if (shouldExplode) {
       event.target.userData.actor.explode();
       event.target.userData.actor.lifeSpan = 0;
     }

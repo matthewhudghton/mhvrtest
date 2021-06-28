@@ -9,12 +9,13 @@ export class Explosion extends Actor {
     options.shapeType ??= "sphere";
     options.bodySettings ??= {};
     options.bodySettings.fixedRotation = true;
+    options.bodySettings.collisionResponse = 0;
     options.lifeSpan ??= 0.5;
-    options.invisible ??= true;
-    options.ghost ??= true;
+    options.invisible ??= false;
+    options.ghost ??= false;
     options.applyGravity ??= false;
     const size = options.rawShapeData.size;
-
+    options.rawShapeData.size *= 4;
     const blue = Math.min(-100 + size * 80, 255);
     const red = Math.max(Math.min(100 + size * 5, 255) - blue, 0);
     const green = 80 + size * 5 - blue;
@@ -64,5 +65,21 @@ export class Explosion extends Actor {
 
   update(dt) {
     Actor.prototype.update.call(this, dt);
+  }
+
+  collideEvent(event) {
+    let me = event.target.userData;
+    let them = event.body.userData;
+    let direction = new CANNON.Vec3(0, 0, 0);
+    event.body.position.vsub(event.target.position, direction);
+    direction.normalize();
+    event.body.applyForce(
+      direction.scale(
+        Math.max(
+          10000 - event.body.position.distanceTo(event.target.position),
+          0
+        )
+      )
+    );
   }
 }
