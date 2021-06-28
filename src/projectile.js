@@ -16,13 +16,13 @@ export class Projectile extends Actor {
     options.applyGravity ??= false;
 
     const size = options.rawShapeData.size;
-    options.damage ??= 7 + size * size * 5;
+    options.damage ??= 10 + size * size * 5;
     const blue = Math.min(-100 + size * 80, 255);
     const red = Math.max(Math.min(100 + size * 5, 255) - blue, 0);
     const green = 80 + size * 5 - blue;
 
     options.color ??= new THREE.Color(red / 255, green / 255, blue / 255);
-
+    options.density ??= 10;
     super(options);
     this.damage = options.damage;
     this.exploding = false;
@@ -129,11 +129,26 @@ new CANNON.Vec3(
   }
 
   collideEvent(event) {
-    event.target.userData.actor.explode();
-    event.target.userData.actor.lifeSpan = 0;
-
     if (event.body?.userData?.actor) {
+      if (
+        event.target.userData.actor.damage &&
+        event.body.userData.actor.damage
+      ) {
+        if (
+          event.target.userData.actor.damage < event.body.userData.actor.damage
+        ) {
+          event.target.userData.actor.explode();
+          event.target.userData.actor.lifeSpan = 0;
+        }
+      } else {
+        event.target.userData.actor.explode();
+        event.target.userData.actor.lifeSpan = 0;
+      }
+
       event.body.userData.actor.doDamage(event.target.userData.actor.damage);
+    } else {
+      event.target.userData.actor.explode();
+      event.target.userData.actor.lifeSpan = 0;
     }
   }
 }

@@ -225,7 +225,7 @@ function init() {
   });
   map.player = player;
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 12; i++) {
     new Driver({
       THREE: THREE,
       CANNON: CANNON,

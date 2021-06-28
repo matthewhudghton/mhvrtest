@@ -20,7 +20,7 @@ export class Actor extends Entity {
     };
     this.applyGravity = options.applyGravity ?? true;
     this.noDie = options.noDie ?? false;
-    this.size = this.rawShapeData.size / 2;
+    this.size = this.rawShapeData.size / 2 ?? this.rawShapeData.width;
     this.width = this.rawShapeData.width;
     this.height = this.rawShapeData.height;
     this.depth = this.rawShapeData.depth ?? 0.5;
@@ -35,7 +35,8 @@ export class Actor extends Entity {
     this.canTravelPortal = options.canTravelPortal ?? true;
     options.bodySettings.linearDamping ??= 0.05;
     options.bodySettings.angularDamping ??= 0.5;
-    options.bodySettings.mass ??= 5;
+    options.density ??= 1;
+    options.bodySettings.mass ??= this.size * 5 * options.density;
     this.spritePath = options.spritePath;
 
     this.maxSpriteOpacity = options.maxSpriteOpacity ?? 1;
