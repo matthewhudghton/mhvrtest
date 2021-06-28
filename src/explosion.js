@@ -11,7 +11,7 @@ export class Explosion extends Actor {
     options.bodySettings.fixedRotation = true;
     options.bodySettings.collisionResponse = 0;
     options.lifeSpan ??= 0.5;
-    options.invisible ??= false;
+    options.invisible ??= true;
     options.ghost ??= false;
     options.applyGravity ??= false;
     const size = options.rawShapeData.size;
