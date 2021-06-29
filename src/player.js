@@ -40,7 +40,11 @@ export class Player extends Entity {
       rawShapeData: { size: 1, height: 3.1, width: 0.5, depth: 0.5 },
       noDie: true,
       mass: 10,
-      bodySettings: { fixedRotation: true, material: "playerMaterial" },
+      bodySettings: {
+        fixedRotation: false,
+        material: "playerMaterial",
+        angularDamping: 0.8
+      },
       collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: this.collisionFilterMask,
       applyGravity: true
@@ -108,6 +112,37 @@ export class Player extends Entity {
       this.cameraGroup.position.x * k +
       this.bodyActor.body.position.x * (1 - k);
 
+    this.bodyActor.body.quaternion.slerp(
+      new CANNON.Quaternion(0, 0, 0, 0),
+      Math.min(1 * dt, 1),
+      this.bodyActor.body.quaternion
+    );
+    /*
+    const amount = 500000 * dt;
+    this.bodyActor.body.applyImpulse(
+      new CANNON.Vec3(0, amount, 0),
+      new CANNON.Vec3(10, 10, 10)
+    );
+    this.bodyActor.body.applyImpulse(
+      new CANNON.Vec3(0, -amount, 0),
+      new CANNON.Vec3(10, -10, 10)
+    ); */
+    const amount = 700 * dt * this.body.mass;
+    let euler = new CANNON.Vec3(0, 0, 0);
+    this.body.quaternion.toEuler(euler);
+    if (Math.abs(euler.x) < 0.2) {
+      euler.x = 0;
+    }
+    if (Math.abs(euler.y) < 0.2) {
+      euler.y = 0;
+    }
+    if (Math.abs(euler.z) < 0.2) {
+      euler.z = 0;
+    }
+    this.body.applyTorque(
+      new CANNON.Vec3(-euler.x * amount, -euler.y * amount, -euler.z * amount)
+    );
+
     this.cameraGroup.position.y =
       this.cameraGroup.position.y * k +
       this.bodyActor.body.position.y * (1 - k);
@@ -117,6 +152,19 @@ export class Player extends Entity {
       this.bodyActor.body.position.z * (1 - k);
 
     this.cameraGroup.position.copy(this.bodyActor.body.position);
+    //this.cameraGroup.quaternion.copy(this.bodyActor.body.quaternion);
+
+    this.cameraGroup.quaternion.slerp(
+      new THREE.Quaternion(
+        this.bodyActor.body.quaternion.x,
+        this.bodyActor.body.quaternion.y,
+        this.bodyActor.body.quaternion.z,
+        this.bodyActor.body.quaternion.w
+      ),
+      //Math.min(0.2 * dt, 1)
+      Math.min(1 * dt, 1)
+    );
+
     //this.bodyActor.body.quaternion.copy(this.camera.quaternion);
     /* this.bodyActor.body.quaternion.setFromAxisAngle(
       new CANNON.Vec3(0, 0, 0),
