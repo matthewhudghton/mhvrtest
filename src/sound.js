@@ -15,7 +15,7 @@ function getSoundFile(name) {
 }
 
 function getSoundFileCachedBuffer(name) {
-  soundFileMapping[name].buffer;
+  return soundFileMapping[name].buffer;
 }
 
 function cacheBufferForSoundFile(name, buffer) {
@@ -37,7 +37,7 @@ function playBufferedSound(sound, options) {
   sound.duration = options.duration;
   sound.play();
   options.self.soundLoaded = true;
-
+  options.mesh.add(sound);
   sound.onEnded(function () {
     options.self.forceKill();
   });
@@ -63,7 +63,9 @@ export class Sound {
     }
     this.detune = options.detune;
 
-    const sound = new THREE.PositionalAudio(options.player.listener);
+    const sound = new THREE.PositionalAudio(this.player.listener);
+
+    const mesh = options.mesh;
     this.sound = sound;
 
     options.self = this;
@@ -80,7 +82,6 @@ export class Sound {
         playBufferedSound(sound, options);
       });
     }
-    this.mesh.add(sound);
   }
 
   kill() {

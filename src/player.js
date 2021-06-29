@@ -76,12 +76,6 @@ export class Player extends Entity {
     });*/
 
     // add music
-    this.music = new Sound({
-      actor: this.bodyActor,
-      player: this,
-      name: "music01",
-      volume: 0.3
-    });
   }
 
   updateAiTracking(dt) {

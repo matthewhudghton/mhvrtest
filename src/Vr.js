@@ -12,6 +12,7 @@ import { Ai } from "./ai.js";
 import { Driver } from "./driver.js";
 import { Block } from "./block.js";
 import { Character } from "./character.js";
+import { Sound } from "./sound.js";
 
 import { Mouse } from "./mouse.js";
 import System, {
@@ -224,6 +225,13 @@ function init() {
     rightControllerGrip: controllerGrip2
   });
   map.player = player;
+
+  let music = new Sound({
+    mesh: player.bodyActor.mesh,
+    player: player,
+    name: "music01",
+    volume: 0.3
+  });
 
   for (let i = 0; i < 12; i++) {
     new Driver({
