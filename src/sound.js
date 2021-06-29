@@ -23,14 +23,15 @@ function cacheBufferForSoundFile(name, buffer) {
 }
 
 function playBufferedSound(sound, options) {
-  if (SOUND_COUNT > 40) {
+  if (false && SOUND_COUNT > 40) {
+    console.log(SOUND_COUNT);
     return;
   }
 
   SOUND_COUNT++;
   sound.detune = options.detune;
   options.self.buffer = options.buffer;
-  sound.setBuffer(options.self.buffer);
+  sound.setBuffer(options.buffer);
   sound.setRefDistance(20);
   sound.setLoop(options.loop);
   sound.setVolume(options.volume);
@@ -38,9 +39,9 @@ function playBufferedSound(sound, options) {
   sound.play();
   options.self.soundLoaded = true;
 
-  sound.onEnded(function () {
+  /*sound.onEnded(function () {
     options.self.forceKill();
-  });
+  });*/
 }
 
 export class Sound {
@@ -71,6 +72,7 @@ export class Sound {
     options.self = this;
 
     this.audioLoader = new THREE.AudioLoader();
+    const optionsToPass = options;
     const possibleCachedBuffer = getSoundFileCachedBuffer(options.name);
     if (possibleCachedBuffer !== undefined) {
       options.buffer = possibleCachedBuffer;
@@ -79,10 +81,10 @@ export class Sound {
       this.audioLoader.load(getSoundFile(options.name), function (buffer) {
         options.buffer = buffer;
         cacheBufferForSoundFile(options.name, options.buffer);
-        playBufferedSound(sound, options);
+        playBufferedSound(sound, optionsToPass);
       });
     }
-    options.mesh.add(sound);
+    mesh.add(sound);
   }
 
   kill() {

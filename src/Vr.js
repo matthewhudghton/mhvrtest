@@ -233,7 +233,7 @@ function init() {
     volume: 0.3
   });
 
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 10; i++) {
     new Driver({
       THREE: THREE,
       CANNON: CANNON,
@@ -379,7 +379,6 @@ export default function Vr() {
     <div className="Vr">
       <h1>Matts Test VR APP</h1>
       <p id="debugText"></p>
-
     </div>
   );
 }

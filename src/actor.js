@@ -123,6 +123,7 @@ export class Actor extends Entity {
         // called when the resource is loaded
         this.model = gltf.scene;
         this.mesh.add(gltf.scene);
+        gltf.material = this.getMaterial();
       },
       (xhr) => {
         // called while loading is progressing
