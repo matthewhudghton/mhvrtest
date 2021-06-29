@@ -41,7 +41,7 @@ export class Player extends Entity {
       noDie: true,
       mass: 10,
       bodySettings: {
-        fixedRotation: false,
+        fixedRotation: true,
         material: "playerMaterial",
         angularDamping: 0.8
       },
@@ -146,24 +146,6 @@ export class Player extends Entity {
       this.bodyActor.body.position.z * (1 - k);
 
     this.cameraGroup.position.copy(this.bodyActor.body.position);
-    //this.cameraGroup.quaternion.copy(this.bodyActor.body.quaternion);
-
-    this.cameraGroup.quaternion.slerp(
-      new THREE.Quaternion(
-        this.bodyActor.body.quaternion.x,
-        this.bodyActor.body.quaternion.y,
-        this.bodyActor.body.quaternion.z,
-        this.bodyActor.body.quaternion.w
-      ),
-      //Math.min(0.2 * dt, 1)
-      Math.min(1 * dt, 1)
-    );
-
-    //this.bodyActor.body.quaternion.copy(this.camera.quaternion);
-    /* this.bodyActor.body.quaternion.setFromAxisAngle(
-      new CANNON.Vec3(0, 0, 0),
-      -Math.PI / 2
-    );*/
 
     this.handleMessages(this.messages, dt);
     while (this.messages.pop()) {}

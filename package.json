@@ -14,6 +14,7 @@
     "statsvr": "2.2.1",
     "three": "0.127.0",
     "three-nebula": "10.0.1",
+    "three-gltf-loader": "latest",
     "webxr": "latest",
     "yuka": "0.7.6"
   },

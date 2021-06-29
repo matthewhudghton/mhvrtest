@@ -25,11 +25,12 @@ export class Driver extends Entity {
       applyGravity: false,
       mass: 5,
       maxHealth: 100,
+      modelPath: "models/human01/scene.gltf",
       color: new THREE.Color(Math.random(), Math.random(), Math.random()),
       rawShapeData: {
         size: this.size,
-        width: this.size / 3,
-        height: this.size / 5,
+        width: 1,
+        height: 1.9,
         depth: this.size / 2
       },
       bodySettings: {
@@ -65,8 +66,8 @@ export class Driver extends Entity {
     }
 
     let direction = this.localDirectionToTargetDelta;
-    let speed = 80 * this.actor.body.mass;
-    let turnSpeed = 5;
+    let speed = 100 * this.actor.body.mass;
+    let turnSpeed = 200;
     let stopDistanceSquared = 10;
     this.debouncer.update(dt);
     if (this.distanceSquaredToTarget < stopDistanceSquared) {
@@ -95,7 +96,7 @@ export class Driver extends Entity {
       new CANNON.Vec3(0, 0, -1 * this.size)
     );
 
-    if (this.position.y < 1) {
+    if (this.position.y < 2 + this.actor.rawShapeData.height * 2) {
       this.body.applyImpulse(
         new CANNON.Vec3(
           0,
@@ -122,6 +123,7 @@ export class Driver extends Entity {
           size: this.size
         },
         position: this.position,
+        attachedToOffset: new THREE.Vector3(0.7, 0, 0),
         bodySettings: {
           quaternion: this.quaternion
         },

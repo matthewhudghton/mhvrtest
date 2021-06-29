@@ -2,6 +2,7 @@ import * as THREE from "three";
 import * as CANNON from "cannon-es";
 import { ChargeBar } from "./chargeBar.js";
 import { Entity } from "./entity.js";
+import GLTFLoader from "three-gltf-loader";
 
 export class Actor extends Entity {
   constructor(options) {
@@ -9,6 +10,8 @@ export class Actor extends Entity {
 
     this.lifeSpan = options.lifeSpan;
     this.attachedTo = options.attachedTo ?? undefined;
+    this.attachedToOffset =
+      options.attachedToOffset ?? new THREE.Vector3(0, 0, 0);
     this.particleSystems = [];
     this.debouncers = [];
     this.lights = [];
@@ -18,6 +21,7 @@ export class Actor extends Entity {
       height: 0.15,
       size: 0.1
     };
+
     this.applyGravity = options.applyGravity ?? true;
     this.noDie = options.noDie ?? false;
     this.size = this.rawShapeData.size / 2 ?? this.rawShapeData.width;
@@ -45,6 +49,7 @@ export class Actor extends Entity {
 
     this.initShape(options);
     this.initHealth(options);
+    this.initModel(options);
 
     if (options.velocity) {
       this.body.velocity.copy(options.velocity);
@@ -98,6 +103,36 @@ export class Actor extends Entity {
       });
       this.addChargeBar(this.healthBar);
     }
+  }
+
+  initModel(options, callback) {
+    const modelPath = options.modelPath;
+    if (!modelPath) {
+      this.hideBasicMesh = false;
+      return;
+    }
+    this.mesh.material.transparent = true;
+    this.mesh.material.opacity = 0;
+    this.hideBasicMesh = true;
+
+    const loader = new GLTFLoader();
+
+    loader.load(
+      modelPath,
+      (gltf) => {
+        // called when the resource is loaded
+        this.model = gltf.scene;
+        this.mesh.add(gltf.scene);
+      },
+      (xhr) => {
+        // called while loading is progressing
+        console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
+      },
+      (error) => {
+        // called when loading has errors
+        console.error("An error happened", error);
+      }
+    );
   }
 
   addChargeBar(chargeBar) {
@@ -187,12 +222,17 @@ export class Actor extends Entity {
       );
     }
 
-    if (this.mesh.material.opacity < 1) {
+    if (this.mesh.material.opacity < 1 && !this.hideBasicMesh) {
       this.mesh.material.opacity += 0.01;
     }
 
     if (this.attachedTo) {
+      let rotatedOffset = new THREE.Vector3()
+        .copy(this.attachedToOffset)
+        .applyQuaternion(this.attachedTo.quaternion);
       this.attachedTo.getWorldPosition(this.mesh.position);
+      this.mesh.position.add(rotatedOffset);
+
       this.attachedTo.getWorldQuaternion(this.mesh.quaternion);
       this.body.position.copy(this.mesh.position);
       this.body.quaternion.copy(this.mesh.quaternion);

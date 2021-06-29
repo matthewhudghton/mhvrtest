@@ -379,6 +379,7 @@ export default function Vr() {
     <div className="Vr">
       <h1>Matts Test VR APP</h1>
       <p id="debugText"></p>
+
     </div>
   );
 }
