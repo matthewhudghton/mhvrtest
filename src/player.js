@@ -58,7 +58,7 @@ export class Player extends Entity {
     this.leftControllerGrip = options.leftControllerGrip;
     this.rightControllerGrip = options.rightControllerGrip;
     this.grabConstraints = [[], []];
-    this.grabForce = 2500;
+    this.grabForce = 25000;
     this.debouncers = [this.leftFireDebouncer, this.rightFireDebouncer];
     this.playerPos = undefined;
     this.messages = [];
@@ -386,6 +386,20 @@ export class Player extends Entity {
         this.grabForce
       );
       currentConstraints.push(constraint);
+      /*
+      const points = [];
+      points.push(new THREE.Vector3(ray.from.x, ray.from.y, ray.from.z));
+      points.push(
+        new THREE.Vector3(
+          ray.result.hitPointWorld.x,
+          ray.result.hitPointWorld.y,
+          ray.result.hitPointWorld.z
+        )
+      );
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const drawLine = new THREE.Line(geometry, new THREE.MeshBasicMaterial());
+      this.map.scene.add(drawLine);
+      */
 
       this.map.world.addConstraint(constraint);
     }

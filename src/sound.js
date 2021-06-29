@@ -37,7 +37,7 @@ function playBufferedSound(sound, options) {
   sound.duration = options.duration;
   sound.play();
   options.self.soundLoaded = true;
-  options.mesh.add(sound);
+
   sound.onEnded(function () {
     options.self.forceKill();
   });
@@ -82,6 +82,7 @@ export class Sound {
         playBufferedSound(sound, options);
       });
     }
+    options.mesh.add(sound);
   }
 
   kill() {
